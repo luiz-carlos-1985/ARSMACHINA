@@ -1,0 +1,22 @@
+<nav class="navbar">
+  <div class="nav-container">
+    <div class="nav-brand">
+      <a routerLink="/home">Ars Machina Consultancy</a>
+    </div>
+    <div class="nav-menu" [class.active]="isMenuOpen">
+      <a routerLink="/home" (click)="closeMenu()">Home</a>
+      <a href="#about" (click)="closeMenu()">Sobre</a>
+      <a href="#services" (click)="closeMenu()">Serviços</a>
+      <a href="#blog" (click)="closeMenu()">Blog</a>
+      <a href="#contact" (click)="closeMenu()">Contato</a>
+      <a *ngIf="!isLoggedIn" routerLink="/login" (click)="closeMenu()">Login</a>
+      <a *ngIf="isLoggedIn" routerLink="/dashboard" (click)="closeMenu()">Painel</a>
+      <button *ngIf="isLoggedIn" (click)="logout()" class="logout-btn">Logout</button>
+    </div>
+    <div class="hamburger" (click)="toggleMenu()">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+  </div>
+</nav>

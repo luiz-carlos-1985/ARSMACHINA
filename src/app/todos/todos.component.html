@@ -1,15 +1,123 @@
-<!-- todos.component.html -->
-<main>
-    <h1>Postagens</h1>
-    <button (click)="createTodo()">Nova Postagem</button>
-    <ul>
-        <li 
-            *ngFor="let todo of todos;">
-            {{ todo.content }}
-        </li>
-    </ul>
-    <div>
-        CRIE UMA NOVA POSTAGEM !
-        <br />
+<!-- Hero Section -->
+<section id="home" class="about">
+  <div class="container">
+    <h1 class="hero-title" style="text-align: center;">! SITE EM CONSTRUÇÃO !</h1>
+    <h1 class="hero-title" style="text-align: center;">Ars Machina Consultancy</h1>
+    <p class="hero-subtitle" style="text-align: center;">Transformando Idéias em Realidade Digital</p>
+    <p class="hero-description" style="text-align: center;">Consultoria em TI, Desenvolvimento de Software e Soluções Inovadoras para o Seu Negócio</p>
+    <div style="text-align: center;">
+      <a href="mailto:contato@arsmachinaconsultancy.com" style="text-decoration: none;">
+        <button class="cta-button">Entre em Contato</button>
+      </a>
     </div>
-</main>
+  </div>
+  <div class="hero-image">
+    <!-- Placeholder for hero image -->
+    <div class="hero-placeholder">🚀 Inovação em TI</div>
+  </div>
+</section>
+
+<!-- About Section -->
+<section id="about" class="about">
+  <div class="container">
+    <h2>Sobre Nós</h2>
+    <p>Ars Machina Consultancy é uma empresa emergente em consultoria em TI, apaixonada por transformar ideias em soluções digitais inovadoras. Nossa equipe jovem e dinâmica combina conhecimento técnico atualizado com criatividade e dedicação para ajudar empresas a se adaptarem ao mundo digital. Estamos com muito entusiasmo e comprometimento em entregar resultados excepcionais aos nossos clientes.</p>
+    <div class="stats">
+      <div class="stat">
+        <h3>20+</h3>
+        <p>Projetos Concluídos</p>
+      </div>
+      <div class="stat">
+        <h3>8+</h3>
+        <p>Clientes Atendidos</p>
+      </div>
+      <div class="stat">
+        <h3>5+</h3>
+        <p>Ano de Experiência</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Services Section -->
+<section id="services" class="services">
+  <div class="container">
+    <h2>Nossos Serviços</h2>
+    <div class="service-grid">
+      <div class="service-card">
+        <div class="service-icon">💻</div>
+        <h3>Desenvolvimento de Software</h3>
+        <p>Criamos aplicações web e móveis personalizadas, utilizando as tecnologias mais modernas do mercado.</p>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">☁️</div>
+        <h3>Cloud Computing</h3>
+        <p>Migração e otimização de infraestrutura em nuvem, garantindo escalabilidade e eficiência.</p>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">🔒</div>
+        <h3>Cibersegurança</h3>
+        <p>Proteção completa dos seus dados e sistemas contra ameaças digitais.</p>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">📊</div>
+        <h3>Análise de Dados</h3>
+        <p>Transformamos dados em insights valiosos para tomada de decisões estratégicas.</p>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">🤖</div>
+        <h3>Inteligência Artificial</h3>
+        <p>Implementamos soluções de IA para automatizar processos e aumentar a produtividade.</p>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">📱</div>
+        <h3>Consultoria Digital</h3>
+        <p>Orientação especializada para digitalização e modernização de processos empresariais.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Blog Section -->
+<section id="blog" class="blog">
+  <div class="container">
+    <h2>Últimas Postagens</h2>
+    <button class="create-post-btn" (click)="createTodo()">Nova Postagem</button>
+    <div class="posts-grid">
+      <div class="post-card" *ngFor="let todo of todos">
+        <h3>{{ todo.content }}</h3>
+        <p>Leia mais sobre esta postagem fascinante...</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Contact Section -->
+<section id="contact" class="contact">
+  <div class="container">
+    <h2>Entre em Contato</h2>
+    <p>Pronto para transformar seu negócio? Vamos conversar!</p>
+    <div class="contact-info">
+      <div class="contact-item">
+        <span class="contact-icon">📧</span>
+<p>contato&#64;arsmachinaconsultancy.com</p>
+      </div>
+      <div class="contact-item">
+        <span class="contact-icon">📞</span>
+        <p>+55 98 99964-9215</p>
+      </div>
+      <div class="contact-item">
+        <span class="contact-icon">📍</span>
+        <p>São Luís, Brasil</p>
+      </div>    
+    </div>
+      <h1 class="hero-title" style="text-align: center;">! SITE EM CONSTRUÇÃO !</h1>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer>
+  <div class="container">
+    <p>&copy; 2025 - Ars Machina Consultancy. Todos os direitos reservados.</p>
+  </div>
+</footer>
