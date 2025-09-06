@@ -106,15 +106,3 @@
     display: flex;
   }
 }
-
-/* Responsive */
-@media (max-width: 768px) {
-  .hero { padding: 50px 20px; min-height: 60vh; }
-  .hero-title { font-size: 2rem; }
-  .hero-subtitle { font-size: 1.2rem; }
-  .about, .services, .blog, .contact { padding: 40px 0; }
-  .about h2, .services h2, .blog h2, .contact h2 { font-size: 2rem; }
-  .stats { flex-direction: column; }
-  .service-grid, .posts-grid { grid-template-columns: 1fr; }
-  .contact-info { flex-direction: column; }
-}
