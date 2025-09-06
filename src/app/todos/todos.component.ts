@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { generateClient } from 'aws-amplify/data';
+import { generateClient } from 'aws-amplify/api';
 import type { Schema } from '../../../amplify/data/resource';
 
 const client = generateClient<Schema>();
@@ -10,7 +10,7 @@ const client = generateClient<Schema>();
   standalone: true,
   imports: [CommonModule],
   templateUrl: './todos.component.html',
-  styleUrl: './todos.component.css',
+  styleUrls: ['./todos.component.css'],
 })
 export class TodosComponent implements OnInit {
   todos: any[] = [];
@@ -27,18 +27,18 @@ export class TodosComponent implements OnInit {
         },
       });
     } catch (error) {
-      console.error('error fetching todos', error);
+      console.error('error fetching posts!', error);
     }
   }
 
   createTodo() {
     try {
       client.models.Todo.create({
-        content: window.prompt('Todo content'),
+        content: window.prompt('Conteúdo da Postagem:'),
       });
       this.listTodos();
     } catch (error) {
-      console.error('error creating todos', error);
+      console.error('error creating posts', error);
     }
   }
 }

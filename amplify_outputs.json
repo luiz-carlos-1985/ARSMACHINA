@@ -1,0 +1,14 @@
+{
+  "version": "1",
+  "auth": {
+    "user_pool_id": "us-east-1_example",
+    "user_pool_client_id": "example_client_id",
+    "identity_pool_id": "us-east-1:example_identity_pool_id",
+    "auth_region": "us-east-1"
+  },
+  "data": {
+    "url": "https://example.appsync-api.us-east-1.amazonaws.com/graphql",
+    "aws_region": "us-east-1",
+    "api_key": "example_api_key"
+  }
+}
