@@ -1,0 +1,62 @@
+<div class="email-verification-container">
+  <div class="email-verification-card">
+    <h2>{{ getTranslation('emailVerification.title') }}</h2>
+    <p>{{ getTranslation('emailVerification.instructions') }}</p>
+
+    <form (ngSubmit)="verifyEmail()" #verificationForm="ngForm">
+      <div class="form-group">
+        <label for="email">{{ getTranslation('emailVerification.emailLabel') }}</label>
+        <input
+          type="email"
+          id="email"
+          [(ngModel)]="email"
+          name="email"
+          required
+          placeholder="seu@email.com"
+          [disabled]="isLoading">
+      </div>
+
+      <div class="form-group">
+        <label for="confirmationCode">{{ getTranslation('emailVerification.codeLabel') }}</label>
+        <input
+          type="text"
+          id="confirmationCode"
+          [(ngModel)]="confirmationCode"
+          name="confirmationCode"
+          required
+          placeholder="123456"
+          maxlength="6"
+          [disabled]="isLoading">
+      </div>
+
+      <button
+        type="submit"
+        class="btn-primary"
+        [disabled]="isLoading || !verificationForm.form.valid">
+        <span *ngIf="isLoading">{{ getTranslation('emailVerification.verifying') }}</span>
+        <span *ngIf="!isLoading">{{ getTranslation('emailVerification.verifyEmail') }}</span>
+      </button>
+    </form>
+
+    <div class="resend-section">
+      <p>{{ getTranslation('emailVerification.noCode') }}</p>
+      <button
+        type="button"
+        class="btn-secondary"
+        (click)="resendCode()"
+        [disabled]="isLoading">
+        {{ getTranslation('emailVerification.resendCode') }}
+      </button>
+    </div>
+
+    <!-- Messages -->
+    <div class="message" *ngIf="errorMessage" [ngClass]="{'error': errorMessage, 'success': successMessage}">
+      <p>{{ errorMessage || successMessage }}</p>
+    </div>
+
+    <!-- Back to Login -->
+    <div class="back-to-login">
+      <a routerLink="/login">{{ getTranslation('emailVerification.backToLogin') }}</a>
+    </div>
+  </div>
+</div>

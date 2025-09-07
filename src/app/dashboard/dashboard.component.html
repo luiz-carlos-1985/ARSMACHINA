@@ -1,26 +1,185 @@
 <div class="dashboard-container">
+  <!-- Welcome Section -->
   <div class="dashboard-header">
-    <h1>{{ getTranslation('dashboard.welcome') }}</h1>
-    <p>{{ getTranslation('dashboard.loggedIn') }}</p>
+    <div class="welcome-section">
+      <h1>{{ getTranslation('dashboard.welcome') }}, <span class="user-name">{{ userName }}</span>!</h1>
+      <p>{{ getTranslation('dashboard.loggedIn') }}</p>
+      <div class="user-stats">
+        <div class="stat-item">
+          <span class="stat-number">{{ userStats.projects }}</span>
+          <span class="stat-label">{{ getTranslation('dashboard.projects') }}</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">{{ userStats.tasks }}</span>
+          <span class="stat-label">{{ getTranslation('dashboard.tasks') }}</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">{{ userStats.completed }}</span>
+          <span class="stat-label">{{ getTranslation('dashboard.completed') }}</span>
+        </div>
+      </div>
+    </div>
   </div>
 
-  <div class="dashboard-content">
-    <div class="dashboard-card">
-      <h3>{{ getTranslation('dashboard.profileInfo') }}</h3>
-      <p>{{ getTranslation('dashboard.manageAccount') }}</p>
-      <button class="btn-primary">{{ getTranslation('dashboard.editProfile') }}</button>
+  <!-- Quick Actions -->
+  <div class="quick-actions">
+    <h2>{{ getTranslation('dashboard.quickActions') }}</h2>
+    <div class="action-buttons">
+      <button class="action-btn primary" (click)="createNewProject()" [attr.aria-label]="getTranslation('dashboard.newProject')" [attr.title]="getTranslation('dashboard.newProject')">
+        <i class="icon-plus" aria-hidden="true"></i>
+        {{ getTranslation('dashboard.newProject') }}
+      </button>
+      <button class="action-btn secondary" (click)="addNewTask()" [attr.aria-label]="getTranslation('dashboard.newTask')" [attr.title]="getTranslation('dashboard.newTask')">
+        <i class="icon-task" aria-hidden="true"></i>
+        {{ getTranslation('dashboard.newTask') }}
+      </button>
+      <button class="action-btn info" (click)="scheduleMeeting()" [attr.aria-label]="getTranslation('dashboard.scheduleMeeting')" [attr.title]="getTranslation('dashboard.scheduleMeeting')">
+        <i class="icon-calendar" aria-hidden="true"></i>
+        {{ getTranslation('dashboard.scheduleMeeting') }}
+      </button>
+      <button class="action-btn success" (click)="generateReport()" [attr.aria-label]="getTranslation('dashboard.generateReport')" [attr.title]="getTranslation('dashboard.generateReport')">
+        <i class="icon-report" aria-hidden="true"></i>
+        {{ getTranslation('dashboard.generateReport') }}
+      </button>
+    </div>
+  </div>
+
+  <!-- Main Dashboard Grid -->
+  <div class="dashboard-grid">
+    <!-- Analytics Cards -->
+    <div class="analytics-section">
+      <h2>{{ getTranslation('dashboard.analytics') }}</h2>
+      <div class="analytics-grid">
+        <div class="metric-card">
+          <div class="metric-header">
+            <h3>{{ getTranslation('dashboard.productivity') }}</h3>
+            <span class="metric-value">{{ productivityScore }}%</span>
+          </div>
+          <div class="progress-bar">
+            <div class="progress-fill" [style.width.%]="productivityScore"></div>
+          </div>
+          <p class="metric-trend positive">+12% {{ getTranslation('dashboard.fromLastMonth') }}</p>
+        </div>
+
+        <div class="metric-card">
+          <div class="metric-header">
+            <h3>{{ getTranslation('dashboard.teamPerformance') }}</h3>
+            <span class="metric-value">{{ teamPerformance }}%</span>
+          </div>
+          <div class="progress-bar">
+            <div class="progress-fill" [style.width.%]="teamPerformance"></div>
+          </div>
+          <p class="metric-trend positive">+8% {{ getTranslation('dashboard.fromLastMonth') }}</p>
+        </div>
+
+        <div class="metric-card">
+          <div class="metric-header">
+            <h3>{{ getTranslation('dashboard.clientSatisfaction') }}</h3>
+            <span class="metric-value">{{ clientSatisfaction }}%</span>
+          </div>
+          <div class="progress-bar">
+            <div class="progress-fill" [style.width.%]="clientSatisfaction"></div>
+          </div>
+          <p class="metric-trend positive">+15% {{ getTranslation('dashboard.fromLastMonth') }}</p>
+        </div>
+
+        <div class="metric-card">
+          <div class="metric-header">
+            <h3>{{ getTranslation('dashboard.revenue') }}</h3>
+            <span class="metric-value">R$ {{ revenue | number:'1.0-0' }}</span>
+          </div>
+          <div class="revenue-chart">
+            <div class="chart-bar" [style.height.%]="85"></div>
+            <div class="chart-bar" [style.height.%]="92"></div>
+            <div class="chart-bar" [style.height.%]="78"></div>
+            <div class="chart-bar" [style.height.%]="95"></div>
+          </div>
+          <p class="metric-trend positive">+22% {{ getTranslation('dashboard.fromLastMonth') }}</p>
+        </div>
+      </div>
     </div>
 
-    <div class="dashboard-card">
-      <h3>{{ getTranslation('dashboard.recentActivity') }}</h3>
-      <p>{{ getTranslation('dashboard.viewUpdates') }}</p>
-      <button class="btn-secondary">{{ getTranslation('dashboard.viewActivity') }}</button>
+    <!-- Recent Activities -->
+    <div class="activities-section">
+      <h2>{{ getTranslation('dashboard.recentActivity') }}</h2>
+      <div class="activities-list">
+        <div class="activity-item" *ngFor="let activity of recentActivities">
+          <div class="activity-icon" [ngClass]="activity.type">
+            <i [class]="activity.icon"></i>
+          </div>
+          <div class="activity-content">
+            <p class="activity-text">{{ activity.text }}</p>
+            <span class="activity-time">{{ activity.time }}</span>
+          </div>
+        </div>
+      </div>
     </div>
 
-    <div class="dashboard-card">
-      <h3>{{ getTranslation('dashboard.settings') }}</h3>
-      <p>{{ getTranslation('dashboard.configurePreferences') }}</p>
-      <button class="btn-secondary">{{ getTranslation('dashboard.openSettings') }}</button>
+    <!-- Project Progress -->
+    <div class="projects-section">
+      <h2>{{ getTranslation('dashboard.projectProgress') }}</h2>
+      <div class="projects-list">
+        <div class="project-item" *ngFor="let project of activeProjects">
+          <div class="project-header">
+            <h4>{{ project.name }}</h4>
+            <span class="project-status" [ngClass]="project.status">{{ project.statusText }}</span>
+          </div>
+          <div class="project-progress">
+            <div class="progress-bar">
+              <div class="progress-fill" [style.width.%]="project.progress"></div>
+            </div>
+            <span class="progress-text">{{ project.progress }}%</span>
+          </div>
+          <div class="project-meta">
+            <span class="project-deadline">{{ getTranslation('dashboard.due') }}: {{ project.deadline }}</span>
+            <span class="project-team">{{ project.teamSize }} {{ getTranslation('dashboard.members') }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Notifications Panel -->
+    <div class="notifications-section">
+      <h2>{{ getTranslation('dashboard.notifications') }}</h2>
+      <div class="notifications-list">
+        <div class="notification-item" *ngFor="let notification of notifications" [ngClass]="{'unread': !notification.read}" (click)="markAsRead(notification)" role="button" tabindex="0" [attr.aria-label]="getTranslation('dashboard.markAsRead')" [attr.title]="getTranslation('dashboard.markAsRead')">
+          <div class="notification-icon" [ngClass]="notification.type">
+            <i [class]="notification.icon" aria-hidden="true"></i>
+          </div>
+          <div class="notification-content">
+            <p class="notification-text">{{ notification.text }}</p>
+            <span class="notification-time">{{ notification.time }}</span>
+          </div>
+          <button class="notification-close" (click)="dismissNotification(notification)" *ngIf="!notification.read" [attr.aria-label]="getTranslation('dashboard.dismissNotification')" [attr.title]="getTranslation('dashboard.dismissNotification')" type="button">
+            <i class="icon-close" aria-hidden="true"></i>
+            <span class="sr-only">{{ getTranslation('dashboard.dismissNotification') }}</span>
+          </button>
+        </div>
+      </div>
+      <button class="btn-link" (click)="viewAllNotifications()" [attr.aria-label]="getTranslation('dashboard.viewAll')" [attr.title]="getTranslation('dashboard.viewAll')">{{ getTranslation('dashboard.viewAll') }}</button>
+    </div>
+
+    <!-- Quick Links -->
+    <div class="quick-links-section">
+      <h2>{{ getTranslation('dashboard.quickLinks') }}</h2>
+      <div class="quick-links-grid">
+        <a href="#" class="quick-link" (click)="navigateTo('profile')" [attr.aria-label]="getTranslation('dashboard.profile')" [attr.title]="getTranslation('dashboard.profile')">
+          <i class="icon-user" aria-hidden="true"></i>
+          <span>{{ getTranslation('dashboard.profile') }}</span>
+        </a>
+        <a href="#" class="quick-link" (click)="navigateTo('settings')" [attr.aria-label]="getTranslation('dashboard.settings')" [attr.title]="getTranslation('dashboard.settings')">
+          <i class="icon-settings" aria-hidden="true"></i>
+          <span>{{ getTranslation('dashboard.settings') }}</span>
+        </a>
+        <a href="#" class="quick-link" (click)="navigateTo('reports')" [attr.aria-label]="getTranslation('dashboard.reports')" [attr.title]="getTranslation('dashboard.reports')">
+          <i class="icon-chart" aria-hidden="true"></i>
+          <span>{{ getTranslation('dashboard.reports') }}</span>
+        </a>
+        <a href="#" class="quick-link" (click)="navigateTo('help')" [attr.aria-label]="getTranslation('dashboard.help')" [attr.title]="getTranslation('dashboard.help')">
+          <i class="icon-help" aria-hidden="true"></i>
+          <span>{{ getTranslation('dashboard.help') }}</span>
+        </a>
+      </div>
     </div>
   </div>
 </div>

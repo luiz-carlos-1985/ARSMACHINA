@@ -60,6 +60,7 @@ export class NavigationComponent implements OnInit {
   changeLanguage(language: string) {
     this.translationService.setLanguage(language);
     this.currentLanguage = language;
+    this.closeMenu(); // Close menu on language change for better UX on mobile
   }
 
   getTranslation(key: string): string {

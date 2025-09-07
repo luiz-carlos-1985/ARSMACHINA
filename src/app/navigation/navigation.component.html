@@ -1,7 +1,10 @@
 <nav class="navbar">
   <div class="nav-container">
     <div class="nav-brand">
-      <a routerLink="/home">Ars Machina Consultancy</a>
+      <a routerLink="/home">
+        <img src="assets/ars-machina-logo.svg" alt="Ars Machina Logo" class="nav-logo">
+        Ars Machina Consultancy
+      </a>
     </div>
     <div class="nav-menu" [class.active]="isMenuOpen">
       <a routerLink="/home" (click)="closeMenu()">{{ getTranslation('nav.home') }}</a>
