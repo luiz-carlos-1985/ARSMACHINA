@@ -33,10 +33,13 @@
         </div>
       </div>
     </div>
-    <div class="hamburger" (click)="toggleMenu()">
+    <div class="hamburger" [class.active]="isMenuOpen" (click)="toggleMenu()">
       <span></span>
       <span></span>
       <span></span>
     </div>
   </div>
+
+  <!-- Mobile Menu Overlay -->
+  <div class="mobile-menu-overlay" [class.active]="isMenuOpen" (click)="closeMenu()"></div>
 </nav>

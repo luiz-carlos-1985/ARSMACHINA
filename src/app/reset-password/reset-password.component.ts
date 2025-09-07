@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../auth.service';
@@ -8,7 +8,7 @@ import { TranslationService } from '../translation.service';
 @Component({
   selector: 'app-reset-password',
   standalone: true,
-  imports: [FormsModule, CommonModule],
+  imports: [FormsModule, CommonModule, RouterLink],
   templateUrl: './reset-password.component.html',
   styleUrls: ['./reset-password.component.css']
 })

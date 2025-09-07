@@ -31,10 +31,20 @@ export class NavigationComponent implements OnInit {
 
   toggleMenu() {
     this.isMenuOpen = !this.isMenuOpen;
+    this.updateBodyScroll();
   }
 
   closeMenu() {
     this.isMenuOpen = false;
+    this.updateBodyScroll();
+  }
+
+  private updateBodyScroll() {
+    if (this.isMenuOpen) {
+      document.body.classList.add('menu-open');
+    } else {
+      document.body.classList.remove('menu-open');
+    }
   }
 
   async logout() {
