@@ -36,9 +36,9 @@
 
     <!-- Added interactive section -->
     <div class="interactive-section">
-      <h3>Por que escolher a Ars Machina Consultancy?</h3>
-      <p>Oferecemos soluções personalizadas que atendem às necessidades específicas do seu negócio, com foco em inovação e resultados mensuráveis.</p>
-      <button (click)="contactUs()" class="contact-button">Fale conosco</button>
+      <h3>{{ translationService.translate('services.interactive.title') }}</h3>
+      <p>{{ translationService.translate('services.interactive.description') }}</p>
+      <button (click)="contactUs()" class="contact-button">{{ translationService.translate('services.interactive.cta') }}</button>
     </div>
   </div>
 </section>

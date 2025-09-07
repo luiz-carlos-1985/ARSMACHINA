@@ -19,32 +19,20 @@
 
     <!-- Mission Section -->
     <div class="mission">
-      <h3>Nossa Missão</h3>
-      <p>Proporcionar soluções inovadoras em TI que impulsionam o crescimento e a eficiência dos nossos clientes, utilizando as melhores práticas e tecnologias de ponta.</p>
+      <h3>{{ translationService.translate('about.mission.title') }}</h3>
+      <p>{{ translationService.translate('about.mission.description') }}</p>
     </div>
 
     <!-- Team Section -->
     <div class="team">
-      <h3>Nossa Equipe</h3>
+      <h3>{{ translationService.translate('about.team.title') }}</h3>
       <div class="team-grid">
         <div class="team-member">
           <div class="member-avatar">👨‍💻</div>
-          <h4>João Silva</h4>
-          <p>CEO & Fundador</p>
-          <p>Especialista em arquitetura de sistemas e liderança de equipes de desenvolvimento.</p>
-        </div>
-        <div class="team-member">
-          <div class="member-avatar">👩‍💼</div>
-          <h4>Maria Santos</h4>
-          <p>Diretora de Projetos</p>
-          <p>Gerencia projetos complexos e garante a entrega de soluções de alta qualidade.</p>
-        </div>
-        <div class="team-member">
-          <div class="member-avatar">🧑‍🔬</div>
-          <h4>Carlos Oliveira</h4>
-          <p>Especialista em IA</p>
-          <p>Desenvolve soluções de inteligência artificial para otimizar processos empresariais.</p>
-        </div>
+          <h4>{{ translationService.translate('about.team.member1.name') }}</h4>
+          <p>{{ translationService.translate('about.team.member1.role') }}</p>
+          <p>{{ translationService.translate('about.team.member1.description') }}</p>
+        </div>       
       </div>
     </div>
   </div>

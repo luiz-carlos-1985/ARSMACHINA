@@ -103,6 +103,24 @@ export class TranslationService {
       'contact.title': 'Entre em Contato',
       'contact.description': 'Pronto para transformar seu negócio? Vamos conversar!',
       'contact.location': 'São Luís, Brasil',
+      'contact.sendMessage': 'Envie uma mensagem',
+      'contact.name': 'Nome',
+      'contact.email': 'Email',
+      'contact.message': 'Mensagem',
+      'contact.send': 'Enviar',
+
+      // About Section - Mission and Team
+      'about.mission.title': 'Nossa Missão',
+      'about.mission.description': 'Proporcionar soluções inovadoras em TI que impulsionam o crescimento e a eficiência dos nossos clientes, utilizando as melhores práticas e tecnologias de ponta.',
+      'about.team.title': 'Nossa Equipe',
+      'about.team.member1.name': 'Luiz Carlos de Castro Júnior',
+      'about.team.member1.role': 'Arquiteto e Engenheiro de Software & Fundador',
+      'about.team.member1.description': 'Especialista em arquitetura de sistemas e liderança de equipes de desenvolvimento.',
+
+      // Services Section - Interactive
+      'services.interactive.title': 'Por que escolher a Ars Machina Consultancy?',
+      'services.interactive.description': 'Oferecemos soluções personalizadas que atendem às necessidades específicas do seu negócio, com foco em inovação e resultados mensuráveis.',
+      'services.interactive.cta': 'Fale conosco',
 
       // Footer
       'footer.rights': 'Todos os direitos reservados.'
@@ -201,6 +219,30 @@ export class TranslationService {
       'contact.title': 'Get in Touch',
       'contact.description': 'Ready to transform your business? Let\'s talk!',
       'contact.location': 'São Luís, Brazil',
+      'contact.sendMessage': 'Send a message',
+      'contact.name': 'Name',
+      'contact.email': 'Email',
+      'contact.message': 'Message',
+      'contact.send': 'Send',
+
+      // About Section - Mission and Team
+      'about.mission.title': 'Our Mission',
+      'about.mission.description': 'To provide innovative IT solutions that boost our clients\' growth and efficiency, using best practices and cutting-edge technologies.',
+      'about.team.title': 'Our Team',
+      'about.team.member1.name': 'João Silva',
+      'about.team.member1.role': 'CEO & Founder',
+      'about.team.member1.description': 'Expert in system architecture and development team leadership.',
+      'about.team.member2.name': 'Maria Santos',
+      'about.team.member2.role': 'Project Director',
+      'about.team.member2.description': 'Manages complex projects and ensures delivery of high-quality solutions.',
+      'about.team.member3.name': 'Carlos Oliveira',
+      'about.team.member3.role': 'AI Specialist',
+      'about.team.member3.description': 'Develops artificial intelligence solutions to optimize business processes.',
+
+      // Services Section - Interactive
+      'services.interactive.title': 'Why choose Ars Machina Consultancy?',
+      'services.interactive.description': 'We offer personalized solutions that meet your business\'s specific needs, with a focus on innovation and measurable results.',
+      'services.interactive.cta': 'Contact us',
 
       // Footer
       'footer.rights': 'All rights reserved.'
