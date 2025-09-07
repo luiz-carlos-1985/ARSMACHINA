@@ -1,184 +1,452 @@
-<div class="dashboard-container">
-  <!-- Welcome Section -->
-  <div class="dashboard-header">
-    <div class="welcome-section">
-      <h1>{{ getTranslation('dashboard.welcome') }}, <span class="user-name">{{ userName }}</span>!</h1>
-      <p>{{ getTranslation('dashboard.loggedIn') }}</p>
-      <div class="user-stats">
-        <div class="stat-item">
-          <span class="stat-number">{{ userStats.projects }}</span>
-          <span class="stat-label">{{ getTranslation('dashboard.projects') }}</span>
+<div class="dashboard-wrapper">
+  <!-- Hero Welcome Section with Enhanced Features -->
+  <div class="dashboard-hero">
+    <div class="hero-content">
+      <div class="hero-text">
+        <div class="hero-greeting">
+          <span class="greeting-badge">👋 Bem-vindo ao seu painel!</span>
+          <h1>{{ userName }}!</h1>
         </div>
-        <div class="stat-item">
-          <span class="stat-number">{{ userStats.tasks }}</span>
-          <span class="stat-label">{{ getTranslation('dashboard.tasks') }}</span>
-        </div>
-        <div class="stat-item">
-          <span class="stat-number">{{ userStats.completed }}</span>
-          <span class="stat-label">{{ getTranslation('dashboard.completed') }}</span>
-        </div>
-      </div>
-    </div>
-  </div>
+        <p class="hero-subtitle">Estamos felizes em tê-lo conosco. Aqui está um resumo do seu progresso e das oportunidades disponíveis.</p>
 
-  <!-- Quick Actions -->
-  <div class="quick-actions">
-    <h2>{{ getTranslation('dashboard.quickActions') }}</h2>
-    <div class="action-buttons">
-      <button class="action-btn primary" (click)="createNewProject()" [attr.aria-label]="getTranslation('dashboard.newProject')" [attr.title]="getTranslation('dashboard.newProject')">
-        <i class="icon-plus" aria-hidden="true"></i>
-        {{ getTranslation('dashboard.newProject') }}
-      </button>
-      <button class="action-btn secondary" (click)="addNewTask()" [attr.aria-label]="getTranslation('dashboard.newTask')" [attr.title]="getTranslation('dashboard.newTask')">
-        <i class="icon-task" aria-hidden="true"></i>
-        {{ getTranslation('dashboard.newTask') }}
-      </button>
-      <button class="action-btn info" (click)="scheduleMeeting()" [attr.aria-label]="getTranslation('dashboard.scheduleMeeting')" [attr.title]="getTranslation('dashboard.scheduleMeeting')">
-        <i class="icon-calendar" aria-hidden="true"></i>
-        {{ getTranslation('dashboard.scheduleMeeting') }}
-      </button>
-      <button class="action-btn success" (click)="generateReport()" [attr.aria-label]="getTranslation('dashboard.generateReport')" [attr.title]="getTranslation('dashboard.generateReport')">
-        <i class="icon-report" aria-hidden="true"></i>
-        {{ getTranslation('dashboard.generateReport') }}
-      </button>
-    </div>
-  </div>
-
-  <!-- Main Dashboard Grid -->
-  <div class="dashboard-grid">
-    <!-- Analytics Cards -->
-    <div class="analytics-section">
-      <h2>{{ getTranslation('dashboard.analytics') }}</h2>
-      <div class="analytics-grid">
-        <div class="metric-card">
-          <div class="metric-header">
-            <h3>{{ getTranslation('dashboard.productivity') }}</h3>
-            <span class="metric-value">{{ productivityScore }}%</span>
-          </div>
-          <div class="progress-bar">
-            <div class="progress-fill" [style.width.%]="productivityScore"></div>
-          </div>
-          <p class="metric-trend positive">+12% {{ getTranslation('dashboard.fromLastMonth') }}</p>
-        </div>
-
-        <div class="metric-card">
-          <div class="metric-header">
-            <h3>{{ getTranslation('dashboard.teamPerformance') }}</h3>
-            <span class="metric-value">{{ teamPerformance }}%</span>
-          </div>
-          <div class="progress-bar">
-            <div class="progress-fill" [style.width.%]="teamPerformance"></div>
-          </div>
-          <p class="metric-trend positive">+8% {{ getTranslation('dashboard.fromLastMonth') }}</p>
-        </div>
-
-        <div class="metric-card">
-          <div class="metric-header">
-            <h3>{{ getTranslation('dashboard.clientSatisfaction') }}</h3>
-            <span class="metric-value">{{ clientSatisfaction }}%</span>
-          </div>
-          <div class="progress-bar">
-            <div class="progress-fill" [style.width.%]="clientSatisfaction"></div>
-          </div>
-          <p class="metric-trend positive">+15% {{ getTranslation('dashboard.fromLastMonth') }}</p>
-        </div>
-
-        <div class="metric-card">
-          <div class="metric-header">
-            <h3>{{ getTranslation('dashboard.revenue') }}</h3>
-            <span class="metric-value">R$ {{ revenue | number:'1.0-0' }}</span>
-          </div>
-          <div class="revenue-chart">
-            <div class="chart-bar" [style.height.%]="85"></div>
-            <div class="chart-bar" [style.height.%]="92"></div>
-            <div class="chart-bar" [style.height.%]="78"></div>
-            <div class="chart-bar" [style.height.%]="95"></div>
-          </div>
-          <p class="metric-trend positive">+22% {{ getTranslation('dashboard.fromLastMonth') }}</p>
-        </div>
-      </div>
-    </div>
-
-    <!-- Recent Activities -->
-    <div class="activities-section">
-      <h2>{{ getTranslation('dashboard.recentActivity') }}</h2>
-      <div class="activities-list">
-        <div class="activity-item" *ngFor="let activity of recentActivities">
-          <div class="activity-icon" [ngClass]="activity.type">
-            <i [class]="activity.icon"></i>
-          </div>
-          <div class="activity-content">
-            <p class="activity-text">{{ activity.text }}</p>
-            <span class="activity-time">{{ activity.time }}</span>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Project Progress -->
-    <div class="projects-section">
-      <h2>{{ getTranslation('dashboard.projectProgress') }}</h2>
-      <div class="projects-list">
-        <div class="project-item" *ngFor="let project of activeProjects">
-          <div class="project-header">
-            <h4>{{ project.name }}</h4>
-            <span class="project-status" [ngClass]="project.status">{{ project.statusText }}</span>
-          </div>
-          <div class="project-progress">
-            <div class="progress-bar">
-              <div class="progress-fill" [style.width.%]="project.progress"></div>
+        <!-- Quick Stats with Icons -->
+        <div class="hero-stats">
+          <div class="stat-card" [attr.aria-label]="'Projetos ativos: ' + userStats.projects">
+            <div class="stat-icon">
+              <i class="icon-projects" aria-hidden="true">📊</i>
             </div>
-            <span class="progress-text">{{ project.progress }}%</span>
+            <div class="stat-info">
+              <span class="stat-number">{{ userStats.projects }}</span>
+              <span class="stat-label">Projetos Ativos</span>
+            </div>
           </div>
-          <div class="project-meta">
-            <span class="project-deadline">{{ getTranslation('dashboard.due') }}: {{ project.deadline }}</span>
-            <span class="project-team">{{ project.teamSize }} {{ getTranslation('dashboard.members') }}</span>
+          <div class="stat-card" [attr.aria-label]="'Tarefas totais: ' + userStats.tasks">
+            <div class="stat-icon">
+              <i class="icon-tasks" aria-hidden="true">✅</i>
+            </div>
+            <div class="stat-info">
+              <span class="stat-number">{{ userStats.tasks }}</span>
+              <span class="stat-label">Tarefas Totais</span>
+            </div>
+          </div>
+          <div class="stat-card" [attr.aria-label]="'Tarefas concluídas: ' + userStats.completed">
+            <div class="stat-icon">
+              <i class="icon-completed" aria-hidden="true">🎯</i>
+            </div>
+            <div class="stat-info">
+              <span class="stat-number">{{ userStats.completed }}</span>
+              <span class="stat-label">Concluídas</span>
+            </div>
           </div>
         </div>
-      </div>
-    </div>
 
-    <!-- Notifications Panel -->
-    <div class="notifications-section">
-      <h2>{{ getTranslation('dashboard.notifications') }}</h2>
-      <div class="notifications-list">
-        <div class="notification-item" *ngFor="let notification of notifications" [ngClass]="{'unread': !notification.read}" (click)="markAsRead(notification)" role="button" tabindex="0" [attr.aria-label]="getTranslation('dashboard.markAsRead')" [attr.title]="getTranslation('dashboard.markAsRead')">
-          <div class="notification-icon" [ngClass]="notification.type">
-            <i [class]="notification.icon" aria-hidden="true"></i>
+        <!-- Motivational Message -->
+        <div class="motivational-message">
+          <p>🚀 <strong>Continue assim!</strong> Você está {{ productivityScore }}% acima da meta mensal.</p>
+        </div>
+      </div>
+
+      <div class="hero-visual">
+        <!-- Enhanced Chart -->
+        <div class="hero-chart">
+          <div class="chart-container">
+            <div class="chart-placeholder">
+              <div class="chart-bar" [style.height.%]="productivityScore" [attr.aria-label]="'Produtividade: ' + productivityScore + '%'"></div>
+              <div class="chart-bar" [style.height.%]="teamPerformance" [attr.aria-label]="'Performance da equipe: ' + teamPerformance + '%'"></div>
+              <div class="chart-bar" [style.height.%]="clientSatisfaction" [attr.aria-label]="'Satisfação do cliente: ' + clientSatisfaction + '%'"></div>
+            </div>
+            <div class="chart-legend">
+              <div class="legend-item">
+                <span class="legend-color productivity"></span>
+                <span>Produtividade</span>
+              </div>
+              <div class="legend-item">
+                <span class="legend-color performance"></span>
+                <span>Equipe</span>
+              </div>
+              <div class="legend-item">
+                <span class="legend-color satisfaction"></span>
+                <span>Cliente</span>
+              </div>
+            </div>
           </div>
-          <div class="notification-content">
-            <p class="notification-text">{{ notification.text }}</p>
-            <span class="notification-time">{{ notification.time }}</span>
-          </div>
-          <button class="notification-close" (click)="dismissNotification(notification)" *ngIf="!notification.read" [attr.aria-label]="getTranslation('dashboard.dismissNotification')" [attr.title]="getTranslation('dashboard.dismissNotification')" type="button">
-            <i class="icon-close" aria-hidden="true"></i>
-            <span class="sr-only">{{ getTranslation('dashboard.dismissNotification') }}</span>
+        </div>
+
+        <!-- Quick Actions Mini -->
+        <div class="hero-actions">
+          <button class="hero-action-btn" (click)="createNewProject()" [attr.aria-label]="getTranslation('dashboard.newProject')" [attr.title]="getTranslation('dashboard.newProject')" type="button">
+            <i class="icon-plus" aria-hidden="true"></i>
+            Novo Projeto
+          </button>
+          <button class="hero-action-btn secondary" (click)="scheduleMeeting()" [attr.aria-label]="getTranslation('dashboard.scheduleMeeting')" [attr.title]="getTranslation('dashboard.scheduleMeeting')" type="button">
+            <i class="icon-calendar" aria-hidden="true"></i>
+            Agendar Reunião
           </button>
         </div>
       </div>
-      <button class="btn-link" (click)="viewAllNotifications()" [attr.aria-label]="getTranslation('dashboard.viewAll')" [attr.title]="getTranslation('dashboard.viewAll')">{{ getTranslation('dashboard.viewAll') }}</button>
     </div>
+  </div>
 
-    <!-- Quick Links -->
-    <div class="quick-links-section">
-      <h2>{{ getTranslation('dashboard.quickLinks') }}</h2>
-      <div class="quick-links-grid">
-        <a href="#" class="quick-link" (click)="navigateTo('profile')" [attr.aria-label]="getTranslation('dashboard.profile')" [attr.title]="getTranslation('dashboard.profile')">
-          <i class="icon-user" aria-hidden="true"></i>
-          <span>{{ getTranslation('dashboard.profile') }}</span>
-        </a>
-        <a href="#" class="quick-link" (click)="navigateTo('settings')" [attr.aria-label]="getTranslation('dashboard.settings')" [attr.title]="getTranslation('dashboard.settings')">
-          <i class="icon-settings" aria-hidden="true"></i>
-          <span>{{ getTranslation('dashboard.settings') }}</span>
-        </a>
-        <a href="#" class="quick-link" (click)="navigateTo('reports')" [attr.aria-label]="getTranslation('dashboard.reports')" [attr.title]="getTranslation('dashboard.reports')">
-          <i class="icon-chart" aria-hidden="true"></i>
-          <span>{{ getTranslation('dashboard.reports') }}</span>
-        </a>
-        <a href="#" class="quick-link" (click)="navigateTo('help')" [attr.aria-label]="getTranslation('dashboard.help')" [attr.title]="getTranslation('dashboard.help')">
-          <i class="icon-help" aria-hidden="true"></i>
-          <span>{{ getTranslation('dashboard.help') }}</span>
-        </a>
+  <!-- Enhanced Quick Actions Bar -->
+  <div class="quick-actions-bar">
+    <div class="actions-container">
+      <button class="action-button primary" (click)="createNewProject()" [attr.aria-label]="getTranslation('dashboard.newProject')" [attr.title]="getTranslation('dashboard.newProject')" type="button">
+        <div class="action-icon">
+          <i class="icon-plus" aria-hidden="true">➕</i>
+        </div>
+        <div class="action-text">
+          <span class="action-title">Novo Projeto</span>
+          <span class="action-subtitle">Inicie um novo projeto inovador</span>
+        </div>
+        <div class="action-arrow">
+          <i class="icon-arrow" aria-hidden="true">→</i>
+        </div>
+      </button>
+
+      <button class="action-button secondary" (click)="addNewTask()" [attr.aria-label]="getTranslation('dashboard.newTask')" [attr.title]="getTranslation('dashboard.newTask')" type="button">
+        <div class="action-icon">
+          <i class="icon-task" aria-hidden="true">📝</i>
+        </div>
+        <div class="action-text">
+          <span class="action-title">Nova Tarefa</span>
+          <span class="action-subtitle">Adicione tarefas ao seu workflow</span>
+        </div>
+        <div class="action-arrow">
+          <i class="icon-arrow" aria-hidden="true">→</i>
+        </div>
+      </button>
+
+      <button class="action-button info" (click)="scheduleMeeting()" [attr.aria-label]="getTranslation('dashboard.scheduleMeeting')" [attr.title]="getTranslation('dashboard.scheduleMeeting')" type="button">
+        <div class="action-icon">
+          <i class="icon-calendar" aria-hidden="true">📅</i>
+        </div>
+        <div class="action-text">
+          <span class="action-title">Agendar Reunião</span>
+          <span class="action-subtitle">Marque uma reunião conosco</span>
+        </div>
+        <div class="action-arrow">
+          <i class="icon-arrow" aria-hidden="true">→</i>
+        </div>
+      </button>
+
+      <button class="action-button success" (click)="generateReport()" [attr.aria-label]="getTranslation('dashboard.generateReport')" [attr.title]="getTranslation('dashboard.generateReport')" type="button">
+        <div class="action-icon">
+          <i class="icon-report" aria-hidden="true">📊</i>
+        </div>
+        <div class="action-text">
+          <span class="action-title">Gerar Relatório</span>
+          <span class="action-subtitle">Obtenha insights detalhados</span>
+        </div>
+        <div class="action-arrow">
+          <i class="icon-arrow" aria-hidden="true">→</i>
+        </div>
+      </button>
+    </div>
+  </div>
+
+  <!-- Main Dashboard Content -->
+  <div class="dashboard-content">
+    <div class="content-grid">
+      <!-- Enhanced Analytics Overview -->
+      <div class="analytics-overview">
+        <div class="section-header">
+          <div class="section-title">
+            <h2>📈 Visão Geral de Performance</h2>
+            <p>Últimos 30 dias</p>
+          </div>
+          <div class="section-actions">
+            <button title="atualizar" class="refresh-btn" (click)="refreshAnalytics()" [attr.aria-label]="'Atualizar dados'" type="button">
+              <i class="icon-refresh" aria-hidden="true">🔄</i>
+            </button>
+            <button title="exportar" class="export-btn" (click)="exportAnalytics()" [attr.aria-label]="'Exportar dados'" type="button">
+              <i class="icon-export" aria-hidden="true">📤</i>
+            </button>
+          </div>
+        </div>
+
+        <div class="analytics-grid">
+          <div class="metric-card productivity">
+            <div class="metric-header">
+              <div class="metric-icon">
+                <i class="icon-productivity" aria-hidden="true">⚡</i>
+              </div>
+              <div class="metric-info">
+                <h3>Produtividade</h3>
+                <span class="metric-value">{{ productivityScore }}%</span>
+              </div>
+            </div>
+            <div class="metric-progress">
+              <div class="progress-bar">
+                <div class="progress-fill" [style.width.%]="productivityScore"></div>
+              </div>
+              <span class="progress-change positive">+12% vs mês anterior</span>
+            </div>
+            <div class="metric-insight">
+              <p>🎯 Meta mensal: 85% | Atual: {{ productivityScore }}%</p>
+            </div>
+          </div>
+
+          <div class="metric-card performance">
+            <div class="metric-header">
+              <div class="metric-icon">
+                <i class="icon-performance" aria-hidden="true">👥</i>
+              </div>
+              <div class="metric-info">
+                <h3>Performance da Equipe</h3>
+                <span class="metric-value">{{ teamPerformance }}%</span>
+              </div>
+            </div>
+            <div class="metric-progress">
+              <div class="progress-bar">
+                <div class="progress-fill" [style.width.%]="teamPerformance"></div>
+              </div>
+              <span class="progress-change positive">+8% vs mês anterior</span>
+            </div>
+            <div class="metric-insight">
+              <p>⭐ Excelente trabalho em equipe!</p>
+            </div>
+          </div>
+
+          <div class="metric-card satisfaction">
+            <div class="metric-header">
+              <div class="metric-icon">
+                <i class="icon-satisfaction" aria-hidden="true">😊</i>
+              </div>
+              <div class="metric-info">
+                <h3>Satisfação do Cliente</h3>
+                <span class="metric-value">{{ clientSatisfaction }}%</span>
+              </div>
+            </div>
+            <div class="metric-progress">
+              <div class="progress-bar">
+                <div class="progress-fill" [style.width.%]="clientSatisfaction"></div>
+              </div>
+              <span class="progress-change positive">+15% vs mês anterior</span>
+            </div>
+            <div class="metric-insight">
+              <p>💝 Clientes muito satisfeitos!</p>
+            </div>
+          </div>
+
+          <div class="metric-card revenue">
+            <div class="metric-header">
+              <div class="metric-icon">
+                <i class="icon-revenue" aria-hidden="true">💰</i>
+              </div>
+              <div class="metric-info">
+                <h3>Receita</h3>
+                <span class="metric-value">R$ {{ revenue | number:'1.0-0' }}</span>
+              </div>
+            </div>
+            <div class="revenue-trend">
+              <div class="trend-chart">
+                <div class="trend-line" [style.height.%]="85" [attr.aria-label]="'Semana 1: 85%'"></div>
+                <div class="trend-line" [style.height.%]="92" [attr.aria-label]="'Semana 2: 92%'"></div>
+                <div class="trend-line" [style.height.%]="78" [attr.aria-label]="'Semana 3: 78%'"></div>
+                <div class="trend-line" [style.height.%]="95" [attr.aria-label]="'Semana 4: 95%'"></div>
+              </div>
+              <span class="trend-change positive">+22% vs mês anterior</span>
+            </div>
+            <div class="metric-insight">
+              <p>📈 Crescimento consistente!</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Enhanced Activity & Notifications -->
+      <div class="activity-notifications">
+        <div class="activities-panel">
+          <div class="panel-header">
+            <div class="panel-title">
+              <h3>🔔 Atividades Recentes</h3>
+              <span class="panel-subtitle">Últimas 24 horas</span>
+            </div>
+            <button class="view-all-btn" (click)="viewAllActivities()" [attr.aria-label]="getTranslation('dashboard.viewAllActivities')" [attr.title]="getTranslation('dashboard.viewAllActivities')" type="button">
+              Ver Todas
+            </button>
+          </div>
+          <div class="activities-list">
+            <div class="activity-item" *ngFor="let activity of recentActivities" [attr.aria-label]="activity.text">
+              <div class="activity-icon" [ngClass]="activity.type">
+                <i [class]="activity.icon" aria-hidden="true"></i>
+              </div>
+              <div class="activity-content">
+                <p class="activity-text">{{ activity.text }}</p>
+                <span class="activity-time">{{ activity.time }}</span>
+              </div>
+              <div class="activity-status" *ngIf="activity.status">
+                <span class="status-badge" [ngClass]="activity.status">{{ activity.statusText }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="notifications-panel">
+          <div class="panel-header">
+            <div class="panel-title">
+              <h3>📬 Notificações</h3>
+              <span class="panel-subtitle">Mensagens importantes</span>
+            </div>
+            <span class="notification-count" *ngIf="unreadNotificationsCount > 0" [attr.aria-label]="unreadNotificationsCount + ' notificações não lidas'">
+              {{ unreadNotificationsCount }}
+            </span>
+          </div>
+          <div class="notifications-list">
+            <div class="notification-item" *ngFor="let notification of notifications.slice(0, 4)" [ngClass]="{'unread': !notification.read}" (click)="markAsRead(notification)" role="button" tabindex="0" [attr.aria-label]="getTranslation('dashboard.markAsRead')" [attr.title]="getTranslation('dashboard.markAsRead')">
+              <div class="notification-icon" [ngClass]="notification.type">
+                <i [class]="notification.icon" aria-hidden="true"></i>
+              </div>
+              <div class="notification-content">
+                <p class="notification-text">{{ notification.text }}</p>
+                <span class="notification-time">{{ notification.time }}</span>
+              </div>
+              <button title="notification" class="notification-close" (click)="dismissNotification(notification)" *ngIf="!notification.read" [attr.aria-label]="getTranslation('dashboard.dismissNotification')" [attr.title]="getTranslation('dashboard.dismissNotification')" type="button">
+                <i class="icon-close" aria-hidden="true">✕</i>
+              </button>
+            </div>
+          </div>
+          <button class="view-all-notifications" (click)="viewAllNotifications()" [attr.aria-label]="getTranslation('dashboard.viewAllNotifications')" [attr.title]="getTranslation('dashboard.viewAllNotifications')" type="button">
+            Ver Todas as Notificações
+          </button>
+        </div>
+      </div>
+
+      <!-- Enhanced Projects Overview -->
+      <div class="projects-overview">
+        <div class="section-header">
+          <div class="section-title">
+            <h2>🚀 Projetos Ativos</h2>
+            <p>Gerencie seus projetos em andamento</p>
+          </div>
+          <button class="manage-projects-btn" (click)="manageProjects()" [attr.aria-label]="getTranslation('dashboard.manageProjects')" [attr.title]="getTranslation('dashboard.manageProjects')" type="button">
+            <i class="icon-settings" aria-hidden="true"></i>
+            Gerenciar Todos
+          </button>
+        </div>
+
+        <div class="projects-grid">
+          <div class="project-card" *ngFor="let project of activeProjects" [attr.aria-label]="'Projeto: ' + project.name">
+            <div class="project-header">
+              <div class="project-info">
+                <h4>{{ project.name }}</h4>
+                <span class="project-status" [ngClass]="project.status">{{ project.statusText }}</span>
+              </div>
+              <div class="project-menu">
+                <button title="abrir" class="menu-btn" (click)="openProjectMenu(project)" [attr.aria-label]="getTranslation('dashboard.projectMenu')" [attr.title]="getTranslation('dashboard.projectMenu')" type="button">
+                  <i class="icon-menu" aria-hidden="true">⋯</i>
+                </button>
+              </div>
+            </div>
+
+            <div class="project-progress">
+              <div class="progress-info">
+                <span class="progress-label">Progresso</span>
+                <span class="progress-value">{{ project.progress }}%</span>
+              </div>
+              <div class="progress-bar">
+                <div class="progress-fill" [style.width.%]="project.progress"></div>
+              </div>
+            </div>
+
+            <div class="project-meta">
+              <div class="meta-item">
+                <i class="icon-calendar" aria-hidden="true">📅</i>
+                <span>Prazo: {{ project.deadline }}</span>
+              </div>
+              <div class="meta-item">
+                <i class="icon-team" aria-hidden="true">👥</i>
+                <span>{{ project.teamSize }} membros</span>
+              </div>
+            </div>
+
+            <div class="project-actions">
+              <button class="project-action-btn" (click)="viewProjectDetails(project)" [attr.aria-label]="'Ver detalhes do projeto ' + project.name" type="button">
+                Ver Detalhes
+              </button>
+              <button class="project-action-btn secondary" (click)="editProject(project)" [attr.aria-label]="'Editar projeto ' + project.name" type="button">
+                Editar
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Enhanced Quick Links & Support -->
+      <div class="quick-links-support">
+        <div class="quick-links-panel">
+          <h3>🔗 Links Rápidos</h3>
+          <div class="links-grid">
+            <a href="#" class="quick-link" (click)="navigateTo('profile')" [attr.aria-label]="getTranslation('dashboard.profile')" [attr.title]="getTranslation('dashboard.profile')">
+              <div class="link-icon">
+                <i class="icon-user" aria-hidden="true">👤</i>
+              </div>
+              <span>Meu Perfil</span>
+            </a>
+            <a href="#" class="quick-link" (click)="navigateTo('settings')" [attr.aria-label]="getTranslation('dashboard.settings')" [attr.title]="getTranslation('dashboard.settings')">
+              <div class="link-icon">
+                <i class="icon-settings" aria-hidden="true">⚙️</i>
+              </div>
+              <span>Configurações</span>
+            </a>
+            <a href="#" class="quick-link" (click)="navigateTo('reports')" [attr.aria-label]="getTranslation('dashboard.reports')" [attr.title]="getTranslation('dashboard.reports')">
+              <div class="link-icon">
+                <i class="icon-chart" aria-hidden="true">📊</i>
+              </div>
+              <span>Relatórios</span>
+            </a>
+            <a href="#" class="quick-link" (click)="navigateTo('help')" [attr.aria-label]="getTranslation('dashboard.help')" [attr.title]="getTranslation('dashboard.help')">
+              <div class="link-icon">
+                <i class="icon-help" aria-hidden="true">❓</i>
+              </div>
+              <span>Ajuda</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="support-panel">
+          <h3>🆘 Suporte & Ajuda</h3>
+          <div class="support-options">
+            <button class="support-btn chat" (click)="openChatSupport()" [attr.aria-label]="getTranslation('dashboard.chatSupport')" [attr.title]="getTranslation('dashboard.chatSupport')" type="button">
+              <div class="support-icon">
+                <i class="icon-chat" aria-hidden="true">💬</i>
+              </div>
+              <div class="support-info">
+                <span class="support-title">Chat ao Vivo</span>
+                <span class="support-subtitle">Atendimento instantâneo</span>
+              </div>
+              <div class="support-status">
+                <span class="status-online">● Online</span>
+              </div>
+            </button>
+
+            <button class="support-btn email" (click)="sendSupportEmail()" [attr.aria-label]="getTranslation('dashboard.emailSupport')" [attr.title]="getTranslation('dashboard.emailSupport')" type="button">
+              <div class="support-icon">
+                <i class="icon-email" aria-hidden="true">📧</i>
+              </div>
+              <div class="support-info">
+                <span class="support-title">Email de Suporte</span>
+                <span class="support-subtitle">Resposta em até 24h</span>
+              </div>
+              <div class="support-status">
+                <span class="status-available">● Disponível</span>
+              </div>
+            </button>
+
+            <button class="support-btn phone" (click)="callSupport()" [attr.aria-label]="getTranslation('dashboard.phoneSupport')" [attr.title]="getTranslation('dashboard.phoneSupport')" type="button">
+              <div class="support-icon">
+                <i class="icon-phone" aria-hidden="true">📞</i>
+              </div>
+              <div class="support-info">
+                <span class="support-title">Suporte por Telefone</span>
+                <span class="support-subtitle">Seg-Sex, 9h-18h</span>
+              </div>
+              <div class="support-status">
+                <span class="status-available">● Disponível</span>
+              </div>
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   </div>

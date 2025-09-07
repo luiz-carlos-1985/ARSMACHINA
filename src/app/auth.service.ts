@@ -154,6 +154,18 @@ export class AuthService {
     return Math.floor(100000 + Math.random() * 900000).toString();
   }
 
+  async getCurrentUserName(): Promise<string> {
+    try {
+      const user = await getCurrentUser();
+      const attributes = user.signInDetails?.loginId || user.username;
+      // Try to get name from attributes, fallback to email username
+      const name = attributes.split('@')[0]; // Simple fallback
+      return name;
+    } catch (error) {
+      return 'Usuário'; // Fallback
+    }
+  }
+
   private async checkAuthState() {
     try {
       await getCurrentUser();

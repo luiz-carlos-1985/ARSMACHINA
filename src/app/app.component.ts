@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { TodosComponent } from './todos/todos.component';
 import { NavigationComponent } from './navigation/navigation.component';
+import { ChatbotComponent } from './chatbot/chatbot.component';
 import { Amplify } from 'aws-amplify';
 import outputs from '../../amplify_outputs.json';
 
@@ -12,8 +13,8 @@ Amplify.configure(outputs);
   standalone: true,
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
-  imports: [RouterOutlet, NavigationComponent],
+  imports: [RouterOutlet, NavigationComponent, ChatbotComponent],
 })
 export class AppComponent {
-  title = 'amplify-angular-template';
+  title = 'ars-machina-consultancy';
 }

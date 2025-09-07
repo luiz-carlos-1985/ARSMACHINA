@@ -1,0 +1,45 @@
+<div class="chatbot-container">
+  <div class="chatbot-header">
+    <div class="chatbot-avatar">
+      <img src="assets/ars-machina-logo.svg" alt="Ars Machina" class="avatar-img">
+    </div>
+    <div class="chatbot-info">
+      <h3>Ars Machina Assistant</h3>
+      <span class="status">Online</span>
+    </div>
+    <button class="minimize-btn" (click)="toggleChat()" aria-label="Minimizar chat" title="Minimizar chat">−</button>
+  </div>
+
+  <div class="chat-messages" #chatContainer>
+    <div *ngFor="let message of messages" class="message" [ngClass]="{'user-message': message.sender === 'user', 'bot-message': message.sender === 'bot'}">
+      <div class="message-content">
+        {{ message.message }}
+      </div>
+    </div>
+
+    <div *ngIf="isLoading" class="message bot-message">
+      <div class="message-content typing">
+        <span class="typing-indicator">
+          <span></span>
+          <span></span>
+          <span></span>
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <div class="chat-input">
+    <input
+      type="text"
+      [(ngModel)]="userInput"
+      (keyup.enter)="sendMessage()"
+      placeholder="Digite sua mensagem..."
+      class="message-input"
+      aria-label="Digite sua mensagem">
+    <button (click)="sendMessage()" class="send-btn" [disabled]="!userInput.trim()" aria-label="Enviar mensagem" title="Enviar mensagem">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M2 21L23 12L2 3V10L17 12L2 14V21Z" fill="currentColor"/>
+      </svg>
+    </button>
+  </div>
+</div>
