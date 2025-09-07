@@ -1,14 +1,8 @@
 <!-- Hero Section -->
 <section id="home" class="hero">
   <div class="container">
-    <h1 class="hero-title" style="text-align: center;">! SITE EM CONSTRUÇÃO ! UNDER CONSTRUCTION !</h1>
     <h1 class="hero-title" style="text-align: center;">{{ getTranslation('hero.title') }}</h1>
     <p class="hero-subtitle" style="text-align: center;">{{ getTranslation('hero.description') }}</p>
-    <div style="text-align: center;">
-      <a href="mailto:contato@arsmachinaconsultancy.com" style="text-decoration: none;">
-        <button class="cta-button">{{ getTranslation('hero.cta') }}</button>
-      </a>
-    </div>
   </div>
 </section>
 
@@ -92,6 +86,9 @@
   <div class="container">
     <h2>{{ getTranslation('contact.title') }}</h2>
     <p>{{ getTranslation('contact.description') }}</p>
+    <div style="text-align: center; margin-bottom: 20px;">
+      <button type="button" class="cta-button" (click)="openWhatsApp()">Entrar em contato</button>
+    </div>
     <div class="contact-info">
       <div class="contact-item">
         <span class="contact-icon">📧</span>

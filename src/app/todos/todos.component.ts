@@ -44,8 +44,12 @@ export class TodosComponent implements OnInit {
 
   createTodo() {
     try {
+      const content = window.prompt('Conteúdo da Postagem:');
+      if (!content || content.trim() === '') {
+        return;
+      }
       client.models.Todo.create({
-        content: window.prompt('Conteúdo da Postagem:'),
+        content: content.trim(),
       });
       this.listTodos();
     } catch (error) {
@@ -56,5 +60,9 @@ export class TodosComponent implements OnInit {
   getTranslation(key: string): string {
     // This ensures the template updates when currentLanguage changes
     return this.translationService.translate(key);
+  }
+
+  openWhatsApp() {
+    window.location.href = 'https://wa.me/5598999649215';
   }
 }
