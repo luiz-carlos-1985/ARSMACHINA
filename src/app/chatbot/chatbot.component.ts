@@ -30,37 +30,67 @@ export class ChatbotComponent implements OnInit {
   userInput: string = '';
   isLoading: boolean = false;
   isMinimized: boolean = false;
+  showInfoBalloon: boolean = false;
   context: ConversationContext = {};
 
-  // Knowledge base for intelligent responses
+  // Enhanced knowledge base for intelligent responses
   private knowledgeBase = {
     services: {
-      web: ['desenvolvimento web', 'sites', 'aplicações web', 'e-commerce', 'landing pages'],
-      mobile: ['apps mobile', 'aplicativos', 'ios', 'android', 'react native', 'flutter'],
-      cloud: ['aws', 'azure', 'google cloud', 'nuvem', 'infraestrutura'],
-      security: ['segurança', 'cibersegurança', 'pentest', 'auditoria', 'compliance'],
-      ai: ['inteligência artificial', 'machine learning', 'ia', 'automação', 'chatbots'],
-      consulting: ['consultoria', 'assessoria', 'mentoria', 'treinamento']
+      web: ['desenvolvimento web', 'sites', 'aplicações web', 'e-commerce', 'landing pages', 'sistemas web', 'plataformas online'],
+      mobile: ['apps mobile', 'aplicativos', 'ios', 'android', 'react native', 'flutter', 'aplicativos móveis'],
+      cloud: ['aws', 'azure', 'google cloud', 'nuvem', 'infraestrutura', 'cloud computing', 'migração para nuvem'],
+      security: ['segurança', 'cibersegurança', 'pentest', 'auditoria', 'compliance', 'segurança da informação'],
+      ai: ['inteligência artificial', 'machine learning', 'ia', 'automação', 'chatbots', 'aprendizado de máquina'],
+      consulting: ['consultoria', 'assessoria', 'mentoria', 'treinamento', 'consultoria técnica']
     },
     expertise: [
       '10+ anos de experiência',
       'Certificações AWS, Azure, Google Cloud',
       'Especialistas em DevOps e SRE',
       'Equipe multidisciplinar',
-      'Projetos enterprise'
+      'Projetos enterprise',
+      'Metodologias ágeis',
+      'Arquitetura de software'
     ],
     technologies: [
-      'React', 'Angular', 'Vue.js', 'Node.js', 'Python', 'Java',
-      'Docker', 'Kubernetes', 'Terraform', 'CI/CD', 'Microservices'
+      'React', 'Angular', 'Vue.js', 'Node.js', 'Python', 'Java', '.NET',
+      'Docker', 'Kubernetes', 'Terraform', 'CI/CD', 'Microservices',
+      'PostgreSQL', 'MongoDB', 'Redis', 'Elasticsearch'
+    ],
+    industries: [
+      'fintech', 'healthtech', 'e-commerce', 'educação', 'saúde', 'varejo',
+      'logística', 'manufatura', 'telecomunicações', 'bancos'
+    ],
+    projectTypes: [
+      'sistema de gestão', 'plataforma e-commerce', 'app delivery', 'sistema financeiro',
+      'portal educacional', 'sistema de saúde', 'dashboard analítico', 'api rest'
     ]
   };
 
+  // Conversation patterns for better intent recognition
+  private conversationPatterns = {
+    questions: ['como', 'qual', 'quando', 'onde', 'quem', 'quanto', 'por que', 'o que', 'pra que'],
+    requests: ['quero', 'preciso', 'gostaria', 'posso', 'tem como', 'é possível'],
+    problems: ['problema', 'erro', 'dificuldade', 'não funciona', 'não consigo'],
+    comparisons: ['melhor', 'comparado', 'diferença', 'versus', 'vs'],
+    urgency: ['urgente', 'rápido', 'imediatamente', 'hoje', 'agora']
+  };
+
   ngOnInit() {
-    this.addBotMessage("Olá! 👋 Eu sou o assistente inteligente da Ars Machina Consultancy. Como posso ajudar você hoje? Posso informar sobre nossos serviços, agendar reuniões ou tirar dúvidas técnicas.");
+    // Do not open chat automatically on load
+    // Instead, show a minimized chat with an info balloon
+    this.isMinimized = true;
+    this.showInfoBalloon = true;
   }
 
   toggleChat() {
     this.isMinimized = !this.isMinimized;
+    if (!this.isMinimized) {
+      this.showInfoBalloon = false;
+      if (this.messages.length === 0) {
+        this.addBotMessage("Olá! 👋 Eu sou o assistente inteligente da Ars Machina Consultancy. Como posso ajudar você hoje? Posso informar sobre nossos serviços, agendar reuniões ou tirar dúvidas técnicas.");
+      }
+    }
   }
 
   addBotMessage(message: string) {
@@ -100,66 +130,126 @@ export class ChatbotComponent implements OnInit {
   generateResponse(userMessage: string): string {
     const msg = userMessage.toLowerCase().trim();
 
-    // Update context
+    // Update context with enhanced analysis
     this.updateContext(msg);
 
-    // Greeting responses
-    if (this.isGreeting(msg)) {
-      return this.handleGreeting();
+    // Analyze intent with better pattern recognition
+    const intent = this.analyzeIntent(msg);
+
+    switch (intent) {
+      case 'greeting':
+        return this.handleGreeting();
+
+      case 'service_inquiry':
+        return this.handleServiceInquiry(msg);
+
+      case 'contact':
+        return this.handleContactInquiry();
+
+      case 'pricing':
+        return this.handlePricingInquiry();
+
+      case 'schedule':
+        return this.handleScheduleInquiry();
+
+      case 'project':
+        return this.handleProjectInquiry(msg);
+
+      case 'technology':
+        return this.handleTechnologyInquiry(msg);
+
+      case 'expertise':
+        return this.handleExpertiseInquiry();
+
+      case 'support':
+        return this.handleSupportInquiry();
+
+      case 'appointment':
+        return this.handleAppointmentRequest();
+
+      case 'company':
+        return this.handleCompanyInquiry();
+
+      case 'comparison':
+        // Fix: method name corrected from handleComparisonInquiry to handleCompanyInquiry
+        return this.handleCompanyInquiry();
+
+      case 'problem':
+        return this.handleProblemInquiry(msg);
+
+      case 'follow_up':
+        return this.handleFollowUpQuestion(msg);
+
+      default:
+        return this.handleIntelligentDefault(msg);
+    }
+  }
+
+  private analyzeIntent(message: string): string {
+    // Check for question patterns
+    if (this.conversationPatterns.questions.some(q => message.includes(q))) {
+      // Determine question type
+      if (this.containsKeywords(message, ['serviço', 'service', 'serviços', 'services', 'o que vocês fazem'])) {
+        return 'service_inquiry';
+      }
+      if (this.containsKeywords(message, ['tecnologia', 'tech', 'stack', 'framework', 'linguagem'])) {
+        return 'technology';
+      }
+      if (this.containsKeywords(message, ['experiência', 'experience', 'expertise', 'qualificação', 'certificação'])) {
+        return 'expertise';
+      }
+      if (this.containsKeywords(message, ['preço', 'price', 'custo', 'cost', 'valor', 'value', 'orçamento'])) {
+        return 'pricing';
+      }
+      if (this.containsKeywords(message, ['horário', 'schedule', 'hora', 'time', 'quando', 'when', 'disponível'])) {
+        return 'schedule';
+      }
+      if (this.containsKeywords(message, ['projeto', 'project', 'desenvolvimento', 'development'])) {
+        return 'project';
+      }
+      if (this.containsKeywords(message, ['empresa', 'company', 'ars machina', 'sobre vocês', 'about'])) {
+        return 'company';
+      }
+      if (this.conversationPatterns.comparisons.some(c => message.includes(c))) {
+        return 'comparison';
+      }
     }
 
-    // Service inquiries
-    if (this.containsKeywords(msg, ['serviço', 'service', 'serviços', 'services', 'o que vocês fazem'])) {
-      return this.handleServiceInquiry(msg);
+    // Check for request patterns
+    if (this.conversationPatterns.requests.some(r => message.includes(r))) {
+      if (this.containsKeywords(message, ['contato', 'contact', 'telefone', 'phone', 'email', 'whatsapp'])) {
+        return 'contact';
+      }
+      if (this.containsKeywords(message, ['reunião', 'meeting', 'agendar', 'schedule', 'consulta', 'consultation'])) {
+        return 'appointment';
+      }
+      if (this.containsKeywords(message, ['ajuda', 'help', 'suporte', 'support'])) {
+        return 'support';
+      }
     }
 
-    // Contact information
-    if (this.containsKeywords(msg, ['contato', 'contact', 'telefone', 'phone', 'email', 'whatsapp'])) {
-      return this.handleContactInquiry();
+    // Check for problem patterns
+    if (this.conversationPatterns.problems.some(p => message.includes(p))) {
+      return 'problem';
     }
 
-    // Pricing inquiries
-    if (this.containsKeywords(msg, ['preço', 'price', 'custo', 'cost', 'valor', 'value', 'orçamento'])) {
-      return this.handlePricingInquiry();
+    // Check for urgency
+    if (this.conversationPatterns.urgency.some(u => message.includes(u))) {
+      this.context.urgency = 'high';
     }
 
-    // Schedule/Time inquiries
-    if (this.containsKeywords(msg, ['horário', 'schedule', 'hora', 'time', 'quando', 'when', 'disponível'])) {
-      return this.handleScheduleInquiry();
+    // Check for greetings
+    if (this.isGreeting(message)) {
+      return 'greeting';
     }
 
-    // Project inquiries
-    if (this.containsKeywords(msg, ['projeto', 'project', 'desenvolvimento', 'development'])) {
-      return this.handleProjectInquiry(msg);
+    // Check for follow-up questions based on context
+    if (this.context.topic && this.context.previousQuestions && this.context.previousQuestions.length > 1) {
+      return 'follow_up';
     }
 
-    // Technology specific inquiries
-    if (this.containsKeywords(msg, ['tecnologia', 'tech', 'stack', 'framework', 'linguagem'])) {
-      return this.handleTechnologyInquiry(msg);
-    }
-
-    // Experience/Expertise inquiries
-    if (this.containsKeywords(msg, ['experiência', 'experience', 'expertise', 'qualificação', 'certificação'])) {
-      return this.handleExpertiseInquiry();
-    }
-
-    // Support/Help inquiries
-    if (this.containsKeywords(msg, ['ajuda', 'help', 'suporte', 'support', 'problema', 'issue'])) {
-      return this.handleSupportInquiry();
-    }
-
-    // Appointment/Meeting requests
-    if (this.containsKeywords(msg, ['reunião', 'meeting', 'agendar', 'schedule', 'consulta', 'consultation'])) {
-      return this.handleAppointmentRequest();
-    }
-
-    // Company information
-    if (this.containsKeywords(msg, ['empresa', 'company', 'ars machina', 'sobre vocês', 'about'])) {
-      return this.handleCompanyInquiry();
-    }
-
-    // Default response with context awareness
-    return this.handleDefaultResponse(msg);
+    // Default fallback
+    return 'default';
   }
 
   private updateContext(message: string): void {
@@ -347,18 +437,114 @@ export class ChatbotComponent implements OnInit {
            "Somos uma consultoria full-stack, desde estratégia até implementação!";
   }
 
-  private handleDefaultResponse(message: string): string {
-    const responses = [
-      "Hmm, não entendi completamente. Poderia ser mais específico sobre o que você precisa? Posso ajudar com desenvolvimento, consultoria, segurança, ou qualquer questão técnica.",
-      "Desculpe, não consegui captar exatamente o que você quis dizer. Tente reformular a pergunta ou me diga qual área você gostaria de explorar: serviços, tecnologias, preços, ou agendamento?",
-      "Interessante! Para te ajudar melhor, me conte mais detalhes. Estou preparado para falar sobre nossos serviços de desenvolvimento, consultoria em nuvem, segurança cibernética, ou soluções de IA."
+
+
+  private handleProblemInquiry(message: string): string {
+    const problemResponses = [
+      "🚨 Entendi que você está enfrentando um problema. Vamos resolver isso juntos!",
+      "🔧 Problemas técnicos são nossa especialidade! Descreva o que está acontecendo.",
+      "🆘 Não se preocupe, estamos aqui para ajudar. Qual é o desafio que você está enfrentando?"
     ];
 
-    // If we have context, provide more targeted response
-    if (this.context.topic) {
-      return `Sobre ${this.context.topic}, posso te dar mais detalhes. O que especificamente você gostaria de saber?`;
+    let response = problemResponses[Math.floor(Math.random() * problemResponses.length)] + "\n\n";
+
+    // Analyze problem type
+    if (message.includes('performance') || message.includes('lento') || message.includes('slow')) {
+      response += "⚡ Para problemas de performance, podemos ajudar com:\n" +
+                  "• Otimização de código e queries\n" +
+                  "• Arquitetura de cache\n" +
+                  "• Otimização de banco de dados\n" +
+                  "• CDN e balanceamento de carga\n\n";
     }
 
-    return responses[Math.floor(Math.random() * responses.length)];
+    if (message.includes('segurança') || message.includes('security') || message.includes('hack')) {
+      response += "🔒 Para questões de segurança, oferecemos:\n" +
+                  "• Auditoria de vulnerabilidades\n" +
+                  "• Implementação de melhores práticas\n" +
+                  "• Testes de penetração\n" +
+                  "• Compliance com regulamentações\n\n";
+    }
+
+    if (message.includes('deploy') || message.includes('implantação') || message.includes('erro')) {
+      response += "🚀 Para problemas de deploy, podemos ajudar com:\n" +
+                  "• Configuração de CI/CD\n" +
+                  "• Automação de processos\n" +
+                  "• Monitoramento e logs\n" +
+                  "• Rollback strategies\n\n";
+    }
+
+    response += "Descreva o problema em detalhes para eu poder te ajudar melhor!";
+    return response;
+  }
+
+  private handleFollowUpQuestion(message: string): string {
+    if (!this.context.topic || !this.context.previousQuestions) {
+      return this.handleIntelligentDefault(message);
+    }
+
+    const lastQuestion = this.context.previousQuestions[this.context.previousQuestions.length - 2];
+
+    // Provide contextual follow-up based on previous conversation
+    if (lastQuestion.includes('preço') || lastQuestion.includes('custo')) {
+      return "💰 Seguindo nossa conversa sobre preços, posso agendar uma reunião gratuita para discutir seu projeto específico e fornecer um orçamento personalizado?";
+    }
+
+    if (lastQuestion.includes('tecnologia') || lastQuestion.includes('stack')) {
+      return "🛠️ Sobre as tecnologias que mencionamos, qual delas te interessou mais? Posso dar mais detalhes sobre implementação e benefícios.";
+    }
+
+    if (lastQuestion.includes('projeto') || lastQuestion.includes('desenvolvimento')) {
+      return "🚀 Continuando sobre seu projeto, que prazo você tem em mente? Podemos adaptar nossa metodologia ágil para atender suas necessidades.";
+    }
+
+    return `Sobre nossa conversa anterior sobre ${this.context.topic}, o que mais você gostaria de saber?`;
+  }
+
+  private handleIntelligentDefault(message: string): string {
+    // Enhanced default responses with better context awareness
+    const intelligentResponses = [
+      {
+        condition: () => this.context.topic,
+        response: `Sobre ${this.context.topic}, posso te ajudar com mais detalhes. O que especificamente você gostaria de saber?`
+      },
+      {
+        condition: () => this.context.urgency === 'high',
+        response: "🚨 Vejo que é uma questão urgente! Podemos priorizar seu atendimento. Que tipo de ajuda você precisa imediatamente?"
+      },
+      {
+        condition: () => this.context.serviceInterest,
+        response: `Parece que você tem interesse em ${this.context.serviceInterest}. Posso fornecer informações mais específicas sobre esse serviço?`
+      },
+      {
+        condition: () => this.knowledgeBase.industries.some(industry => message.includes(industry)),
+        response: "📊 Vejo que trabalha com um setor específico. Temos experiência em diversos segmentos! Conte-me mais sobre seu negócio."
+      },
+      {
+        condition: () => this.knowledgeBase.projectTypes.some(type => message.includes(type)),
+        response: "🎯 Identifiquei o tipo de projeto que você mencionou. Temos cases similares muito bem-sucedidos! Quer conhecer alguns?"
+      }
+    ];
+
+    // Check for matching conditions
+    for (const item of intelligentResponses) {
+      if (item.condition()) {
+        return item.response;
+      }
+    }
+
+    // Fallback responses with personality
+    const fallbackResponses = [
+      "🤔 Hmm, deixe-me entender melhor sua necessidade. Você está procurando por desenvolvimento de software, consultoria, ou algo mais específico?",
+      "💡 Interessante! Para te ajudar melhor, me conte um pouco mais sobre o que você precisa. Sou especialista em soluções tecnológicas.",
+      "🎯 Vamos encontrar a solução perfeita para você! Que tipo de desafio tecnológico você está enfrentando?",
+      "🚀 Estou aqui para ajudar com qualquer questão relacionada a tecnologia e desenvolvimento. O que você tem em mente?"
+    ];
+
+    return fallbackResponses[Math.floor(Math.random() * fallbackResponses.length)];
+  }
+
+  private handleDefaultResponse(message: string): string {
+    // Keep the old method for backward compatibility
+    return this.handleIntelligentDefault(message);
   }
 }

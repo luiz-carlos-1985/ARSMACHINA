@@ -165,3 +165,37 @@
 - Verify context tracking works properly
 - Test service-specific responses
 - Check conversation flow and coherence
+
+---
+
+## New Task: Fix Translation Popup White/Blank Issue
+
+## Steps to Complete:
+- [x] Replace basic select element with custom dropdown
+- [x] Add proper styling for dropdown options
+- [x] Implement toggle functionality for dropdown
+- [x] Add click-outside functionality to close dropdown
+- [x] Fix CSS syntax errors and ensure proper styling
+
+## Information Gathered:
+- Translation popup was appearing white/blank due to browser default select styling
+- The select dropdown options were not visible because they inherited default browser styles
+- Need to create a custom dropdown component with proper styling
+
+## Plan:
+- Replace `<select>` with custom button and dropdown div
+- Add proper CSS styling with white background and dark text for options
+- Implement toggle functionality for opening/closing dropdown
+- Add hover and active states for better UX
+- Ensure responsive design works on mobile
+
+## Dependent Files:
+- src/app/navigation/navigation.component.html
+- src/app/navigation/navigation.component.ts
+- src/app/navigation/navigation.component.css
+
+## Followup Steps:
+- Test translation popup on different browsers
+- Verify dropdown closes when clicking outside
+- Test mobile responsiveness
+- Ensure language switching works properly

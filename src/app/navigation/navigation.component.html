@@ -15,9 +15,23 @@
       <a *ngIf="!isLoggedIn" routerLink="/login" (click)="closeMenu()">{{ getTranslation('nav.login') }}</a>
       <a *ngIf="isLoggedIn" routerLink="/dashboard" (click)="closeMenu()">{{ getTranslation('nav.dashboard') }}</a>
       <button *ngIf="isLoggedIn" (click)="logout()" class="logout-btn">{{ getTranslation('nav.logout') }}</button>
-      <select (change)="changeLanguage($any($event.target).value)" [value]="currentLanguage" aria-label="Select language">
-        <option *ngFor="let lang of availableLanguages" [value]="lang.code">{{ lang.name }}</option>
-      </select>
+      <div class="language-selector">
+        <button class="language-btn" (click)="toggleLanguageDropdown()" [class.active]="isLanguageDropdownOpen">
+          <span class="current-lang">{{ getCurrentLanguageName() }}</span>
+          <svg class="dropdown-arrow" [class.rotated]="isLanguageDropdownOpen" width="12" height="12" viewBox="0 0 12 12">
+            <path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" stroke-width="1.5" fill="none"/>
+          </svg>
+        </button>
+        <div class="language-dropdown" [class.show]="isLanguageDropdownOpen">
+          <button
+            *ngFor="let lang of availableLanguages"
+            class="language-option"
+            [class.active]="lang.code === currentLanguage"
+            (click)="selectLanguage(lang.code)">
+            {{ lang.name }}
+          </button>
+        </div>
+      </div>
     </div>
     <div class="hamburger" (click)="toggleMenu()">
       <span></span>

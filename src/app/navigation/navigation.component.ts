@@ -16,6 +16,7 @@ export class NavigationComponent implements OnInit {
   isLoggedIn = false;
   currentLanguage = 'pt';
   availableLanguages: { code: string; name: string }[] = [];
+  isLanguageDropdownOpen = false;
 
   constructor(
     private authService: AuthService,
@@ -61,6 +62,20 @@ export class NavigationComponent implements OnInit {
     this.translationService.setLanguage(language);
     this.currentLanguage = language;
     this.closeMenu(); // Close menu on language change for better UX on mobile
+  }
+
+  toggleLanguageDropdown() {
+    this.isLanguageDropdownOpen = !this.isLanguageDropdownOpen;
+  }
+
+  getCurrentLanguageName(): string {
+    const currentLang = this.availableLanguages.find(lang => lang.code === this.currentLanguage);
+    return currentLang ? currentLang.name : 'Português';
+  }
+
+  selectLanguage(languageCode: string) {
+    this.changeLanguage(languageCode);
+    this.isLanguageDropdownOpen = false;
   }
 
   getTranslation(key: string): string {

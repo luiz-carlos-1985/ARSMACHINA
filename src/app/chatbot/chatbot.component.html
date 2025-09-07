@@ -1,5 +1,15 @@
-<div class="chatbot-container">
-  <div class="chatbot-header">
+<div class="chatbot-container" [ngClass]="{'minimized': isMinimized}" (click)="isMinimized ? toggleChat() : null">
+  <!-- Info Balloon -->
+  <div *ngIf="showInfoBalloon" class="info-balloon">
+    <div class="balloon-content">
+      <span class="balloon-text">Olá! Precisa de ajuda?</span>
+      <button class="balloon-close" (click)="showInfoBalloon = false" aria-label="Fechar balão">×</button>
+    </div>
+    <div class="balloon-arrow"></div>
+  </div>
+
+  <!-- Chat Header -->
+  <div class="chatbot-header" *ngIf="!isMinimized">
     <div class="chatbot-avatar">
       <img src="assets/ars-machina-logo.svg" alt="Ars Machina" class="avatar-img">
     </div>
