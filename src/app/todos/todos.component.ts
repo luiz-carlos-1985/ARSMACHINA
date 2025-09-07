@@ -48,6 +48,10 @@ export class TodosComponent implements OnInit {
       if (!content || content.trim() === '') {
         return;
       }
+      if (content.trim().length < 3) {
+        window.alert('O conteúdo da postagem deve ter pelo menos 3 caracteres.');
+        return;
+      }
       client.models.Todo.create({
         content: content.trim(),
       });

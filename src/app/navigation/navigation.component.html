@@ -5,10 +5,10 @@
     </div>
     <div class="nav-menu" [class.active]="isMenuOpen">
       <a routerLink="/home" (click)="closeMenu()">{{ getTranslation('nav.home') }}</a>
-      <a href="#about" (click)="closeMenu()">{{ getTranslation('nav.about') }}</a>
-      <a href="#services" (click)="closeMenu()">{{ getTranslation('nav.services') }}</a>
-      <a href="#blog" (click)="closeMenu()">{{ getTranslation('nav.blog') }}</a>
-      <a href="#contact" (click)="closeMenu()">{{ getTranslation('nav.contact') }}</a>
+      <a routerLink="/about" (click)="closeMenu()">{{ getTranslation('nav.about') }}</a>
+      <a routerLink="/services" (click)="closeMenu()">{{ getTranslation('nav.services') }}</a>
+      <a routerLink="/blog" (click)="closeMenu()">{{ getTranslation('nav.blog') }}</a>
+      <a routerLink="/contact" (click)="closeMenu()">{{ getTranslation('nav.contact') }}</a>
       <a *ngIf="!isLoggedIn" routerLink="/login" (click)="closeMenu()">{{ getTranslation('nav.login') }}</a>
       <a *ngIf="isLoggedIn" routerLink="/dashboard" (click)="closeMenu()">{{ getTranslation('nav.dashboard') }}</a>
       <button *ngIf="isLoggedIn" (click)="logout()" class="logout-btn">{{ getTranslation('nav.logout') }}</button>

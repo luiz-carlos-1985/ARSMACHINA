@@ -1,0 +1,44 @@
+<section class="services">
+  <div class="container">
+    <h2>{{ translationService.translate('services.title') }}</h2>
+    <div class="service-grid">
+      <div class="service-card">
+        <div class="service-icon">💻</div>
+        <h3>{{ translationService.translate('services.software.title') }}</h3>
+        <p>{{ translationService.translate('services.software.description') }}</p>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">☁️</div>
+        <h3>{{ translationService.translate('services.cloud.title') }}</h3>
+        <p>{{ translationService.translate('services.cloud.description') }}</p>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">🔒</div>
+        <h3>{{ translationService.translate('services.security.title') }}</h3>
+        <p>{{ translationService.translate('services.security.description') }}</p>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">📊</div>
+        <h3>{{ translationService.translate('services.analytics.title') }}</h3>
+        <p>{{ translationService.translate('services.analytics.description') }}</p>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">🤖</div>
+        <h3>{{ translationService.translate('services.ai.title') }}</h3>
+        <p>{{ translationService.translate('services.ai.description') }}</p>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">📱</div>
+        <h3>{{ translationService.translate('services.consulting.title') }}</h3>
+        <p>{{ translationService.translate('services.consulting.description') }}</p>
+      </div>
+    </div>
+
+    <!-- Added interactive section -->
+    <div class="interactive-section">
+      <h3>Por que escolher a Ars Machina Consultancy?</h3>
+      <p>Oferecemos soluções personalizadas que atendem às necessidades específicas do seu negócio, com foco em inovação e resultados mensuráveis.</p>
+      <button (click)="contactUs()" class="contact-button">Fale conosco</button>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,18 @@
+import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { TranslationService } from '../translation.service';
+
+@Component({
+  selector: 'app-services',
+  standalone: true,
+  imports: [CommonModule],
+  templateUrl: './services.component.html',
+  styleUrls: ['./services.component.css'],
+})
+export class ServicesComponent {
+  constructor(public translationService: TranslationService) {}
+
+  contactUs() {
+    window.open('https://wa.me/5598999649215', '_blank', 'noopener');
+  }
+}

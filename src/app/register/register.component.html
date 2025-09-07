@@ -25,6 +25,7 @@
           id="password"
           name="password"
           [(ngModel)]="password"
+          (input)="onPasswordChange()"
           required
           minlength="6"
           #passwordInput="ngModel"
@@ -32,6 +33,15 @@
         <div *ngIf="passwordInput.invalid && passwordInput.touched" class="error">
           {{ getTranslation('register.password') }} {{ getTranslation('register.passwordTooShort') }}.
         </div>
+
+        <!-- Password requirements checklist -->
+        <ul class="password-requirements">
+          <li [class.met]="passwordRequirements.minLength">Mínimo 8 caracteres</li>
+          <li [class.met]="passwordRequirements.uppercase">Uma letra maiúscula</li>
+          <li [class.met]="passwordRequirements.lowercase">Uma letra minúscula</li>
+          <li [class.met]="passwordRequirements.number">Um número</li>
+          <li [class.met]="passwordRequirements.specialChar">Um caractere especial (!&#64;$%^&*)</li>
+        </ul>
       </div>
 
       <div class="form-group">

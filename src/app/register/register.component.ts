@@ -21,6 +21,14 @@ export class RegisterComponent implements OnInit {
   successMessage = '';
   currentLanguage = 'pt';
 
+  passwordRequirements = {
+    minLength: false,
+    uppercase: false,
+    lowercase: false,
+    number: false,
+    specialChar: false,
+  };
+
   constructor(
     private router: Router,
     private translationService: TranslationService,
@@ -29,6 +37,14 @@ export class RegisterComponent implements OnInit {
 
   ngOnInit() {
     this.initializeLanguageSubscription();
+  }
+
+  onPasswordChange() {
+    this.passwordRequirements.minLength = this.password.length >= 8;
+    this.passwordRequirements.uppercase = /[A-Z]/.test(this.password);
+    this.passwordRequirements.lowercase = /[a-z]/.test(this.password);
+    this.passwordRequirements.number = /\d/.test(this.password);
+    this.passwordRequirements.specialChar = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(this.password);
   }
 
   private initializeLanguageSubscription() {
@@ -50,6 +66,16 @@ export class RegisterComponent implements OnInit {
 
     if (this.password.length < 6) {
       this.errorMessage = this.getTranslation('register.passwordTooShort');
+      return;
+    }
+
+    // Check password requirements
+    if (!this.passwordRequirements.minLength ||
+        !this.passwordRequirements.uppercase ||
+        !this.passwordRequirements.lowercase ||
+        !this.passwordRequirements.number ||
+        !this.passwordRequirements.specialChar) {
+      this.errorMessage = 'A senha deve atender a todos os requisitos.';
       return;
     }
 

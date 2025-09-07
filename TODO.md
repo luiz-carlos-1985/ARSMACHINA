@@ -30,3 +30,25 @@
 - Run `ng serve` to test the app locally
 - Use browser_action to verify the page appearance
 - Make any final tweaks based on visual feedback
+
+---
+
+## New Task: Add Validation for Post Creation
+
+## Steps to Complete:
+- [x] Edit src/app/todos/todos.component.ts to add length validation in createTodo method (prevent creation if content < 3 characters and show alert)
+
+## Information Gathered:
+- Post creation is handled in createTodo method using window.prompt
+- Currently checks for empty content, but not minimum length
+- Need to add check for content.trim().length < 3, alert user, and prevent creation
+
+## Plan:
+- Modify the createTodo method to include length validation
+- Use window.alert to warn the user appropriately
+
+## Dependent Files:
+- src/app/todos/todos.component.ts
+
+## Followup Steps:
+- Test the validation by trying to create a post with less than 3 characters
