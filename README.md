@@ -113,7 +113,5 @@ Para relatar vulnerabilidades de segurança, consulte nossas [diretrizes de segu
 
 Este projeto está licenciado sob a Licença MIT-0. Consulte o arquivo LICENSE para mais detalhes.
 
----
-
 **Ars Machina Consultancy** © 2025. Todos os direitos reservados.
 Transformando ideias em realidade digital.
