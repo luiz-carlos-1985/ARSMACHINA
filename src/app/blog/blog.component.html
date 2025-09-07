@@ -5,15 +5,21 @@
       <div class="post-card" *ngFor="let post of posts">
         <h3>{{ post.title }}</h3>
         <p class="post-excerpt">{{ post.content | slice:0:150 }}...</p>
-        <a href="#" (click)="openPost(post)" class="read-more">{{ translationService.translate('blog.readMore') }}</a>
+        <button (click)="openPost(post)" class="read-more">{{ translationService.translate('blog.readMore') }}</button>
       </div>
     </div>
 
     <div *ngIf="selectedPost" class="post-modal" (click)="closePost()">
       <div class="post-modal-content" (click)="$event.stopPropagation()">
-        <h3>{{ selectedPost.title }}</h3>
-        <p>{{ selectedPost.content }}</p>
-        <button (click)="closePost()" class="close-button">X</button>
+        <div class="modal-header">
+          <h3>{{ selectedPost.title }}</h3>
+          <button (click)="closePost()" class="close-button" title="Fechar" aria-label="Fechar modal">
+            X
+          </button>
+        </div>
+        <div class="modal-body">
+          <p>{{ selectedPost.content }}</p>
+        </div>
       </div>
     </div>
   </div>
