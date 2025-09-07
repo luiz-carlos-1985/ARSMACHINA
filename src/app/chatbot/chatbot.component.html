@@ -3,7 +3,7 @@
   <div *ngIf="showInfoBalloon" class="info-balloon">
     <div class="balloon-content">
       <span class="balloon-text">Olá! Precisa de ajuda?</span>
-      <button class="balloon-close" (click)="showInfoBalloon = false" aria-label="Fechar balão">×</button>
+      <button class="balloon-close" (click)="showInfoBalloon = false; $event.stopPropagation()" aria-label="Fechar balão">×</button>
     </div>
     <div class="balloon-arrow"></div>
   </div>
@@ -17,7 +17,7 @@
       <h3>Ars Machina Assistant</h3>
       <span class="status">Online</span>
     </div>
-    <button class="minimize-btn" (click)="toggleChat()" aria-label="Minimizar chat" title="Minimizar chat">−</button>
+    <button class="minimize-btn" (click)="toggleChat(); $event.stopPropagation()" aria-label="Minimizar chat" title="Minimizar chat">−</button>
   </div>
 
   <div class="chat-messages" #chatContainer>
