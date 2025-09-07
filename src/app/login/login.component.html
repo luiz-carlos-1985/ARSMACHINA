@@ -1,9 +1,9 @@
 <div class="login-container">
   <div class="login-form">
-    <h2>Login</h2>
+    <h2>{{ getTranslation('login.title') }}</h2>
     <form (ngSubmit)="onSubmit()" #loginForm="ngForm">
       <div class="form-group">
-        <label for="email">Email:</label>
+        <label for="email">{{ getTranslation('login.email') }}:</label>
         <input
           type="email"
           id="email"
@@ -14,12 +14,12 @@
           #emailInput="ngModel"
         />
         <div *ngIf="emailInput.invalid && emailInput.touched" class="error">
-          Por gentileza, informe um e-mail válido.
+          {{ getTranslation('login.email') }} inválido.
         </div>
       </div>
 
       <div class="form-group">
-        <label for="password">Senha:</label>
+        <label for="password">{{ getTranslation('login.password') }}:</label>
         <input
           type="password"
           id="password"
@@ -30,12 +30,12 @@
           #passwordInput="ngModel"
         />
         <div *ngIf="passwordInput.invalid && passwordInput.touched" class="error">
-          A senha tem que ter no mínimo 6 caracteres.
+          {{ getTranslation('login.password') }} deve ter no mínimo 6 caracteres.
         </div>
       </div>
 
       <button type="submit" [disabled]="loginForm.invalid || isLoading" class="login-btn">
-        {{ isLoading ? 'Logging in...' : 'Login' }}
+        {{ isLoading ? getTranslation('login.submit') + '...' : getTranslation('login.submit') }}
       </button>
     </form>
 
@@ -44,7 +44,7 @@
     </div>
 
     <div class="register-link">
-      <p>Não tem uma conta? <a routerLink="/register">Registre-se</a></p>
+      <p>{{ getTranslation('login.noAccount') }} <a routerLink="/register" routerLinkActive="active">{{ getTranslation('login.register') }}</a></p>
     </div>
   </div>
 </div>

@@ -1,39 +1,34 @@
 <!-- Hero Section -->
-<section id="home" class="about">
+<section id="home" class="hero">
   <div class="container">
-    <h1 class="hero-title" style="text-align: center;">! SITE EM CONSTRUÇÃO !</h1>
-    <h1 class="hero-title" style="text-align: center;">Ars Machina Consultancy</h1>
-    <p class="hero-subtitle" style="text-align: center;">Transformando Idéias em Realidade Digital</p>
-    <p class="hero-description" style="text-align: center;">Consultoria em TI, Desenvolvimento de Software e Soluções Inovadoras para o Seu Negócio</p>
+    <h1 class="hero-title" style="text-align: center;">! SITE EM CONSTRUÇÃO ! UNDER CONSTRUCTION !</h1>
+    <h1 class="hero-title" style="text-align: center;">{{ getTranslation('hero.title') }}</h1>
+    <p class="hero-subtitle" style="text-align: center;">{{ getTranslation('hero.description') }}</p>
     <div style="text-align: center;">
       <a href="mailto:contato@arsmachinaconsultancy.com" style="text-decoration: none;">
-        <button class="cta-button">Entre em Contato</button>
+        <button class="cta-button">{{ getTranslation('hero.cta') }}</button>
       </a>
     </div>
-  </div>
-  <div class="hero-image">
-    <!-- Placeholder for hero image -->
-    <div class="hero-placeholder">🚀 Inovação em TI</div>
   </div>
 </section>
 
 <!-- About Section -->
 <section id="about" class="about">
   <div class="container">
-    <h2>Sobre Nós</h2>
-    <p>Ars Machina Consultancy é uma empresa emergente em consultoria em TI, apaixonada por transformar ideias em soluções digitais inovadoras. Nossa equipe jovem e dinâmica combina conhecimento técnico atualizado com criatividade e dedicação para ajudar empresas a se adaptarem ao mundo digital. Estamos com muito entusiasmo e comprometimento em entregar resultados excepcionais aos nossos clientes.</p>
+    <h2>{{ getTranslation('about.title') }}</h2>
+    <p>{{ getTranslation('about.description') }}</p>
     <div class="stats">
       <div class="stat">
         <h3>20+</h3>
-        <p>Projetos Concluídos</p>
+        <p>{{ getTranslation('about.projects') }}</p>
       </div>
       <div class="stat">
         <h3>8+</h3>
-        <p>Clientes Atendidos</p>
+        <p>{{ getTranslation('about.clients') }}</p>
       </div>
       <div class="stat">
         <h3>5+</h3>
-        <p>Ano de Experiência</p>
+        <p>{{ getTranslation('about.experience') }}</p>
       </div>
     </div>
   </div>
@@ -42,37 +37,37 @@
 <!-- Services Section -->
 <section id="services" class="services">
   <div class="container">
-    <h2>Nossos Serviços</h2>
+    <h2>{{ getTranslation('services.title') }}</h2>
     <div class="service-grid">
       <div class="service-card">
         <div class="service-icon">💻</div>
-        <h3>Desenvolvimento de Software</h3>
-        <p>Criamos aplicações web e móveis personalizadas, utilizando as tecnologias mais modernas do mercado.</p>
+        <h3>{{ getTranslation('services.software.title') }}</h3>
+        <p>{{ getTranslation('services.software.description') }}</p>
       </div>
       <div class="service-card">
         <div class="service-icon">☁️</div>
-        <h3>Cloud Computing</h3>
-        <p>Migração e otimização de infraestrutura em nuvem, garantindo escalabilidade e eficiência.</p>
+        <h3>{{ getTranslation('services.cloud.title') }}</h3>
+        <p>{{ getTranslation('services.cloud.description') }}</p>
       </div>
       <div class="service-card">
         <div class="service-icon">🔒</div>
-        <h3>Cibersegurança</h3>
-        <p>Proteção completa dos seus dados e sistemas contra ameaças digitais.</p>
+        <h3>{{ getTranslation('services.security.title') }}</h3>
+        <p>{{ getTranslation('services.security.description') }}</p>
       </div>
       <div class="service-card">
         <div class="service-icon">📊</div>
-        <h3>Análise de Dados</h3>
-        <p>Transformamos dados em insights valiosos para tomada de decisões estratégicas.</p>
+        <h3>{{ getTranslation('services.analytics.title') }}</h3>
+        <p>{{ getTranslation('services.analytics.description') }}</p>
       </div>
       <div class="service-card">
         <div class="service-icon">🤖</div>
-        <h3>Inteligência Artificial</h3>
-        <p>Implementamos soluções de IA para automatizar processos e aumentar a produtividade.</p>
+        <h3>{{ getTranslation('services.ai.title') }}</h3>
+        <p>{{ getTranslation('services.ai.description') }}</p>
       </div>
       <div class="service-card">
         <div class="service-icon">📱</div>
-        <h3>Consultoria Digital</h3>
-        <p>Orientação especializada para digitalização e modernização de processos empresariais.</p>
+        <h3>{{ getTranslation('services.consulting.title') }}</h3>
+        <p>{{ getTranslation('services.consulting.description') }}</p>
       </div>
     </div>
   </div>
@@ -81,12 +76,12 @@
 <!-- Blog Section -->
 <section id="blog" class="blog">
   <div class="container">
-    <h2>Últimas Postagens</h2>
-    <button class="create-post-btn" (click)="createTodo()">Nova Postagem</button>
+    <h2>{{ getTranslation('blog.title') }}</h2>
+    <button class="create-post-btn" (click)="createTodo()">{{ getTranslation('blog.newPost') }}</button>
     <div class="posts-grid">
       <div class="post-card" *ngFor="let todo of todos">
         <h3>{{ todo.content }}</h3>
-        <p>Leia mais sobre esta postagem fascinante...</p>
+        <p>{{ getTranslation('blog.readMore') }}</p>
       </div>
     </div>
   </div>
@@ -95,8 +90,8 @@
 <!-- Contact Section -->
 <section id="contact" class="contact">
   <div class="container">
-    <h2>Entre em Contato</h2>
-    <p>Pronto para transformar seu negócio? Vamos conversar!</p>
+    <h2>{{ getTranslation('contact.title') }}</h2>
+    <p>{{ getTranslation('contact.description') }}</p>
     <div class="contact-info">
       <div class="contact-item">
         <span class="contact-icon">📧</span>
@@ -108,16 +103,16 @@
       </div>
       <div class="contact-item">
         <span class="contact-icon">📍</span>
-        <p>São Luís, Brasil</p>
-      </div>    
+        <p>{{ getTranslation('contact.location') }}</p>
+      </div>
     </div>
-      <h1 class="hero-title" style="text-align: center;">! SITE EM CONSTRUÇÃO !</h1>
+      <h1 class="hero-title" style="text-align: center;">! SITE EM CONSTRUÇÃO ! UNDER CONSTRUCTION !</h1>
   </div>
 </section>
 
 <!-- Footer -->
 <footer>
   <div class="container">
-    <p>&copy; 2025 - Ars Machina Consultancy. Todos os direitos reservados.</p>
+    <p>&copy; 2025 - Ars Machina Consultancy. {{ getTranslation('footer.rights') }}</p>
   </div>
 </footer>

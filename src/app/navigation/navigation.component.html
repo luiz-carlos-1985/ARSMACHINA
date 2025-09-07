@@ -4,14 +4,17 @@
       <a routerLink="/home">Ars Machina Consultancy</a>
     </div>
     <div class="nav-menu" [class.active]="isMenuOpen">
-      <a routerLink="/home" (click)="closeMenu()">Home</a>
-      <a href="#about" (click)="closeMenu()">Sobre</a>
-      <a href="#services" (click)="closeMenu()">Serviços</a>
-      <a href="#blog" (click)="closeMenu()">Blog</a>
-      <a href="#contact" (click)="closeMenu()">Contato</a>
-      <a *ngIf="!isLoggedIn" routerLink="/login" (click)="closeMenu()">Login</a>
-      <a *ngIf="isLoggedIn" routerLink="/dashboard" (click)="closeMenu()">Painel</a>
-      <button *ngIf="isLoggedIn" (click)="logout()" class="logout-btn">Logout</button>
+      <a routerLink="/home" (click)="closeMenu()">{{ getTranslation('nav.home') }}</a>
+      <a href="#about" (click)="closeMenu()">{{ getTranslation('nav.about') }}</a>
+      <a href="#services" (click)="closeMenu()">{{ getTranslation('nav.services') }}</a>
+      <a href="#blog" (click)="closeMenu()">{{ getTranslation('nav.blog') }}</a>
+      <a href="#contact" (click)="closeMenu()">{{ getTranslation('nav.contact') }}</a>
+      <a *ngIf="!isLoggedIn" routerLink="/login" (click)="closeMenu()">{{ getTranslation('nav.login') }}</a>
+      <a *ngIf="isLoggedIn" routerLink="/dashboard" (click)="closeMenu()">{{ getTranslation('nav.dashboard') }}</a>
+      <button *ngIf="isLoggedIn" (click)="logout()" class="logout-btn">{{ getTranslation('nav.logout') }}</button>
+      <select (change)="changeLanguage($any($event.target).value)" [value]="currentLanguage" aria-label="Select language">
+        <option *ngFor="let lang of availableLanguages" [value]="lang.code">{{ lang.name }}</option>
+      </select>
     </div>
     <div class="hamburger" (click)="toggleMenu()">
       <span></span>

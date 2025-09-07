@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { signIn, signOut, getCurrentUser, SignInInput } from 'aws-amplify/auth';
+import { signIn, signOut, getCurrentUser, signUp, confirmSignUp, SignUpInput, ConfirmSignUpInput } from 'aws-amplify/auth';
 import { BehaviorSubject, Observable } from 'rxjs';
 
 @Injectable({
@@ -15,12 +15,42 @@ export class AuthService {
 
   async signIn(email: string, password: string) {
     try {
-      const signInInput: SignInInput = {
+      const result = await signIn({
         username: email,
         password: password,
-      };
-      const result = await signIn(signInInput);
+      });
       this.isAuthenticatedSubject.next(true);
+      return result;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async signUp(email: string, password: string) {
+    try {
+      const signUpInput: SignUpInput = {
+        username: email,
+        password: password,
+        options: {
+          userAttributes: {
+            email: email,
+          },
+        },
+      };
+      const result = await signUp(signUpInput);
+      return result;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async confirmSignUp(email: string, confirmationCode: string) {
+    try {
+      const confirmSignUpInput: ConfirmSignUpInput = {
+        username: email,
+        confirmationCode: confirmationCode,
+      };
+      const result = await confirmSignUp(confirmSignUpInput);
       return result;
     } catch (error) {
       throw error;

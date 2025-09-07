@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { generateClient } from 'aws-amplify/data';
 import type { Schema } from '../../../amplify/data/resource';
+import { TranslationService } from '../translation.service';
 
 const client = generateClient<Schema>();
 
@@ -14,9 +15,19 @@ const client = generateClient<Schema>();
 })
 export class TodosComponent implements OnInit {
   todos: any[] = [];
+  currentLanguage = 'pt';
+
+  constructor(private translationService: TranslationService) {}
 
   ngOnInit(): void {
     this.listTodos();
+    this.initializeLanguageSubscription();
+  }
+
+  private initializeLanguageSubscription() {
+    this.translationService.currentLanguage$.subscribe(lang => {
+      this.currentLanguage = lang;
+    });
   }
 
   listTodos() {
@@ -40,5 +51,10 @@ export class TodosComponent implements OnInit {
     } catch (error) {
       console.error('error creating posts', error);
     }
+  }
+
+  getTranslation(key: string): string {
+    // This ensures the template updates when currentLanguage changes
+    return this.translationService.translate(key);
   }
 }

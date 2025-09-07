@@ -1,0 +1,69 @@
+<div class="register-container">
+  <div class="register-form">
+    <h2>{{ getTranslation('register.title') }}</h2>
+    <form (ngSubmit)="onSubmit()" #registerForm="ngForm">
+      <div class="form-group">
+        <label for="email">{{ getTranslation('register.email') }}:</label>
+        <input
+          type="email"
+          id="email"
+          name="email"
+          [(ngModel)]="email"
+          required
+          email
+          #emailInput="ngModel"
+        />
+        <div *ngIf="emailInput.invalid && emailInput.touched" class="error">
+          {{ getTranslation('register.email') }} {{ getTranslation('register.invalid') }}.
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="password">{{ getTranslation('register.password') }}:</label>
+        <input
+          type="password"
+          id="password"
+          name="password"
+          [(ngModel)]="password"
+          required
+          minlength="6"
+          #passwordInput="ngModel"
+        />
+        <div *ngIf="passwordInput.invalid && passwordInput.touched" class="error">
+          {{ getTranslation('register.password') }} {{ getTranslation('register.passwordTooShort') }}.
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="confirmPassword">{{ getTranslation('register.confirmPassword') }}:</label>
+        <input
+          type="password"
+          id="confirmPassword"
+          name="confirmPassword"
+          [(ngModel)]="confirmPassword"
+          required
+          #confirmPasswordInput="ngModel"
+        />
+        <div *ngIf="confirmPasswordInput.invalid && confirmPasswordInput.touched" class="error">
+          {{ getTranslation('register.confirmPasswordRequired') }}
+        </div>
+      </div>
+
+      <button type="submit" [disabled]="registerForm.invalid || isLoading" class="register-btn">
+        {{ isLoading ? getTranslation('register.creating') + '...' : getTranslation('register.createAccount') }}
+      </button>
+    </form>
+
+    <div *ngIf="errorMessage" class="error-message">
+      {{ errorMessage }}
+    </div>
+
+    <div *ngIf="successMessage" class="success-message">
+      {{ successMessage }}
+    </div>
+
+    <div class="login-link">
+      <p>{{ getTranslation('register.haveAccount') }} <a routerLink="/login">{{ getTranslation('register.login') }}</a></p>
+    </div>
+  </div>
+</div>
