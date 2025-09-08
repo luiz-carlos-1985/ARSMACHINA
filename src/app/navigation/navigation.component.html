@@ -375,7 +375,10 @@
           <h4 class="mobile-section-title">Configurações</h4>
           
           <!-- Theme Toggle -->
-          <div class="mobile-theme-selector">
+          <button class="mobile-theme-selector" 
+                  (click)="toggleMobileTheme($event)"
+                  type="button"
+                  tabindex="0">
             <div class="mobile-nav-icon">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
                 <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -384,10 +387,16 @@
             <div class="mobile-nav-content">
               <span class="mobile-nav-title">Tema</span>
               <div class="mobile-theme-options">
-                <app-theme-toggle></app-theme-toggle>
+                <span class="theme-indicator">{{ getCurrentThemeName() }}</span>
+                <span class="theme-icon">{{ getCurrentThemeIcon() }}</span>
               </div>
             </div>
-          </div>
+            <div class="mobile-nav-arrow">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                <path d="M9 18L15 12L9 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+          </button>
           
           <div class="mobile-language-selector">
             <div class="mobile-nav-icon">

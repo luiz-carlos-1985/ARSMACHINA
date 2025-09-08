@@ -171,7 +171,7 @@ Solução: Configure SPF, DKIM e DMARC
 ## 💰 Custos
 
 ### Preços AWS SES (2024)
-- Primeiros 62.000 emails/mês: GRÁTIS
+- Primeiros 62.000 emails: GRÁTIS
 - Após isso: $0.10 por 1.000 emails
 - Emails recebidos: $0.09 por 1.000 emails
 

@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { AuthService } from '../auth.service';
 import { TranslationService } from '../translation.service';
 import { ThemeToggleComponent } from '../theme-toggle/theme-toggle.component';
+import { ThemeService } from '../theme.service';
 
 @Component({
   selector: 'app-navigation',
@@ -22,12 +23,14 @@ export class NavigationComponent implements OnInit {
   isUserMenuOpen = false;
   private isMobile = false;
   private touchStartTime = 0;
+  currentTheme = 'light';
 
   constructor(
     private authService: AuthService,
     private router: Router,
     private translationService: TranslationService,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private themeService: ThemeService
   ) {}
 
   ngOnInit() {
@@ -35,6 +38,7 @@ export class NavigationComponent implements OnInit {
     this.initializeLanguageSettings();
     this.detectMobileDevice();
     this.setupEventListeners();
+    this.initializeTheme();
   }
 
   private detectMobileDevice() {
@@ -322,5 +326,43 @@ export class NavigationComponent implements OnInit {
 
   getTranslation(key: string): string {
     return this.translationService.translate(key);
+  }
+
+  private initializeTheme() {
+    this.themeService.theme$.subscribe(theme => {
+      this.currentTheme = theme;
+      this.cdr.detectChanges();
+    });
+  }
+
+  toggleMobileTheme(event?: Event) {
+    try {
+      if (event) {
+        event.preventDefault();
+        event.stopPropagation();
+        
+        // Add haptic feedback for mobile
+        if ('vibrate' in navigator) {
+          navigator.vibrate(50);
+        }
+      }
+      
+      this.themeService.toggleTheme();
+      
+      // Force change detection for mobile
+      if (this.isMobile) {
+        this.cdr.detectChanges();
+      }
+    } catch (error) {
+      console.error('Error toggling mobile theme:', error);
+    }
+  }
+
+  getCurrentThemeName(): string {
+    return this.currentTheme === 'light' ? 'Claro' : 'Escuro';
+  }
+
+  getCurrentThemeIcon(): string {
+    return this.currentTheme === 'light' ? '🌙' : '☀️';
   }
 }

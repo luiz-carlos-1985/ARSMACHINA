@@ -189,6 +189,7 @@ export class ChatbotComponent implements OnInit, OnDestroy {
 
   getBusinessResponse(message: string): string {
     const lowerMessage = message.toLowerCase();
+    const isEnglish = this.detectEnglish(message);
     
     // Mensagem inicial atrativa mostrando serviços - apenas para saudações
     if (lowerMessage.includes('oi') || lowerMessage.includes('olá') || lowerMessage.includes('hello') || lowerMessage.includes('bom dia') || lowerMessage.includes('boa tarde') || lowerMessage.includes('boa noite')) {
@@ -235,7 +236,7 @@ export class ChatbotComponent implements OnInit, OnDestroy {
              `• DevOps e CI/CD\n` +
              `• Monitoramento 24/7\n` +
              `• Backup automático\n` +
-             `💰 **A partir de R$ 4.500/mês**\n\n` +
+             `💰 **A partir de R$ 4.500**\n\n` +
              `🔐 **CIBERSEGURANÇA EMPRESARIAL**\n` +
              `• Auditoria completa de segurança\n` +
              `• Implementação LGPD\n` +
@@ -252,7 +253,36 @@ export class ChatbotComponent implements OnInit, OnDestroy {
              `**Qual serviço desperta seu interesse?**`;
     }
     
-    if (lowerMessage.includes('preço') || lowerMessage.includes('preco') || lowerMessage.includes('custo') || lowerMessage.includes('valor') || lowerMessage.includes('orçamento')) {
+    if (lowerMessage.includes('preço') || lowerMessage.includes('preco') || lowerMessage.includes('custo') || lowerMessage.includes('valor') || lowerMessage.includes('orçamento') || lowerMessage.includes('price') || lowerMessage.includes('cost') || lowerMessage.includes('pricing') || lowerMessage.includes('budget') || lowerMessage.includes('quote')) {
+      if (isEnglish) {
+        return `💰 **SMART INVESTMENT IN TECHNOLOGY:**\n\n` +
+               `🎯 **PREMIUM PACKAGES:**\n\n` +
+               `📱 **PROFESSIONAL WEBSITE**\n` +
+               `• Modern responsive design\n` +
+               `• SEO optimized\n` +
+               `• 1-year hosting included\n` +
+               `• **$15,000** (12 installments available)\n\n` +
+               `🛍️ **COMPLETE E-COMMERCE**\n` +
+               `• Professional online store\n` +
+               `• Payment gateway integration\n` +
+               `• Inventory management\n` +
+               `• **$35,000** (up to 18 installments)\n\n` +
+               `📱 **MOBILE APP**\n` +
+               `• iOS + Android\n` +
+               `• Native design\n` +
+               `• App store publication\n` +
+               `• **$50,000** (up to 24 installments)\n\n` +
+               `☁️ **CLOUD MIGRATION**\n` +
+               `• Complete AWS/Azure setup\n` +
+               `• Data migration\n` +
+               `• 24/7 monitoring\n` +
+               `• **$8,000/month**\n\n` +
+               `🎁 **SPECIAL OFFER:**\n` +
+               `• **25% OFF** for new international clients\n` +
+               `• Free consultation\n` +
+               `• 3 months support included\n\n` +
+               `**Type 'contact' to request a personalized quote!**`;
+      }
       return `💰 **INVESTIMENTO INTELIGENTE EM TECNOLOGIA:**\n\n` +
              `🎯 **PACOTES PROMOCIONAIS:**\n\n` +
              `📱 **SITE PROFISSIONAL**\n` +
@@ -274,7 +304,7 @@ export class ChatbotComponent implements OnInit, OnDestroy {
              `• Setup completo AWS/Azure\n` +
              `• Migração de dados\n` +
              `• Monitoramento 24/7\n` +
-             `• **R$ 4.500/mês**\n\n` +
+             `• **R$ 4.500**\n\n` +
              `🎁 **OFERTA ESPECIAL:**\n` +
              `• **20% OFF** para novos clientes\n` +
              `• Consultoria gratuita\n` +
@@ -282,7 +312,27 @@ export class ChatbotComponent implements OnInit, OnDestroy {
              `**Digite 'contato' para solicitar orçamento personalizado!**`;
     }
     
-    if (lowerMessage.includes('contato') || lowerMessage.includes('falar') || lowerMessage.includes('consultor') || lowerMessage.includes('whatsapp')) {
+    if (lowerMessage.includes('contato') || lowerMessage.includes('falar') || lowerMessage.includes('consultor') || lowerMessage.includes('whatsapp') || lowerMessage.includes('contact') || lowerMessage.includes('talk') || lowerMessage.includes('speak') || lowerMessage.includes('consultant')) {
+      if (isEnglish) {
+        return `📞 **CONTACT US NOW - VIP SERVICE:**\n\n` +
+               `🚀 **DIRECT CONTACT (FAST RESPONSE):**\n` +
+               `📱 **WhatsApp:** +55 98 99964-9215\n` +
+               `⚡ Response within 30 minutes\n` +
+               `🕐 Available: Mon-Fri 8am-8pm | Sat 9am-3pm (GMT-3)\n\n` +
+               `📧 **Business Email:**\n` +
+               `✉️ contact@arsmachinaconsultancy.com\n` +
+               `⏰ Response within 2 business hours\n\n` +
+               `🎯 **SCHEDULE YOUR FREE CONSULTATION:**\n` +
+               `• Complete project analysis\n` +
+               `• Detailed technical proposal\n` +
+               `• No-obligation quote\n` +
+               `• Development roadmap\n\n` +
+               `🏢 **Office São Luís/Brazil:**\n` +
+               `📍 In-person meetings available\n` +
+               `🕒 Monday to Friday: 9am to 6pm\n\n` +
+               `💡 **TIP:** Mention you came from chat and get 20% discount!\n\n` +
+               `**Do you prefer WhatsApp or email?**`;
+      }
       return `📞 **FALE CONOSCO AGORA - ATENDIMENTO VIP:**\n\n` +
              `🚀 **CONTATO DIRETO (RESPOSTA RÁPIDA):**\n` +
              `📱 **WhatsApp:** +55 98 99964-9215\n` +
@@ -330,6 +380,21 @@ export class ChatbotComponent implements OnInit, OnDestroy {
     }
     
     // Resposta padrão atrativa
+    if (isEnglish) {
+      return `🤖 **Hello! I'm your digital consultant from Ars Machina!**\n\n` +
+             `We're here to **revolutionize your business** with cutting-edge technology!\n\n` +
+             `💻 Type **'services'** - See our complete portfolio\n` +
+             `💰 Type **'pricing'** - Learn about our packages\n` +
+             `💡 Type **'idea'** - Transform your idea into a project\n` +
+             `📞 Type **'contact'** - Speak with a specialist\n\n` +
+             `🏆 **WHY CHOOSE ARS MACHINA?**\n` +
+             `✅ +200 successfully delivered projects\n` +
+             `✅ Specialized and certified team\n` +
+             `✅ Proven agile methodology\n` +
+             `✅ 24/7 technical support\n` +
+             `✅ Quality guarantee\n\n` +
+             `**Ready to start your digital transformation now?**`;
+    }
     return `🤖 **Olá! Sou seu consultor digital da Ars Machina!**\n\n` +
            `Estamos aqui para **revolucionar seu negócio** com tecnologia de ponta!\n\n` +
            `💻 Digite **'serviços'** - Ver nosso portfólio completo\n` +
@@ -458,5 +523,12 @@ export class ChatbotComponent implements OnInit, OnDestroy {
 
   closeFeedbackModal() {
     this.showFeedbackModal = false;
+  }
+
+  detectEnglish(message: string): boolean {
+    const englishWords = ['hello', 'hi', 'good', 'morning', 'afternoon', 'evening', 'services', 'development', 'portfolio', 'price', 'cost', 'pricing', 'budget', 'quote', 'contact', 'talk', 'speak', 'consultant', 'help', 'can', 'you', 'what', 'how', 'when', 'where', 'why', 'the', 'and', 'or', 'but', 'with', 'for', 'from', 'about', 'into', 'through', 'during', 'before', 'after', 'above', 'below', 'up', 'down', 'out', 'off', 'over', 'under', 'again', 'further', 'then', 'once'];
+    const words = message.toLowerCase().split(/\s+/);
+    const englishWordCount = words.filter(word => englishWords.includes(word)).length;
+    return englishWordCount >= 2 || message.toLowerCase().includes('hello') || message.toLowerCase().includes('services') || message.toLowerCase().includes('development');
   }
 }
