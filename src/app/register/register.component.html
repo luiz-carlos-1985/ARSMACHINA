@@ -4,63 +4,108 @@
     <form (ngSubmit)="onSubmit()" #registerForm="ngForm">
       <div class="form-group">
         <label for="email">{{ getTranslation('register.email') }}:</label>
-        <input
-          type="email"
-          id="email"
-          name="email"
-          [(ngModel)]="email"
-          required
-          email
-          #emailInput="ngModel"
-        />
+        <div class="input-container">
+          <input
+            type="email"
+            id="email"
+            name="email"
+            [(ngModel)]="email"
+            (input)="onEmailChange()"
+            required
+            email
+            #emailInput="ngModel"
+            [class.valid]="emailValid && email.length > 0"
+            [class.invalid]="!emailValid && email.length > 0"
+          />
+          <span class="input-icon" *ngIf="emailValid && email.length > 0">✓</span>
+          <span class="input-icon error" *ngIf="!emailValid && email.length > 0">✗</span>
+        </div>
         <div *ngIf="emailInput.invalid && emailInput.touched" class="error">
-          {{ getTranslation('register.email') }} {{ getTranslation('register.invalid') }}.
+          Por favor, insira um email válido.
         </div>
       </div>
 
       <div class="form-group">
         <label for="password">{{ getTranslation('register.password') }}:</label>
-        <input
-          type="password"
-          id="password"
-          name="password"
-          [(ngModel)]="password"
-          (input)="onPasswordChange()"
-          required
-          minlength="6"
-          #passwordInput="ngModel"
-        />
-        <div *ngIf="passwordInput.invalid && passwordInput.touched" class="error">
-          {{ getTranslation('register.password') }} {{ getTranslation('register.passwordTooShort') }}.
+        <div class="input-container">
+          <input
+            [type]="showPassword ? 'text' : 'password'"
+            id="password"
+            name="password"
+            [(ngModel)]="password"
+            (input)="onPasswordChange()"
+            required
+            minlength="8"
+            #passwordInput="ngModel"
+          />
+          <button type="button" class="toggle-password" (click)="togglePasswordVisibility()">
+            {{ showPassword ? '👁️' : '🙈' }}
+          </button>
+        </div>
+        
+        <!-- Password strength indicator -->
+        <div class="password-strength" *ngIf="password.length > 0">
+          <div class="strength-bar">
+            <div class="strength-fill" [style.width.%]="passwordStrength" 
+                 [class.weak]="passwordStrength < 40"
+                 [class.medium]="passwordStrength >= 40 && passwordStrength < 80"
+                 [class.strong]="passwordStrength >= 80"></div>
+          </div>
+          <span class="strength-text">{{ passwordStrengthText }}</span>
         </div>
 
         <!-- Password requirements checklist -->
-        <ul class="password-requirements">
-          <li [class.met]="passwordRequirements.minLength">Mínimo 8 caracteres</li>
-          <li [class.met]="passwordRequirements.uppercase">Uma letra maiúscula</li>
-          <li [class.met]="passwordRequirements.lowercase">Uma letra minúscula</li>
-          <li [class.met]="passwordRequirements.number">Um número</li>
-          <li [class.met]="passwordRequirements.specialChar">Um caractere especial (!&#64;$%^&*)</li>
+        <ul class="password-requirements" *ngIf="password.length > 0">
+          <li [class.met]="passwordRequirements.minLength">
+            <span class="req-icon">{{ passwordRequirements.minLength ? '✓' : '✗' }}</span>
+            Mínimo 8 caracteres
+          </li>
+          <li [class.met]="passwordRequirements.uppercase">
+            <span class="req-icon">{{ passwordRequirements.uppercase ? '✓' : '✗' }}</span>
+            Uma letra maiúscula
+          </li>
+          <li [class.met]="passwordRequirements.lowercase">
+            <span class="req-icon">{{ passwordRequirements.lowercase ? '✓' : '✗' }}</span>
+            Uma letra minúscula
+          </li>
+          <li [class.met]="passwordRequirements.number">
+            <span class="req-icon">{{ passwordRequirements.number ? '✓' : '✗' }}</span>
+            Um número
+          </li>
+          <li [class.met]="passwordRequirements.specialChar">
+            <span class="req-icon">{{ passwordRequirements.specialChar ? '✓' : '✗' }}</span>
+            Um caractere especial (!&#64;#$%^&*)
+          </li>
         </ul>
       </div>
 
       <div class="form-group">
         <label for="confirmPassword">{{ getTranslation('register.confirmPassword') }}:</label>
-        <input
-          type="password"
-          id="confirmPassword"
-          name="confirmPassword"
-          [(ngModel)]="confirmPassword"
-          required
-          #confirmPasswordInput="ngModel"
-        />
-        <div *ngIf="confirmPasswordInput.invalid && confirmPasswordInput.touched" class="error">
-          {{ getTranslation('register.confirmPasswordRequired') }}
+        <div class="input-container">
+          <input
+            [type]="showConfirmPassword ? 'text' : 'password'"
+            id="confirmPassword"
+            name="confirmPassword"
+            [(ngModel)]="confirmPassword"
+            required
+            #confirmPasswordInput="ngModel"
+            [class.valid]="password === confirmPassword && confirmPassword.length > 0"
+            [class.invalid]="password !== confirmPassword && confirmPassword.length > 0"
+          />
+          <button type="button" class="toggle-password" (click)="toggleConfirmPasswordVisibility()">
+            {{ showConfirmPassword ? '👁️' : '🙈' }}
+          </button>
+          <span class="input-icon" *ngIf="password === confirmPassword && confirmPassword.length > 0">✓</span>
+          <span class="input-icon error" *ngIf="password !== confirmPassword && confirmPassword.length > 0">✗</span>
+        </div>
+        <div *ngIf="password !== confirmPassword && confirmPassword.length > 0" class="error">
+          As senhas não coincidem.
         </div>
       </div>
 
-      <button type="submit" [disabled]="registerForm.invalid || isLoading" class="register-btn">
-        {{ isLoading ? getTranslation('register.creating') + '...' : getTranslation('register.createAccount') }}
+      <button type="submit" [disabled]="!isFormValid() || isLoading" 
+              class="register-btn" [class.loading]="isLoading">
+        {{ isLoading ? 'Criando conta...' : 'Criar Conta' }}
       </button>
     </form>
 

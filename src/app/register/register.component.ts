@@ -29,6 +29,12 @@ export class RegisterComponent implements OnInit {
     specialChar: false,
   };
 
+  showPassword = false;
+  showConfirmPassword = false;
+  passwordStrength = 0;
+  passwordStrengthText = '';
+  emailValid = false;
+
   constructor(
     private router: Router,
     private translationService: TranslationService,
@@ -45,6 +51,47 @@ export class RegisterComponent implements OnInit {
     this.passwordRequirements.lowercase = /[a-z]/.test(this.password);
     this.passwordRequirements.number = /\d/.test(this.password);
     this.passwordRequirements.specialChar = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(this.password);
+    
+    this.calculatePasswordStrength();
+  }
+
+  onEmailChange() {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    this.emailValid = emailRegex.test(this.email);
+  }
+
+  togglePasswordVisibility() {
+    this.showPassword = !this.showPassword;
+  }
+
+  toggleConfirmPasswordVisibility() {
+    this.showConfirmPassword = !this.showConfirmPassword;
+  }
+
+  private calculatePasswordStrength() {
+    let strength = 0;
+    const requirements = Object.values(this.passwordRequirements);
+    strength = requirements.filter(req => req).length;
+    
+    this.passwordStrength = (strength / 5) * 100;
+    
+    if (strength <= 1) {
+      this.passwordStrengthText = 'Muito fraca';
+    } else if (strength <= 2) {
+      this.passwordStrengthText = 'Fraca';
+    } else if (strength <= 3) {
+      this.passwordStrengthText = 'Média';
+    } else if (strength <= 4) {
+      this.passwordStrengthText = 'Forte';
+    } else {
+      this.passwordStrengthText = 'Muito forte';
+    }
+  }
+
+  isFormValid(): boolean {
+    return this.emailValid && 
+           this.password === this.confirmPassword &&
+           Object.values(this.passwordRequirements).every(req => req);
   }
 
   private initializeLanguageSubscription() {
@@ -64,8 +111,13 @@ export class RegisterComponent implements OnInit {
       return;
     }
 
-    if (this.password.length < 6) {
-      this.errorMessage = this.getTranslation('register.passwordTooShort');
+    if (this.password.length < 8) {
+      this.errorMessage = 'A senha deve ter no mínimo 8 caracteres.';
+      return;
+    }
+
+    if (!this.emailValid) {
+      this.errorMessage = 'Por favor, insira um email válido.';
       return;
     }
 

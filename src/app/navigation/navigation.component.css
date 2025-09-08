@@ -641,22 +641,12 @@
 /* ===== MOBILE THEME SELECTOR ===== */
 .mobile-theme-selector {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   padding: 1rem 1.5rem;
-  margin: 0.25rem 0;
+  margin: 0.25rem 0 1rem 0;
   border-radius: 16px;
   background: linear-gradient(135deg, rgba(102, 126, 234, 0.05) 0%, rgba(118, 75, 162, 0.05) 100%);
   border: 1px solid rgba(102, 126, 234, 0.1);
-  cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  width: 100%;
-  text-align: left;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
-  touch-action: manipulation;
-  -webkit-tap-highlight-color: rgba(102, 126, 234, 0.2);
-  min-height: 60px;
 }
 
 .mobile-theme-options {
@@ -664,31 +654,26 @@
 }
 
 .mobile-theme-options {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  margin-top: 0.25rem;
+  margin-top: 0.5rem;
+  pointer-events: auto;
 }
 
-.theme-indicator {
-  font-size: 0.875rem;
-  color: #667eea;
-  font-weight: 500;
+.mobile-theme-options app-theme-toggle {
+  position: static;
+  display: block;
+  pointer-events: auto;
 }
 
-.theme-icon {
-  font-size: 1.2rem;
-}
-
-.mobile-theme-selector:hover {
-  background: linear-gradient(135deg, rgba(102, 126, 234, 0.08) 0%, rgba(118, 75, 162, 0.08) 100%);
-  transform: translateX(8px) scale(1.02);
-  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.15);
-  border-color: rgba(102, 126, 234, 0.2);
-}
-
-.mobile-theme-selector:active {
-  transform: translateX(8px) scale(0.98);
+.mobile-theme-options app-theme-toggle .theme-toggle {
+  position: static;
+  width: 40px;
+  height: 40px;
+  font-size: 16px;
+  margin: 0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  pointer-events: auto !important;
+  cursor: pointer !important;
+  z-index: 10;
 }
 
 .mobile-theme-options app-theme-toggle {

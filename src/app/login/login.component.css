@@ -85,6 +85,10 @@
   position: relative;
 }
 
+.theme-dark .login-form h2 {
+  color: var(--text-primary, #ffffff);
+}
+
 .login-form h2::after {
   content: '';
   position: absolute;
@@ -128,7 +132,7 @@
 .form-group label {
   display: block;
   margin-bottom: 0.5rem;
-  color: #333;
+  color: var(--text-primary, #333);
   font-weight: 500;
   transition: color 0.3s ease;
 }
@@ -316,6 +320,12 @@
   margin-top: 2rem;
   padding-top: 1.5rem;
   border-top: 1px solid var(--border-color, rgba(0,0,0,0.1));
+  color: var(--text-secondary, #666);
+}
+
+.theme-dark .register-link {
+  border-top-color: var(--border-color, rgba(255,255,255,0.1));
+  color: var(--text-secondary, #cccccc);
 }
 
 .register-link a {
@@ -330,5 +340,29 @@
 .register-link a:hover {
   background: rgba(102, 126, 234, 0.1);
   transform: translateY(-1px);
+}
+
+.forgot-password-link {
+  text-align: center;
+  margin-top: 1rem;
+}
+
+.forgot-password-link a {
+  color: var(--text-secondary, #666);
+  text-decoration: none;
+  font-size: 0.9rem;
+  transition: color 0.3s ease;
+}
+
+.forgot-password-link a:hover {
+  color: #667eea;
+}
+
+.theme-dark .forgot-password-link a {
+  color: var(--text-secondary, #cccccc);
+}
+
+.theme-dark .forgot-password-link a:hover {
+  color: #667eea;
 }
 
