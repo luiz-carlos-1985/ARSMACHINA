@@ -10,6 +10,7 @@ import { EmailService } from '../email.service';
   selector: 'app-dashboard',
   standalone: true,
   imports: [CommonModule, FormsModule],
+  providers: [AuthService],
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css']
 })

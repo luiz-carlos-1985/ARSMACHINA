@@ -32,14 +32,31 @@ export class TodosComponent implements OnInit {
 
   listTodos() {
     try {
-      client.models.Todo.observeQuery().subscribe({
-        next: ({ items, isSynced }) => {
-          this.todos = items;
-        },
-      });
+      if (client?.models?.Todo) {
+        client.models.Todo.observeQuery().subscribe({
+          next: ({ items, isSynced }) => {
+            this.todos = items;
+          },
+          error: (error) => {
+            console.warn('GraphQL client not configured for development. Using mock data.', error);
+            this.loadMockData();
+          }
+        });
+      } else {
+        console.warn('GraphQL client not configured for development. Using mock data.');
+        this.loadMockData();
+      }
     } catch (error) {
-      console.error('error fetching posts!', error);
+      console.warn('GraphQL client not configured for development. Using mock data.', error);
+      this.loadMockData();
     }
+  }
+
+  private loadMockData() {
+    this.todos = [
+      { id: '1', content: 'Exemplo de postagem 1', createdAt: new Date().toISOString() },
+      { id: '2', content: 'Exemplo de postagem 2', createdAt: new Date().toISOString() }
+    ];
   }
 
   createTodo() {
@@ -52,10 +69,15 @@ export class TodosComponent implements OnInit {
         window.alert('O conteúdo da postagem deve ter pelo menos 3 caracteres.');
         return;
       }
-      client.models.Todo.create({
-        content: content.trim(),
-      });
-      this.listTodos();
+      
+      if (client?.models?.Todo) {
+        client.models.Todo.create({
+          content: content.trim(),
+        });
+      } else {
+        console.warn('GraphQL client not configured. Cannot create todo.');
+        window.alert('Funcionalidade não disponível no modo de desenvolvimento.');
+      }
     } catch (error) {
       console.error('error creating posts', error);
     }

@@ -9,6 +9,7 @@ import { TranslationService } from '../translation.service';
   selector: 'app-login',
   standalone: true,
   imports: [FormsModule, CommonModule, RouterLink],
+  providers: [AuthService],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })

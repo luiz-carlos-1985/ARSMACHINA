@@ -2,9 +2,9 @@
   "version": "1",
   "auth": {
     "aws_region": "us-east-1",
-    "user_pool_id": "YOUR_ACTUAL_USER_POOL_ID",
-    "user_pool_client_id": "YOUR_ACTUAL_USER_POOL_CLIENT_ID",
-    "identity_pool_id": "us-east-1:YOUR_ACTUAL_IDENTITY_POOL_ID",
+    "user_pool_id": "us-east-1_EXAMPLE123",
+    "user_pool_client_id": "EXAMPLE_CLIENT_ID",
+    "identity_pool_id": "us-east-1:EXAMPLE_IDENTITY_POOL_ID",
     "mfa_methods": [],
     "standard_required_attributes": [
       "email"
@@ -40,10 +40,10 @@
     }
   },
   "data": {
-    "url": "https://your-api-id.appsync-api.us-east-1.amazonaws.com/graphql",
+    "url": "https://example.appsync-api.us-east-1.amazonaws.com/graphql",
     "aws_region": "us-east-1",
     "default_authorization_type": "API_KEY",
     "authorization_types": ["API_KEY"],
-    "api_key": "your-api-key-here"
+    "api_key": "da2-example-api-key"
   }
 }

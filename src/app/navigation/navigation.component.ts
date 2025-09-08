@@ -8,6 +8,7 @@ import { TranslationService } from '../translation.service';
   selector: 'app-navigation',
   standalone: true,
   imports: [RouterLink, CommonModule],
+  providers: [AuthService],
   templateUrl: './navigation.component.html',
   styleUrl: './navigation.component.css'
 })

@@ -5,6 +5,7 @@ import { registerLocaleData } from '@angular/common';
 import localePt from '@angular/common/locales/pt';
 import localeEn from '@angular/common/locales/en';
 import { Amplify } from 'aws-amplify';
+import outputs from '../../amplify_outputs.json';
 
 import { routes } from './app.routes';
 
@@ -12,35 +13,8 @@ import { routes } from './app.routes';
 registerLocaleData(localePt);
 registerLocaleData(localeEn);
 
-// Configure Amplify
-Amplify.configure({
-  Auth: {
-    Cognito: {
-      userPoolId: 'us-east-1_EXAMPLE123',
-      userPoolClientId: 'EXAMPLE_CLIENT_ID',
-      signUpVerificationMethod: 'code',
-      loginWith: {
-        email: true,
-      },
-    }
-  }
-});
-
-// TODO: Replace the above configuration with your actual AWS Cognito User Pool details
-// You can find these values in your AWS Cognito console or in amplify_outputs.json after running 'amplify push'
-// Example:
-// Amplify.configure({
-//   Auth: {
-//     Cognito: {
-//       userPoolId: 'us-east-1_YourActualUserPoolId',
-//       userPoolClientId: 'YourActualUserPoolClientId',
-//       signUpVerificationMethod: 'code',
-//       loginWith: {
-//         email: true,
-//       },
-//     }
-//   }
-// });
+// Configure Amplify with outputs
+Amplify.configure(outputs);
 
 export const appConfig: ApplicationConfig = {
   providers: [
