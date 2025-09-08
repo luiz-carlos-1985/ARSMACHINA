@@ -315,11 +315,22 @@ Enviado através do site Ars Machina Consultancy
     this.showAlternativeContact = false;
   }
 
-  // Alternative contact methods
+  // Contact item click handlers
+  openEmail() {
+    const subject = encodeURIComponent('Contato - Ars Machina Consultancy');
+    const mailtoUrl = `mailto:contato@arsmachinaconsultancy.com?subject=${subject}`;
+    window.location.href = mailtoUrl;
+  }
+
   openWhatsApp() {
     window.open('https://wa.me/message/KNSHISJA3H25K1', '_blank');
   }
 
+  openLocation() {
+    window.open('https://maps.app.goo.gl/kgzFBHLheK9ny3Sm8', '_blank');
+  }
+
+  // Alternative contact methods
   openEmailClient() {
     const subject = encodeURIComponent('Contato via Site - Ars Machina Consultancy');
     const body = encodeURIComponent(`

@@ -169,25 +169,25 @@
       </a>
     </div>
     <div class="contact-info">
-      <div class="contact-item">
+      <div class="contact-item" (click)="openEmail()">
         <span class="contact-icon">📧</span>
-        <div>
-          <h4>{{ getTranslation('contact.emailLabel') }}</h4>
-          <p>contato&#64;arsmachinaconsultancy.com</p>
+        <div class="contact-details">
+          <span class="contact-label">Email</span>
+          <span class="contact-value">contato&#64;arsmachinaconsultancy.com</span>
         </div>
       </div>
-      <div class="contact-item">
+      <div class="contact-item" (click)="openWhatsApp()">
         <span class="contact-icon">📞</span>
-        <div>
-          <h4>{{ getTranslation('contact.whatsappLabel') }}</h4>
-          <p>+55 98 99964-9215</p>
+        <div class="contact-details">
+          <span class="contact-label">WhatsApp</span>
+          <span class="contact-value">+55 98 99964-9215</span>
         </div>
       </div>
-      <div class="contact-item">
+      <div class="contact-item" (click)="openLocation()">
         <span class="contact-icon">📍</span>
-        <div>
-          <h4>{{ getTranslation('contact.locationLabel') }}</h4>
-          <p>{{ getTranslation('contact.locationValue') }}</p>
+        <div class="contact-details">
+          <span class="contact-label">Localização</span>
+          <span class="contact-value">{{ getTranslation('contact.locationValue') }}</span>
         </div>
       </div>
     </div>

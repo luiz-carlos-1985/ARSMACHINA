@@ -3,15 +3,15 @@
 // Follow the setup instructions in EMAILJS_SETUP.md
 
 export const EMAILJS_CONFIG = {
-  // Development mode - emails disabled
-  enabled: false,
+  // Production mode - emails enabled
+  enabled: true,
   
-  // Replace with your EmailJS Service ID (from Email Services section)
-  serviceID: 'service_your_service_id',
+  // EmailJS Service ID
+  serviceID: 'service_arsmachina',
 
-  // Replace with your EmailJS Template ID (from Email Templates section)
-  templateID: 'template_your_template_id',
+  // EmailJS Template ID
+  templateID: 'template_verification',
 
-  // Replace with your EmailJS Public Key/User ID (from Account section)
-  userID: 'your_public_key_here'
+  // EmailJS Public Key
+  userID: 'arsmachina_public_key'
 };

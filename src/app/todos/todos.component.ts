@@ -98,7 +98,18 @@ export class TodosComponent implements OnInit, OnDestroy {
     return this.translationService.translate(key);
   }
 
+  // Contact item click handlers
+  openEmail() {
+    const subject = encodeURIComponent('Contato - Ars Machina Consultancy');
+    const mailtoUrl = `mailto:contato@arsmachinaconsultancy.com?subject=${subject}`;
+    window.location.href = mailtoUrl;
+  }
+
   openWhatsApp() {
-    window.location.href = 'https://wa.me/5598999649215';
+    window.open('https://wa.me/message/KNSHISJA3H25K1', '_blank');
+  }
+
+  openLocation() {
+    window.open('https://maps.app.goo.gl/kgzFBHLheK9ny3Sm8', '_blank');
   }
 }

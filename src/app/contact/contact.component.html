@@ -132,24 +132,27 @@
 
     <!-- Contact Information -->
     <div class="contact-info">
-      <div class="contact-item">
+      <div class="contact-item" (click)="openEmail()">
         <span class="contact-icon">📧</span>
         <div class="contact-details">
-          <p class="contact-value">contato&#64;arsmachinaconsultancy.com</p>
+          <span class="contact-label">Email</span>
+          <span class="contact-value">contato&#64;arsmachinaconsultancy.com</span>
         </div>
       </div>
       
-      <div class="contact-item">
+      <div class="contact-item" (click)="openWhatsApp()">
         <span class="contact-icon">📞</span>
         <div class="contact-details">
-          <p class="contact-value">+55 98 99964-9215</p>
+          <span class="contact-label">WhatsApp</span>
+          <span class="contact-value">+55 98 99964-9215</span>
         </div>
       </div>
       
-      <div class="contact-item">
+      <div class="contact-item" (click)="openLocation()">
         <span class="contact-icon">📍</span>
         <div class="contact-details">
-          <p class="contact-value">{{ translationService.translate('contact.location') }}</p>
+          <span class="contact-label">Localização</span>
+          <span class="contact-value">{{ translationService.translate('contact.location') }}</span>
         </div>
       </div>
     </div>

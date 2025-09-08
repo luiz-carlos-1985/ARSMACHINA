@@ -18,7 +18,6 @@ export class AuthService {
     try {
       // Always use development mode - no AWS Amplify calls
       console.log('Development mode login for:', email);
-      
 
       // Simulate successful login for any credentials
       localStorage.setItem('auth_user', JSON.stringify({
@@ -70,12 +69,14 @@ export class AuthService {
         throw new Error('Senha deve conter pelo menos um caractere especial');
       }
 
-      // Check if email already exists (excluding deleted accounts)
+      // Always reload lists to avoid sync conflicts
       const existingUsers = JSON.parse(localStorage.getItem('registered_users') || '[]');
       const deletionLogs = JSON.parse(localStorage.getItem('deletion_logs') || '[]');
       const isDeleted = deletionLogs.some((log: any) => log.email === email);
       
-      if (existingUsers.some((user: any) => user.email === email) && !isDeleted) {
+      // Allow registration if account was deleted, otherwise check for existing active accounts
+      const activeUser = existingUsers.find((user: any) => user.email === email && !user.isDeleted);
+      if (activeUser && !isDeleted) {
         throw new Error('Este email já está cadastrado');
       }
 
@@ -91,12 +92,13 @@ export class AuthService {
         attempts: 0
       }));
 
-      // Try to send verification email, but don't fail if it doesn't work
+      // Send verification email
       try {
         await this.emailService.sendEmailVerification(email, verificationCode);
         console.log('Verification email sent successfully');
       } catch (emailError) {
-        console.warn('Email service not configured, verification code stored locally:', verificationCode);
+        console.error('Failed to send verification email:', emailError);
+        // Continue with signup even if email fails
       }
 
       return { 
@@ -154,14 +156,35 @@ export class AuthService {
       // Complete signup in development mode
       localStorage.removeItem('pending_signup');
       
-      // Update registered users
-      const existingUsers = JSON.parse(localStorage.getItem('registered_users') || '[]');
-      const userIndex = existingUsers.findIndex((user: any) => user.email === email);
+      // Always reload and update deletion logs if account is being recreated
+      const currentDeletionLogs = JSON.parse(localStorage.getItem('deletion_logs') || '[]');
+      const updatedLogs = currentDeletionLogs.filter((log: any) => log.email !== email);
+      localStorage.setItem('deletion_logs', JSON.stringify(updatedLogs));
+      
+      // Always reload registered users to avoid sync conflicts
+      const currentUsers = JSON.parse(localStorage.getItem('registered_users') || '[]');
+      const userIndex = currentUsers.findIndex((user: any) => user.email === email);
+      
       if (userIndex !== -1) {
-        existingUsers[userIndex].isVerified = true;
-        existingUsers[userIndex].verifiedAt = new Date().toISOString();
-        localStorage.setItem('registered_users', JSON.stringify(existingUsers));
+        // Update existing user (could be a previously deleted account)
+        currentUsers[userIndex] = {
+          ...currentUsers[userIndex],
+          isVerified: true,
+          verifiedAt: new Date().toISOString(),
+          isDeleted: false, // Reactivate if was deleted
+          reactivatedAt: new Date().toISOString()
+        };
+      } else {
+        // Create new user
+        currentUsers.push({
+          email: email,
+          isVerified: true,
+          verifiedAt: new Date().toISOString(),
+          createdAt: new Date().toISOString()
+        });
       }
+      
+      localStorage.setItem('registered_users', JSON.stringify(currentUsers));
       
       // Send welcome email
       try {
@@ -265,11 +288,12 @@ export class AuthService {
         timestamp: new Date().toISOString()
       }));
 
-      // Try to send email, but don't fail if it doesn't work
+      // Send verification email
       try {
         await this.emailService.sendEmailVerification(email, verificationCode);
+        console.log('Verification email resent successfully');
       } catch (emailError) {
-        console.warn('Email service not configured, verification code stored locally');
+        console.error('Failed to resend verification email:', emailError);
       }
 
       return { isCodeDelivered: true };
@@ -382,29 +406,53 @@ export class AuthService {
         }
       };
       
-      const deletionLogs = JSON.parse(localStorage.getItem('deletion_logs') || '[]');
-      deletionLogs.push(deletionLog);
-      localStorage.setItem('deletion_logs', JSON.stringify(deletionLogs));
+      // Always reload deletion_logs to avoid sync conflicts
+      const currentDeletionLogs = JSON.parse(localStorage.getItem('deletion_logs') || '[]');
+      currentDeletionLogs.push(deletionLog);
+      localStorage.setItem('deletion_logs', JSON.stringify(currentDeletionLogs));
       
       console.log('✅ Step 4: Audit log created with ID:', deletionLog.id);
 
       // Step 5: Send deletion confirmation email
       console.log('📧 Step 5: Sending deletion confirmation email');
       try {
-        await this.emailService.sendAccountDeletionEmail(email, authUser.username || email.split('@')[0]);
-        console.log('✅ Step 5: Deletion confirmation email sent successfully');
+        const emailResult = await this.emailService.sendAccountDeletionEmail(email, authUser.username || email.split('@')[0]);
+        console.log('✅ Step 5: Deletion confirmation email sent via', emailResult.method);
       } catch (emailError) {
-        console.warn('⚠️ Step 5: Deletion confirmation email could not be sent:', emailError);
+        console.warn('⚠️ Step 5: All email methods failed, continuing with deletion');
         // Continue with deletion even if email fails
       }
 
-      // Step 6: Remove user data from registered users (if exists)
-      console.log('🗂️ Step 6: Removing user data from storage');
-      const registeredUsers = JSON.parse(localStorage.getItem('registered_users') || '[]');
-      const updatedUsers = registeredUsers.filter((u: any) => u.email !== email);
-      localStorage.setItem('registered_users', JSON.stringify(updatedUsers));
+      // Step 6: Implement environment-based deletion strategy
+      console.log('🗂️ Step 6: Implementing deletion strategy');
+      const isDevelopment = !window.location.hostname.includes('amazonaws.com');
       
-      console.log('✅ Step 6: User data removed from registered users (if existed)');
+      if (isDevelopment) {
+        // Development: Real deletion - always reload users list
+        console.log('🔧 Development mode: Performing real deletion');
+        const currentUsers = JSON.parse(localStorage.getItem('registered_users') || '[]');
+        const updatedUsers = currentUsers.filter((u: any) => u.email !== email);
+        localStorage.setItem('registered_users', JSON.stringify(updatedUsers));
+        console.log('✅ User data permanently deleted in development');
+      } else {
+        // Production: Soft delete with data protection - always reload users list
+        console.log('🛡️ Production mode: Performing soft delete');
+        const currentUsers = JSON.parse(localStorage.getItem('registered_users') || '[]');
+        const userIndex = currentUsers.findIndex((u: any) => u.email === email);
+        if (userIndex !== -1) {
+          currentUsers[userIndex] = {
+            ...currentUsers[userIndex],
+            isDeleted: true,
+            deletedAt: new Date().toISOString(),
+            deletionReason: reason,
+            originalData: { ...currentUsers[userIndex] }
+          };
+          localStorage.setItem('registered_users', JSON.stringify(currentUsers));
+          console.log('✅ User data soft deleted with backup in production');
+        }
+      }
+      
+      console.log('✅ Step 6: Deletion strategy completed');
 
       // Step 7: Clear all user-related data
       console.log('🧹 Step 7: Clearing all user-related data');

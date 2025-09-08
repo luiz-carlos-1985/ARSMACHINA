@@ -10,8 +10,20 @@ const schema = a.schema({
   Todo: a
     .model({
       content: a.string(),
+      isDeleted: a.boolean().default(false),
+      deletedAt: a.datetime(),
     })
     .authorization((allow) => [allow.publicApiKey()]),
+  
+  User: a
+    .model({
+      email: a.string().required(),
+      username: a.string(),
+      isDeleted: a.boolean().default(false),
+      deletedAt: a.datetime(),
+      deletionReason: a.string(),
+    })
+    .authorization((allow) => [allow.owner()]),
 });
 
 export type Schema = ClientSchema<typeof schema>;

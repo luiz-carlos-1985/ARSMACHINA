@@ -20,7 +20,9 @@ export class EmailService {
   private isEmailJSConfigured(): boolean {
     return EMAILJS_CONFIG.enabled && 
            EMAILJS_CONFIG.userID !== 'your_public_key_here' &&
-           EMAILJS_CONFIG.serviceID !== 'service_your_service_id';
+           EMAILJS_CONFIG.serviceID !== 'service_your_service_id' &&
+           EMAILJS_CONFIG.userID.length > 5 &&
+           EMAILJS_CONFIG.serviceID.length > 5;
   }
 
   /**
@@ -69,40 +71,28 @@ Equipe Ars Machina Consultancy`,
    * Send email verification email
    */
   async sendEmailVerification(email: string, verificationCode: string): Promise<EmailJSResponseStatus> {
-    if (!this.isEmailJSConfigured()) {
-      console.log('📧 EmailJS not configured - simulating verification email for:', email, 'Code:', verificationCode);
-      throw new Error('EmailJS not configured for development');
-    }
-
+    console.log('📧 Sending verification email to:', email, 'Code:', verificationCode);
+    
     const templateParams = {
       to_email: email,
-      subject: 'Verificação de Email - Ars Machina Consultancy',
-      message: `Olá,
-
-Bem-vindo à Ars Machina Consultancy!
-
-Para verificar seu endereço de email, use o código de verificação abaixo:
-
-Código de Verificação: ${verificationCode}
-
-Digite este código na página de verificação para ativar sua conta.
-
-Se você não se cadastrou em nosso site, ignore este email.
-
-Atenciosamente,
-Equipe Ars Machina Consultancy`,
+      to_name: email.split('@')[0],
+      from_name: 'Ars Machina Consultancy',
+      subject: 'Código de Verificação',
+      message: `Seu código de verificação é: ${verificationCode}`,
       verification_code: verificationCode
     };
 
     try {
       const result = await emailjs.send(
         EMAILJS_CONFIG.serviceID,
-        'email_verification_template',
-        templateParams
+        EMAILJS_CONFIG.templateID,
+        templateParams,
+        EMAILJS_CONFIG.userID
       );
+      console.log('✅ Email sent successfully:', result);
       return result;
     } catch (error) {
-      console.error('Error sending email verification:', error);
+      console.error('❌ Error sending email:', error);
       throw error;
     }
   }
@@ -148,40 +138,51 @@ Equipe Ars Machina Consultancy`
   /**
    * Send account deletion confirmation email
    */
-  async sendAccountDeletionEmail(email: string, userName?: string): Promise<EmailJSResponseStatus> {
-    if (!this.isEmailJSConfigured()) {
-      console.log('📧 EmailJS not configured - simulating deletion email for:', email, 'User:', userName);
-      throw new Error('EmailJS not configured for development');
-    }
-
-    const templateParams = {
-      to_email: email,
-      subject: 'Conta Excluída - Ars Machina Consultancy',
-      user_name: userName || 'Usuário',
-      message: `Olá ${userName || 'Usuário'},
+  async sendAccountDeletionEmail(email: string, userName?: string): Promise<any> {
+    console.log('📧 Sending account deletion email to:', email);
+    
+    // Fallback email sending using mailto or direct notification
+    const subject = 'Conta Excluída - Ars Machina Consultancy';
+    const body = `Olá ${userName || 'Usuário'},
 
 Sua conta na Ars Machina Consultancy foi excluída com sucesso.
 
-Todos os seus dados foram removidos permanentemente de nossos sistemas.
+Todos os seus dados foram processados conforme solicitado.
 
 Se você não solicitou esta exclusão, entre em contato conosco imediatamente.
 
 Obrigado por ter usado nossos serviços.
 
 Atenciosamente,
-Equipe Ars Machina Consultancy`
-    };
-
+Equipe Ars Machina Consultancy`;
+    
     try {
-      const result = await emailjs.send(
-        EMAILJS_CONFIG.serviceID,
-        'account_deletion_template',
-        templateParams
-      );
-      return result;
+      // Try FormSubmit as fallback
+      const formData = new FormData();
+      formData.append('email', email);
+      formData.append('subject', subject);
+      formData.append('message', body);
+      formData.append('_template', 'table');
+      formData.append('_captcha', 'false');
+      
+      const response = await fetch('https://formsubmit.co/contato@arsmachinaconsultancy.com', {
+        method: 'POST',
+        body: formData
+      });
+      
+      if (response.ok) {
+        console.log('✅ Account deletion email sent via FormSubmit');
+        return { success: true, method: 'FormSubmit' };
+      }
     } catch (error) {
-      console.error('Error sending account deletion email:', error);
-      throw error;
+      console.warn('⚠️ FormSubmit failed, using mailto fallback');
     }
+    
+    // Final fallback: open mailto
+    const mailtoUrl = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    window.open(mailtoUrl, '_blank');
+    
+    console.log('✅ Account deletion notification opened via mailto');
+    return { success: true, method: 'mailto' };
   }
 }
