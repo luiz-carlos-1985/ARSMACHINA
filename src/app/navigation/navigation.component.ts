@@ -3,11 +3,12 @@ import { Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../auth.service';
 import { TranslationService } from '../translation.service';
+import { ThemeToggleComponent } from '../theme-toggle/theme-toggle.component';
 
 @Component({
   selector: 'app-navigation',
   standalone: true,
-  imports: [RouterLink, CommonModule],
+  imports: [RouterLink, CommonModule, ThemeToggleComponent],
   providers: [AuthService],
   templateUrl: './navigation.component.html',
   styleUrl: './navigation.component.css'

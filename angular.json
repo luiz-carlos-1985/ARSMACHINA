@@ -25,7 +25,9 @@
               "src/assets"
             ],
             "styles": [
-              "src/styles.css"
+              "src/styles.css",
+              "src/chatbot-enhanced.css",
+              "src/z-index-fix.css"
             ],
             "scripts": []
           },

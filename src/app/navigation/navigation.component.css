@@ -300,6 +300,12 @@
   transform: scale(0.95);
 }
 
+.hamburger.hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
 .hamburger span {
   width: 28px;
   height: 3px;
@@ -630,6 +636,37 @@
   color: #667eea;
   opacity: 1;
   transform: translateX(0);
+}
+
+/* ===== MOBILE THEME SELECTOR ===== */
+.mobile-theme-selector {
+  display: flex;
+  align-items: flex-start;
+  padding: 1rem 1.5rem;
+  margin: 0.25rem 0 1rem 0;
+  border-radius: 16px;
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.05) 0%, rgba(118, 75, 162, 0.05) 100%);
+  border: 1px solid rgba(102, 126, 234, 0.1);
+}
+
+.mobile-theme-options {
+  margin-top: 0.5rem;
+}
+
+.mobile-theme-options app-theme-toggle {
+  position: static;
+  display: block;
+}
+
+.mobile-theme-options app-theme-toggle .theme-toggle {
+  position: static;
+  width: 40px;
+  height: 40px;
+  font-size: 16px;
+  margin: 0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  pointer-events: auto;
+  cursor: pointer;
 }
 
 /* ===== MOBILE LANGUAGE SELECTOR ===== */

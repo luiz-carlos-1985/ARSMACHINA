@@ -102,6 +102,8 @@
         <span class="help-icon">❓</span>
         <span class="nav-text">{{ getTranslation('nav.help') }}</span>
       </button>
+<app-theme-toggle></app-theme-toggle>
+      
       <div class="language-selector desktop-lang">
         <button class="language-btn" 
                 (click)="toggleLanguageDropdown($event)" 
@@ -371,6 +373,22 @@
         <!-- Settings Section -->
         <div class="mobile-menu-section">
           <h4 class="mobile-section-title">Configurações</h4>
+          
+          <!-- Theme Toggle -->
+          <div class="mobile-theme-selector">
+            <div class="mobile-nav-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <div class="mobile-nav-content">
+              <span class="mobile-nav-title">Tema</span>
+              <div class="mobile-theme-options">
+                <app-theme-toggle></app-theme-toggle>
+              </div>
+            </div>
+          </div>
+          
           <div class="mobile-language-selector">
             <div class="mobile-nav-icon">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
@@ -416,7 +434,8 @@
 
     <!-- Enhanced Hamburger Menu -->
     <button class="hamburger" 
-            [class.active]="isMenuOpen" 
+            [class.active]="isMenuOpen"
+            [class.hidden]="isMenuOpen"
             (click)="toggleMenu()"
             type="button" 
             aria-label="Toggle navigation menu"

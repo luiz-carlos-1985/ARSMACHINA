@@ -18,31 +18,29 @@ import { ThemeService } from '../theme.service';
   `,
   styles: [`
     .theme-toggle {
-      position: fixed;
-      top: 100px;
-      right: 20px;
-      z-index: 1001;
       background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
       border: none;
       border-radius: 50%;
-      width: 50px;
-      height: 50px;
+      width: 40px;
+      height: 40px;
       color: white;
-      font-size: 20px;
+      font-size: 16px;
       cursor: pointer;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
       transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
       display: flex;
       align-items: center;
       justify-content: center;
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
     }
+    
+
     
     .theme-toggle.dark {
       background: linear-gradient(135deg, #ffd700 0%, #ff8c00 100%);
-      box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
+      box-shadow: 0 2px 8px rgba(255, 215, 0, 0.3);
     }
+    
+
     
     .theme-icon {
       transition: all 0.3s ease;
@@ -50,31 +48,29 @@ import { ThemeService } from '../theme.service';
     }
 
     .theme-toggle:hover {
-      transform: scale(1.1) rotate(15deg);
-      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+      transform: scale(1.05);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
     }
     
+
+    
     .theme-toggle.dark:hover {
-      box-shadow: 0 6px 20px rgba(255, 215, 0, 0.4);
+      box-shadow: 0 4px 12px rgba(255, 215, 0, 0.4);
     }
+    
+
     
     .theme-toggle:active {
       transform: scale(0.95);
     }
     
     .theme-toggle:hover .theme-icon {
-      transform: rotate(-15deg) scale(1.1);
+      transform: scale(1.1);
     }
+    
 
-    @media (max-width: 768px) {
-      .theme-toggle {
-        top: 80px;
-        right: 15px;
-        width: 45px;
-        height: 45px;
-        font-size: 18px;
-      }
-    }
+
+
   `]
 })
 export class ThemeToggleComponent implements OnInit {
