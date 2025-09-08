@@ -167,7 +167,7 @@
                 <div class="project-status" [ngClass]="project.status">{{ project.statusText }}</div>
               </div>
               <div class="project-menu">
-                <button class="menu-btn" (click)="openProjectMenu(project)">⋮</button>
+                <button class="menu-btn" (click)="openProjectMenu(project)" title="Menu do projeto" aria-label="Abrir menu do projeto">⋮</button>
               </div>
             </div>
             <div class="project-progress">
@@ -234,7 +234,8 @@
             </div>
             <button class="notification-close" 
                     (click)="dismissNotification(notification)"
-                    [title]="getTranslation('dashboard.dismissNotification')">×</button>
+                    [title]="getTranslation('dashboard.dismissNotification')"
+                    aria-label="Dispensar notificação">×</button>
           </div>
         </div>
         <button class="view-all-notifications" (click)="viewAllNotifications()">
@@ -303,7 +304,7 @@
 <div class="component-overlay" *ngIf="showProfileComponent || showSettingsComponent || showReportsComponent || showHelpComponent">
   <div class="component-container">
     <div class="component-header">
-      <button class="component-close" (click)="closeAllComponents()">
+      <button class="component-close" (click)="closeAllComponents()" title="Voltar ao Dashboard" aria-label="Voltar ao Dashboard">
         ← Voltar ao Dashboard
       </button>
     </div>
@@ -321,7 +322,7 @@
     <div class="report-header">
       <h2>📊 Gerar Relatório</h2>
       <p>Escolha o tipo de relatório que deseja gerar</p>
-      <button class="modal-close" (click)="closeReportModal()">×</button>
+      <button class="modal-close" (click)="closeReportModal()" title="Fechar modal" aria-label="Fechar modal de relatórios">×</button>
     </div>
     
     <div class="report-stats">
@@ -408,21 +409,21 @@
   <div class="modal-content" (click)="$event.stopPropagation()">
     <div class="modal-header">
       <h3>{{ isEditingProject ? 'Editar Projeto' : 'Novo Projeto' }}</h3>
-      <button class="modal-close" (click)="closeProjectModal()">×</button>
+      <button class="modal-close" (click)="closeProjectModal()" title="Fechar modal" aria-label="Fechar modal de projeto">×</button>
     </div>
     <div class="modal-body">
       <div class="form-group">
-        <label>Nome do Projeto</label>
-        <input type="text" [(ngModel)]="currentProject.name" placeholder="Digite o nome do projeto">
+        <label for="project-name">Nome do Projeto</label>
+        <input id="project-name" type="text" [(ngModel)]="currentProject.name" placeholder="Digite o nome do projeto" aria-label="Nome do projeto">
       </div>
       <div class="form-group">
-        <label>Descrição</label>
-        <textarea [(ngModel)]="currentProject.description" placeholder="Descreva o projeto"></textarea>
+        <label for="project-description">Descrição</label>
+        <textarea id="project-description" [(ngModel)]="currentProject.description" placeholder="Descreva o projeto" aria-label="Descrição do projeto"></textarea>
       </div>
       <div class="form-row">
         <div class="form-group">
-          <label>Status</label>
-          <select [(ngModel)]="currentProject.status">
+          <label for="project-status">Status</label>
+          <select id="project-status" [(ngModel)]="currentProject.status" aria-label="Status do projeto">
             <option value="planning">Planejamento</option>
             <option value="in-progress">Em Andamento</option>
             <option value="review">Em Revisão</option>
@@ -430,13 +431,13 @@
           </select>
         </div>
         <div class="form-group">
-          <label>Tamanho da Equipe</label>
-          <input type="number" [(ngModel)]="currentProject.teamSize" min="1">
+          <label for="project-team-size">Tamanho da Equipe</label>
+          <input id="project-team-size" type="number" [(ngModel)]="currentProject.teamSize" min="1" aria-label="Tamanho da equipe">
         </div>
       </div>
       <div class="form-group">
-        <label>Data de Entrega</label>
-        <input type="date" [(ngModel)]="currentProject.deadline">
+        <label for="project-deadline">Data de Entrega</label>
+        <input id="project-deadline" type="date" [(ngModel)]="currentProject.deadline" aria-label="Data de entrega">
       </div>
     </div>
     <div class="modal-footer">
@@ -451,28 +452,28 @@
   <div class="modal-content" (click)="$event.stopPropagation()">
     <div class="modal-header">
       <h3>{{ isEditingTask ? 'Editar Tarefa' : 'Nova Tarefa' }}</h3>
-      <button class="modal-close" (click)="closeTaskModal()">×</button>
+      <button class="modal-close" (click)="closeTaskModal()" title="Fechar modal" aria-label="Fechar modal de tarefa">×</button>
     </div>
     <div class="modal-body">
       <div class="form-group">
-        <label>Título da Tarefa</label>
-        <input type="text" [(ngModel)]="currentTask.title" placeholder="Digite o título da tarefa">
+        <label for="task-title">Título da Tarefa</label>
+        <input id="task-title" type="text" [(ngModel)]="currentTask.title" placeholder="Digite o título da tarefa" aria-label="Título da tarefa">
       </div>
       <div class="form-group">
-        <label>Descrição</label>
-        <textarea [(ngModel)]="currentTask.description" placeholder="Descreva a tarefa"></textarea>
+        <label for="task-description">Descrição</label>
+        <textarea id="task-description" [(ngModel)]="currentTask.description" placeholder="Descreva a tarefa" aria-label="Descrição da tarefa"></textarea>
       </div>
       <div class="form-row">
         <div class="form-group">
-          <label>Projeto</label>
-          <select [(ngModel)]="currentTask.projectId">
+          <label for="task-project">Projeto</label>
+          <select id="task-project" [(ngModel)]="currentTask.projectId" aria-label="Projeto associado">
             <option value="">Nenhum projeto</option>
             <option *ngFor="let project of activeProjects" [value]="project.id">{{ project.name }}</option>
           </select>
         </div>
         <div class="form-group">
-          <label>Prioridade</label>
-          <select [(ngModel)]="currentTask.priority">
+          <label for="task-priority">Prioridade</label>
+          <select id="task-priority" [(ngModel)]="currentTask.priority" aria-label="Prioridade da tarefa">
             <option value="low">Baixa</option>
             <option value="medium">Média</option>
             <option value="high">Alta</option>
@@ -480,8 +481,8 @@
         </div>
       </div>
       <div class="form-group">
-        <label>Data de Vencimento</label>
-        <input type="date" [(ngModel)]="currentTask.dueDate">
+        <label for="task-due-date">Data de Vencimento</label>
+        <input id="task-due-date" type="date" [(ngModel)]="currentTask.dueDate" aria-label="Data de vencimento">
       </div>
     </div>
     <div class="modal-footer">
@@ -496,30 +497,30 @@
   <div class="modal-content" (click)="$event.stopPropagation()">
     <div class="modal-header">
       <h3>Agendar Reunião</h3>
-      <button class="modal-close" (click)="closeMeetingModal()">×</button>
+      <button class="modal-close" (click)="closeMeetingModal()" title="Fechar modal" aria-label="Fechar modal de reunião">×</button>
     </div>
     <div class="modal-body">
       <div class="form-group">
-        <label>Título da Reunião</label>
-        <input type="text" [(ngModel)]="currentMeeting.title" placeholder="Digite o título da reunião">
+        <label for="meeting-title">Título da Reunião</label>
+        <input id="meeting-title" type="text" [(ngModel)]="currentMeeting.title" placeholder="Digite o título da reunião" aria-label="Título da reunião">
       </div>
       <div class="form-row">
         <div class="form-group">
-          <label>Data</label>
-          <input type="date" [(ngModel)]="currentMeeting.date">
+          <label for="meeting-date">Data</label>
+          <input id="meeting-date" type="date" [(ngModel)]="currentMeeting.date" aria-label="Data da reunião">
         </div>
         <div class="form-group">
-          <label>Horário</label>
-          <input type="time" [(ngModel)]="currentMeeting.time">
+          <label for="meeting-time">Horário</label>
+          <input id="meeting-time" type="time" [(ngModel)]="currentMeeting.time" aria-label="Horário da reunião">
         </div>
       </div>
       <div class="form-group">
-        <label>Participantes</label>
-        <input type="text" [(ngModel)]="currentMeeting.participants" placeholder="Separados por vírgula">
+        <label for="meeting-participants">Participantes</label>
+        <input id="meeting-participants" type="text" [(ngModel)]="currentMeeting.participants" placeholder="Separados por vírgula" aria-label="Participantes da reunião">
       </div>
       <div class="form-group">
-        <label>Descrição</label>
-        <textarea [(ngModel)]="currentMeeting.description" placeholder="Descreva a reunião"></textarea>
+        <label for="meeting-description">Descrição</label>
+        <textarea id="meeting-description" [(ngModel)]="currentMeeting.description" placeholder="Descreva a reunião" aria-label="Descrição da reunião"></textarea>
       </div>
     </div>
     <div class="modal-footer">
