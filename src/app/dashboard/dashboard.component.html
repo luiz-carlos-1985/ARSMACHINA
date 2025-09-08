@@ -75,6 +75,117 @@
   <!-- Main Dashboard Content -->
   <div class="dashboard-content">
     <div class="content-grid">
+      <!-- Client Management -->
+      <div class="client-management">
+        <div class="section-header">
+          <h2>🏢 Gestão de Clientes</h2>
+          <button class="manage-clients-btn" (click)="manageClients()">
+            Gerenciar Clientes
+          </button>
+        </div>
+        <div class="clients-grid">
+          <div class="client-card" *ngFor="let client of activeClients">
+            <div class="client-header">
+              <div class="client-avatar">{{ client.name.charAt(0) }}</div>
+              <div class="client-info">
+                <h4>{{ client.name }}</h4>
+                <div class="client-status" [ngClass]="client.status">{{ client.statusText }}</div>
+              </div>
+              <div class="client-value">R$ {{ client.contractValue | number:'1.0-0' }}</div>
+            </div>
+            <div class="client-details">
+              <div class="detail-item">
+                <span>📧</span>
+                <span>{{ client.email }}</span>
+              </div>
+              <div class="detail-item">
+                <span>📞</span>
+                <span>{{ client.phone }}</span>
+              </div>
+              <div class="detail-item">
+                <span>📅</span>
+                <span>Contrato até: {{ client.contractEnd }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Financial Overview -->
+      <div class="financial-overview">
+        <div class="section-header">
+          <h2>💰 Visão Financeira</h2>
+          <div class="section-actions">
+            <button class="icon-btn" (click)="refreshFinancials()" title="Atualizar">🔄</button>
+            <button class="icon-btn" (click)="exportFinancials()" title="Exportar">📤</button>
+          </div>
+        </div>
+        <div class="financial-grid">
+          <div class="financial-card revenue">
+            <div class="financial-icon">💵</div>
+            <div class="financial-info">
+              <h3>Receita Mensal</h3>
+              <div class="financial-value">R$ {{ monthlyRevenue | number:'1.0-0' }}</div>
+              <div class="financial-change positive">+18% vs mês anterior</div>
+            </div>
+          </div>
+          <div class="financial-card expenses">
+            <div class="financial-icon">📊</div>
+            <div class="financial-info">
+              <h3>Despesas</h3>
+              <div class="financial-value">R$ {{ monthlyExpenses | number:'1.0-0' }}</div>
+              <div class="financial-change negative">+5% vs mês anterior</div>
+            </div>
+          </div>
+          <div class="financial-card profit">
+            <div class="financial-icon">📈</div>
+            <div class="financial-info">
+              <h3>Lucro Líquido</h3>
+              <div class="financial-value">R$ {{ netProfit | number:'1.0-0' }}</div>
+              <div class="financial-change positive">+25% vs mês anterior</div>
+            </div>
+          </div>
+          <div class="financial-card pending">
+            <div class="financial-icon">⏳</div>
+            <div class="financial-info">
+              <h3>A Receber</h3>
+              <div class="financial-value">R$ {{ pendingReceivables | number:'1.0-0' }}</div>
+              <div class="financial-change neutral">{{ pendingInvoices }} faturas</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Team Performance -->
+      <div class="team-performance">
+        <div class="section-header">
+          <h2>👥 Performance da Equipe</h2>
+          <button class="manage-team-btn" (click)="manageTeam()">
+            Ver Equipe
+          </button>
+        </div>
+        <div class="team-grid">
+          <div class="team-member" *ngFor="let member of teamMembers">
+            <div class="member-avatar">{{ member.name.charAt(0) }}</div>
+            <div class="member-info">
+              <h4>{{ member.name }}</h4>
+              <div class="member-role">{{ member.role }}</div>
+              <div class="member-stats">
+                <div class="stat">
+                  <span class="stat-label">Projetos</span>
+                  <span class="stat-value">{{ member.activeProjects }}</span>
+                </div>
+                <div class="stat">
+                  <span class="stat-label">Eficiência</span>
+                  <span class="stat-value">{{ member.efficiency }}%</span>
+                </div>
+              </div>
+            </div>
+            <div class="member-status" [ngClass]="member.status">{{ member.statusText }}</div>
+          </div>
+        </div>
+      </div>
+
       <!-- Analytics Overview -->
       <div class="analytics-overview">
         <div class="section-header">

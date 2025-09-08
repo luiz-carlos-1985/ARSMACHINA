@@ -53,6 +53,87 @@ export class DashboardComponent implements OnInit {
   clientSatisfaction = 94;
   revenue = 125000;
 
+  // Financial data
+  monthlyRevenue = 185000;
+  monthlyExpenses = 65000;
+  netProfit = 120000;
+  pendingReceivables = 45000;
+  pendingInvoices = 8;
+
+  // Client data
+  activeClients = [
+    {
+      id: 1,
+      name: 'TechCorp Solutions',
+      email: 'contato@techcorp.com',
+      phone: '+55 11 9999-8888',
+      status: 'active',
+      statusText: 'Ativo',
+      contractValue: 85000,
+      contractEnd: '2024-12-31'
+    },
+    {
+      id: 2,
+      name: 'InnovateHub',
+      email: 'admin@innovatehub.com',
+      phone: '+55 21 8888-7777',
+      status: 'active',
+      statusText: 'Ativo',
+      contractValue: 120000,
+      contractEnd: '2025-06-30'
+    },
+    {
+      id: 3,
+      name: 'DataFlow Systems',
+      email: 'info@dataflow.com',
+      phone: '+55 11 7777-6666',
+      status: 'pending',
+      statusText: 'Pendente',
+      contractValue: 95000,
+      contractEnd: '2024-11-15'
+    }
+  ];
+
+  // Team data
+  teamMembers = [
+    {
+      id: 1,
+      name: 'Ana Silva',
+      role: 'Desenvolvedora Senior',
+      activeProjects: 3,
+      efficiency: 94,
+      status: 'available',
+      statusText: 'Disponível'
+    },
+    {
+      id: 2,
+      name: 'Carlos Santos',
+      role: 'Arquiteto de Software',
+      activeProjects: 2,
+      efficiency: 89,
+      status: 'busy',
+      statusText: 'Ocupado'
+    },
+    {
+      id: 3,
+      name: 'Maria Costa',
+      role: 'DevOps Engineer',
+      activeProjects: 4,
+      efficiency: 96,
+      status: 'available',
+      statusText: 'Disponível'
+    },
+    {
+      id: 4,
+      name: 'João Oliveira',
+      role: 'UX/UI Designer',
+      activeProjects: 2,
+      efficiency: 91,
+      status: 'vacation',
+      statusText: 'Férias'
+    }
+  ];
+
   // Modal states
   showProjectModal = false;
   showTaskModal = false;
@@ -772,6 +853,56 @@ export class DashboardComponent implements OnInit {
         this.saveToLocalStorage();
       }
     }
+  }
+
+  // Client Management
+  manageClients() {
+    alert(`Gestão de Clientes:\n\n${this.activeClients.length} clientes ativos\nReceita total: R$ ${this.activeClients.reduce((sum, c) => sum + c.contractValue, 0).toLocaleString('pt-BR')}\n\nFuncionalidade completa em desenvolvimento.`);
+  }
+
+  // Financial Management
+  refreshFinancials() {
+    this.monthlyRevenue = Math.floor(Math.random() * 50000) + 150000;
+    this.monthlyExpenses = Math.floor(Math.random() * 20000) + 50000;
+    this.netProfit = this.monthlyRevenue - this.monthlyExpenses;
+    this.pendingReceivables = Math.floor(Math.random() * 30000) + 30000;
+    this.addActivity('Dados financeiros atualizados', 'analytics', 'icon-chart', 'updated', 'Atualizado');
+  }
+
+  exportFinancials() {
+    const financialData = {
+      monthlyRevenue: this.monthlyRevenue,
+      monthlyExpenses: this.monthlyExpenses,
+      netProfit: this.netProfit,
+      pendingReceivables: this.pendingReceivables,
+      pendingInvoices: this.pendingInvoices,
+      exportDate: new Date().toISOString()
+    };
+    
+    const blob = new Blob([JSON.stringify(financialData, null, 2)], { type: 'application/json' });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `financeiro-${new Date().toISOString().split('T')[0]}.json`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    window.URL.revokeObjectURL(url);
+    
+    this.addActivity('Relatório financeiro exportado', 'report', 'icon-export', 'exported', 'Exportado');
+  }
+
+  // Team Management
+  manageTeam() {
+    const teamStats = this.teamMembers.reduce((stats, member) => {
+      stats.totalProjects += member.activeProjects;
+      stats.avgEfficiency += member.efficiency;
+      return stats;
+    }, { totalProjects: 0, avgEfficiency: 0 });
+    
+    teamStats.avgEfficiency = Math.round(teamStats.avgEfficiency / this.teamMembers.length);
+    
+    alert(`Gestão da Equipe:\n\n${this.teamMembers.length} membros\n${teamStats.totalProjects} projetos ativos\nEficiência média: ${teamStats.avgEfficiency}%\n\nFuncionalidade completa em desenvolvimento.`);
   }
 
   // Support
