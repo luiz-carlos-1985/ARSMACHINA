@@ -64,8 +64,6 @@ export class DashboardComponent implements OnInit {
   showHelpModal = false;
   isEditingProfile = false;
   profileSaving = false;
-  showActivityModal = false;
-  selectedActivity: any = null;
   
   // Component states
   showProfileComponent = false;
@@ -302,6 +300,10 @@ export class DashboardComponent implements OnInit {
     this.showReportModal = true;
   }
 
+  closeReportModal() {
+    this.showReportModal = false;
+  }
+
   generateSelectedReport(type: string) {
     const date = new Date().toISOString().split('T')[0];
     
@@ -321,34 +323,6 @@ export class DashboardComponent implements OnInit {
     }
     
     this.closeReportModal();
-  }
-
-  closeReportModal() {
-    this.showReportModal = false;
-  }
-
-  showActivityDetails(activity: any) {
-    this.selectedActivity = activity;
-    this.showActivityModal = true;
-  }
-
-  closeActivityModal() {
-    this.showActivityModal = false;
-    this.selectedActivity = null;
-  }
-
-  getActivityTypeName(type: string): string {
-    const typeNames: { [key: string]: string } = {
-      'project': 'Projeto',
-      'task': 'Tarefa',
-      'meeting': 'Reunião',
-      'report': 'Relatório',
-      'analytics': 'Analytics',
-      'support': 'Suporte',
-      'profile': 'Perfil',
-      'settings': 'Configurações'
-    };
-    return typeNames[type] || type;
   }
   
   private generateProjectsCSV(date: string) {
@@ -520,6 +494,19 @@ export class DashboardComponent implements OnInit {
 
   // Project Management
   saveProject() {
+    if (!this.currentProject.name.trim()) {
+      alert('Nome do projeto é obrigatório!');
+      return;
+    }
+    if (!this.currentProject.deadline) {
+      alert('Data de entrega é obrigatória!');
+      return;
+    }
+    if (this.currentProject.teamSize < 1) {
+      alert('Tamanho da equipe deve ser pelo menos 1!');
+      return;
+    }
+
     if (this.isEditingProject) {
       // Update existing project
       const index = this.activeProjects.findIndex(p => p.id === this.currentProject.id);
@@ -560,6 +547,15 @@ export class DashboardComponent implements OnInit {
 
   // Task Management
   saveTask() {
+    if (!this.currentTask.title.trim()) {
+      alert('Título da tarefa é obrigatório!');
+      return;
+    }
+    if (!this.currentTask.dueDate) {
+      alert('Data de vencimento é obrigatória!');
+      return;
+    }
+
     if (this.isEditingTask) {
       // Update existing task
       const index = this.tasks.findIndex(t => t.id === this.currentTask.id);
@@ -1067,6 +1063,19 @@ export class DashboardComponent implements OnInit {
   }
   
   saveMeeting() {
+    if (!this.currentMeeting.title.trim()) {
+      alert('Título da reunião é obrigatório!');
+      return;
+    }
+    if (!this.currentMeeting.date) {
+      alert('Data da reunião é obrigatória!');
+      return;
+    }
+    if (!this.currentMeeting.time) {
+      alert('Horário da reunião é obrigatório!');
+      return;
+    }
+
     const meeting = {
       ...this.currentMeeting,
       id: Date.now(),

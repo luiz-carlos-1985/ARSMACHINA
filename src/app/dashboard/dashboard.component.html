@@ -205,13 +205,12 @@
           </button>
         </div>
         <div class="activities-list">
-          <div class="activity-item" *ngFor="let activity of recentActivities.slice(0, 5)" (click)="showActivityDetails(activity)">
+          <div class="activity-item" *ngFor="let activity of recentActivities.slice(0, 5)">
             <div class="activity-icon">{{ getActivityIcon(activity.type) }}</div>
             <div class="activity-content">
               <div class="activity-text">{{ activity.text }}</div>
               <div class="activity-time">{{ activity.time }}</div>
             </div>
-            <div class="activity-arrow">→</div>
           </div>
         </div>
       </div>
@@ -227,15 +226,14 @@
         <div class="notifications-list">
           <div class="notification-item" 
                *ngFor="let notification of notifications.slice(0, 4)"
-               [ngClass]="{ 'unread': !notification.read }"
-               (click)="dismissNotification(notification)">
+               [ngClass]="{ 'unread': !notification.read }">
             <div class="notification-icon">{{ getNotificationIcon(notification.type) }}</div>
             <div class="notification-content">
               <div class="notification-text">{{ notification.text }}</div>
               <div class="notification-time">{{ notification.time }}</div>
             </div>
             <button class="notification-close" 
-                    (click)="dismissNotification(notification); $event.stopPropagation()"
+                    (click)="dismissNotification(notification)"
                     [title]="getTranslation('dashboard.dismissNotification')">×</button>
           </div>
         </div>
@@ -317,45 +315,7 @@
   </div>
 </div>
 
-<!-- Activity Details Modal -->
-<div class="modal-overlay" *ngIf="showActivityModal" (click)="closeActivityModal()">
-  <div class="activity-modal" (click)="$event.stopPropagation()">
-    <div class="activity-modal-header">
-      <div class="activity-modal-icon">{{ getActivityIcon(selectedActivity?.type) }}</div>
-      <h3 class="activity-modal-title">Detalhes da Atividade</h3>
-      <button class="modal-close" (click)="closeActivityModal()">×</button>
-    </div>
-    
-    <div class="activity-modal-body" *ngIf="selectedActivity">
-      <div class="activity-detail-item">
-        <span class="activity-detail-label">Descrição:</span>
-        <span class="activity-detail-value">{{ selectedActivity.text }}</span>
-      </div>
-      
-      <div class="activity-detail-item">
-        <span class="activity-detail-label">Tipo:</span>
-        <span class="activity-detail-value">{{ getActivityTypeName(selectedActivity.type) }}</span>
-      </div>
-      
-      <div class="activity-detail-item">
-        <span class="activity-detail-label">Status:</span>
-        <span class="activity-status" [class]="selectedActivity.status">{{ selectedActivity.statusText }}</span>
-      </div>
-      
-      <div class="activity-detail-item">
-        <span class="activity-detail-label">Horário:</span>
-        <span class="activity-detail-value">{{ selectedActivity.time }}</span>
-      </div>
-      
-      <div class="activity-detail-item" *ngIf="selectedActivity.details">
-        <span class="activity-detail-label">Detalhes:</span>
-        <span class="activity-detail-value">{{ selectedActivity.details }}</span>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- Report Modal -->
+<!-- Enhanced Report Modal -->
 <div class="modal-overlay" *ngIf="showReportModal" (click)="closeReportModal()">
   <div class="report-modal" (click)="$event.stopPropagation()">
     <div class="report-header">
@@ -364,12 +324,27 @@
       <button class="modal-close" (click)="closeReportModal()">×</button>
     </div>
     
+    <div class="report-stats">
+      <div class="stat-item">
+        <div class="stat-number">{{ activeProjects.length }}</div>
+        <div class="stat-label">Projetos</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number">{{ tasks.length }}</div>
+        <div class="stat-label">Tarefas</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number">{{ productivityScore }}%</div>
+        <div class="stat-label">Produtividade</div>
+      </div>
+    </div>
+    
     <div class="report-options">
       <div class="report-card" (click)="generateSelectedReport('projects')">
         <div class="report-icon">📁</div>
         <div class="report-info">
           <h3>Relatório de Projetos</h3>
-          <p>Lista completa de todos os projetos com status, progresso e prazos</p>
+          <p>Lista completa de todos os projetos com status, progresso e prazos detalhados</p>
           <div class="report-meta">
             <span class="format">CSV</span>
             <span class="count">{{ activeProjects.length }} projetos</span>
@@ -382,7 +357,7 @@
         <div class="report-icon">✅</div>
         <div class="report-info">
           <h3>Relatório de Tarefas</h3>
-          <p>Todas as tarefas com prioridades, status e associações a projetos</p>
+          <p>Todas as tarefas com prioridades, status e associações a projetos específicos</p>
           <div class="report-meta">
             <span class="format">CSV</span>
             <span class="count">{{ tasks.length }} tarefas</span>
@@ -395,7 +370,7 @@
         <div class="report-icon">📈</div>
         <div class="report-info">
           <h3>Relatório de Analytics</h3>
-          <p>Métricas de produtividade, performance e satisfação do cliente</p>
+          <p>Métricas avançadas de produtividade, performance da equipe e satisfação</p>
           <div class="report-meta">
             <span class="format">HTML</span>
             <span class="count">4 métricas</span>
@@ -407,406 +382,26 @@
       <div class="report-card featured" (click)="generateSelectedReport('complete')">
         <div class="report-icon">📋</div>
         <div class="report-info">
-          <h3>Relatório Completo</h3>
-          <p>Dashboard completo com todos os dados, gráficos e estatísticas</p>
+          <h3>Relatório Executivo Completo</h3>
+          <p>Dashboard executivo com todos os dados, gráficos interativos e insights estratégicos</p>
           <div class="report-meta">
             <span class="format premium">HTML Premium</span>
             <span class="count">Tudo incluído</span>
           </div>
         </div>
         <div class="report-arrow">→</div>
-        <div class="featured-badge">Recomendado</div>
+        <div class="featured-badge">⭐ Recomendado</div>
       </div>
     </div>
     
     <div class="report-footer">
       <div class="report-info-text">
-        <p>💡 Os relatórios são gerados instantaneamente e baixados automaticamente</p>
+        <span>⚡</span>
+        <p>Relatórios gerados instantaneamente e baixados automaticamente</p>
       </div>
     </div>
   </div>
 </div>
-
-<style>
-.modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.5);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
-}
-
-.modal-content {
-  background: white;
-  border-radius: 12px;
-  width: 90%;
-  max-width: 500px;
-  max-height: 90vh;
-  overflow-y: auto;
-}
-
-.modal-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 20px;
-  border-bottom: 1px solid #E5E7EB;
-}
-
-.modal-header h3 {
-  margin: 0;
-  color: #374151;
-}
-
-.modal-close {
-  background: none;
-  border: none;
-  font-size: 24px;
-  cursor: pointer;
-  color: #9CA3AF;
-}
-
-.modal-body {
-  padding: 20px;
-}
-
-.form-group {
-  margin-bottom: 16px;
-}
-
-.form-group label {
-  display: block;
-  margin-bottom: 6px;
-  font-weight: 500;
-  color: #374151;
-}
-
-.form-group input,
-.form-group select,
-.form-group textarea {
-  width: 100%;
-  padding: 10px 12px;
-  border: 1px solid #D1D5DB;
-  border-radius: 8px;
-  font-size: 14px;
-}
-
-.form-group textarea {
-  height: 80px;
-  resize: vertical;
-}
-
-.form-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 16px;
-}
-
-.modal-footer {
-  display: flex;
-  justify-content: flex-end;
-  gap: 12px;
-  padding: 20px;
-  border-top: 1px solid #E5E7EB;
-}
-
-.btn-primary {
-  background: #4F46E5;
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 8px;
-  cursor: pointer;
-  font-weight: 500;
-}
-
-.btn-secondary {
-  background: #F3F4F6;
-  color: #374151;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 8px;
-  cursor: pointer;
-  font-weight: 500;
-}
-
-@media (max-width: 768px) {
-  .modal-content {
-    width: 95%;
-    margin: 20px;
-  }
-  
-  .form-row {
-    grid-template-columns: 1fr;
-  }
-}
-
-/* Report Modal */
-.report-modal {
-  background: white;
-  border-radius: 20px;
-  width: 90%;
-  max-width: 600px;
-  max-height: 90vh;
-  overflow-y: auto;
-}
-
-.report-header {
-  text-align: center;
-  padding: 30px;
-  background: linear-gradient(135deg, #4F46E5 0%, #7C3AED 100%);
-  color: white;
-  border-radius: 20px 20px 0 0;
-  position: relative;
-}
-
-.report-header h2 {
-  margin: 0 0 8px 0;
-  font-size: 24px;
-}
-
-.report-header .modal-close {
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  background: rgba(255, 255, 255, 0.2);
-  border: none;
-  color: white;
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  cursor: pointer;
-}
-
-.report-options {
-  padding: 30px;
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-
-.report-card {
-  display: flex;
-  align-items: center;
-  padding: 20px;
-  border: 2px solid #E5E7EB;
-  border-radius: 16px;
-  cursor: pointer;
-  transition: all 0.3s;
-  position: relative;
-}
-
-.report-card:hover {
-  border-color: #4F46E5;
-  transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(79, 70, 229, 0.15);
-}
-
-.report-card.featured {
-  border-color: #10B981;
-  background: linear-gradient(135deg, #ECFDF5 0%, #F0FDF4 100%);
-}
-
-.report-icon {
-  font-size: 32px;
-  margin-right: 20px;
-}
-
-.report-info {
-  flex: 1;
-}
-
-.report-info h3 {
-  margin: 0 0 6px 0;
-  font-size: 18px;
-  color: #1F2937;
-}
-
-.report-info p {
-  margin: 0 0 12px 0;
-  color: #6B7280;
-  font-size: 14px;
-}
-
-.report-meta {
-  display: flex;
-  gap: 12px;
-}
-
-.format {
-  background: #4F46E5;
-  color: white;
-  padding: 4px 8px;
-  border-radius: 6px;
-  font-size: 11px;
-  font-weight: 600;
-}
-
-.format.premium {
-  background: #10B981;
-}
-
-.count {
-  color: #6B7280;
-  font-size: 12px;
-}
-
-.report-arrow {
-  font-size: 20px;
-  color: #9CA3AF;
-  margin-left: 16px;
-  transition: all 0.2s;
-}
-
-.report-card:hover .report-arrow {
-  color: #4F46E5;
-  transform: translateX(4px);
-}
-
-.featured-badge {
-  position: absolute;
-  top: 12px;
-  right: 12px;
-  background: #10B981;
-  color: white;
-  padding: 4px 8px;
-  border-radius: 6px;
-  font-size: 10px;
-  font-weight: 600;
-}
-
-.report-footer {
-  padding: 20px 30px;
-  border-top: 1px solid #E5E7EB;
-  background: #F9FAFB;
-  border-radius: 0 0 20px 20px;
-}
-
-.report-info-text p {
-  margin: 0;
-  color: #6B7280;
-  font-size: 14px;
-  text-align: center;
-}
-
-/* Activity Details Modal */
-.activity-modal {
-  background: white;
-  border-radius: 16px;
-  width: 90%;
-  max-width: 500px;
-  overflow: hidden;
-}
-
-.activity-modal-header {
-  background: linear-gradient(135deg, #4F46E5 0%, #7C3AED 100%);
-  color: white;
-  padding: 24px;
-  text-align: center;
-  position: relative;
-}
-
-.activity-modal-icon {
-  font-size: 48px;
-  margin-bottom: 12px;
-}
-
-.activity-modal-title {
-  font-size: 20px;
-  font-weight: 600;
-  margin: 0;
-}
-
-.activity-modal-header .modal-close {
-  position: absolute;
-  top: 16px;
-  right: 16px;
-  background: rgba(255, 255, 255, 0.2);
-  border: none;
-  color: white;
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  cursor: pointer;
-}
-
-.activity-modal-body {
-  padding: 24px;
-}
-
-.activity-detail-item {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 12px 0;
-  border-bottom: 1px solid #F3F4F6;
-}
-
-.activity-detail-item:last-child {
-  border-bottom: none;
-}
-
-.activity-detail-label {
-  font-weight: 500;
-  color: #374151;
-}
-
-.activity-detail-value {
-  color: #6B7280;
-}
-
-.activity-status {
-  display: inline-block;
-  padding: 4px 8px;
-  border-radius: 12px;
-  font-size: 12px;
-  font-weight: 500;
-  text-transform: capitalize;
-}
-
-.activity-status.created { background: #DBEAFE; color: #1E40AF; }
-.activity-status.updated { background: #FEF3C7; color: #92400E; }
-.activity-status.completed { background: #D1FAE5; color: #065F46; }
-.activity-status.scheduled { background: #E0E7FF; color: #3730A3; }
-.activity-status.generated { background: #F3E8FF; color: #6B21A8; }
-
-.activity-item {
-  cursor: pointer;
-  transition: all 0.2s;
-  position: relative;
-}
-
-.activity-item:hover {
-  background: #F9FAFB;
-  transform: translateX(4px);
-}
-
-.activity-arrow {
-  color: #D1D5DB;
-  font-size: 16px;
-  transition: all 0.2s;
-}
-
-.activity-item:hover .activity-arrow {
-  color: #4F46E5;
-  transform: translateX(4px);
-}
-
-.notification-item {
-  cursor: pointer;
-  transition: all 0.2s;
-}
-
-.notification-item:hover {
-  background: #F9FAFB;
-  transform: translateX(2px);
-}
-</style>
 
 <!-- Project Modal -->
 <div class="modal-overlay" *ngIf="showProjectModal" (click)="closeProjectModal()">
