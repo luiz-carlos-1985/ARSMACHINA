@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { generateClient } from 'aws-amplify/data';
 import type { Schema } from '../../../amplify/data/resource';
 import { TranslationService } from '../translation.service';
+import { Subscription } from 'rxjs';
 
 const client = generateClient<Schema>();
 
@@ -13,20 +14,29 @@ const client = generateClient<Schema>();
   templateUrl: './todos.component.html',
   styleUrls: ['./todos.component.css'],
 })
-export class TodosComponent implements OnInit {
+export class TodosComponent implements OnInit, OnDestroy {
   todos: any[] = [];
   currentLanguage = 'pt';
+  private languageSubscription: Subscription = new Subscription();
 
-  constructor(private translationService: TranslationService) {}
+  constructor(
+    private translationService: TranslationService,
+    private cdr: ChangeDetectorRef
+  ) {}
 
   ngOnInit(): void {
     this.listTodos();
     this.initializeLanguageSubscription();
   }
 
+  ngOnDestroy(): void {
+    this.languageSubscription.unsubscribe();
+  }
+
   private initializeLanguageSubscription() {
-    this.translationService.currentLanguage$.subscribe(lang => {
+    this.languageSubscription = this.translationService.currentLanguage$.subscribe(lang => {
       this.currentLanguage = lang;
+      this.cdr.detectChanges(); // Force change detection
     });
   }
 

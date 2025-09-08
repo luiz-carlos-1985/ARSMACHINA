@@ -1,0 +1,102 @@
+<div class="help-container">
+  <div class="help-header">
+    <h2>❓ Central de Ajuda</h2>
+    <p>Encontre respostas e aprenda a usar o sistema</p>
+  </div>
+
+  <div class="help-search">
+    <div class="search-box">
+      <input type="text" 
+             [(ngModel)]="searchTerm" 
+             placeholder="Buscar ajuda..."
+             class="search-input">
+      <span class="search-icon">🔍</span>
+    </div>
+  </div>
+
+  <div class="help-content">
+    <div class="help-tabs">
+      <button class="tab-btn" 
+              [class.active]="activeSection === 'guides'"
+              (click)="setActiveSection('guides')">
+        📚 Guias
+      </button>
+      <button class="tab-btn" 
+              [class.active]="activeSection === 'faqs'"
+              (click)="setActiveSection('faqs')">
+        ❓ FAQ
+      </button>
+      <button class="tab-btn" 
+              [class.active]="activeSection === 'tutorials'"
+              (click)="setActiveSection('tutorials')">
+        🎥 Tutoriais
+      </button>
+    </div>
+
+    <div class="help-section">
+      <!-- Guias -->
+      <div *ngIf="activeSection === 'guides'" class="content-grid">
+        <div class="guide-card" *ngFor="let item of filteredContent">
+          <div class="card-header">
+            <div class="card-icon">{{ getItemIcon(item) }}</div>
+            <h3>{{ getItemTitle(item) }}</h3>
+          </div>
+          <p class="card-description">{{ getItemContent(item) }}</p>
+          <button class="card-action" (click)="showGuide(item.id)">
+            Ver Guia Completo
+          </button>
+        </div>
+      </div>
+
+      <!-- FAQ -->
+      <div *ngIf="activeSection === 'faqs'" class="faq-list">
+        <div class="faq-item" *ngFor="let item of filteredContent">
+          <div class="faq-question" (click)="showFAQ(item.id)">
+            <span class="faq-icon">❓</span>
+            <span class="question-text">{{ getItemQuestion(item) }}</span>
+            <span class="expand-icon">▶</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tutoriais -->
+      <div *ngIf="activeSection === 'tutorials'" class="content-grid">
+        <div class="tutorial-card" *ngFor="let item of filteredContent">
+          <div class="card-header">
+            <div class="card-icon">🎥</div>
+            <h3>{{ getItemTitle(item) }}</h3>
+          </div>
+          <p class="card-description">{{ getItemDescription(item) }}</p>
+          <div class="tutorial-meta">
+            <span class="duration">⏱️ {{ getItemDuration(item) }}</span>
+          </div>
+          <button class="card-action" (click)="watchTutorial(item.id)">
+            Assistir Tutorial
+          </button>
+        </div>
+      </div>
+
+      <!-- Empty State -->
+      <div *ngIf="filteredContent.length === 0" class="empty-state">
+        <div class="empty-icon">🔍</div>
+        <p>Nenhum resultado encontrado</p>
+        <small>Tente usar termos diferentes na busca</small>
+      </div>
+    </div>
+  </div>
+
+  <div class="help-footer">
+    <div class="support-section">
+      <h3>Ainda precisa de ajuda?</h3>
+      <p>Nossa equipe está pronta para ajudar você</p>
+      <div class="support-options">
+        <button class="support-btn primary" (click)="contactSupport()">
+          📧 Contatar Suporte
+        </button>
+        <a href="https://wa.me/5598999649215" target="_blank" class="support-btn secondary">
+          💬 WhatsApp
+        </a>
+      </div>
+    </div>
+  </div>
+</div>

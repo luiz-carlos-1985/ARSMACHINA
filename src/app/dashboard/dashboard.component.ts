@@ -5,11 +5,15 @@ import { Router } from '@angular/router';
 import { TranslationService } from '../translation.service';
 import { AuthService } from '../auth.service';
 import { EmailService } from '../email.service';
+import { ProfileComponent } from '../profile/profile.component';
+import { SettingsComponent } from '../settings/settings.component';
+import { ReportsComponent } from '../reports/reports.component';
+import { HelpComponent } from '../help/help.component';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, ProfileComponent, SettingsComponent, ReportsComponent, HelpComponent],
   providers: [AuthService],
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css']
@@ -18,7 +22,23 @@ export class DashboardComponent implements OnInit {
   currentLanguage = 'pt';
 
   // User data
-  userName = 'Usuário';
+  userName: string = 'Usuário';
+  
+  userProfile = {
+    name: '',
+    email: '',
+    phone: '',
+    company: 'Ars Machina Consultancy',
+    position: '',
+    bio: '',
+    avatar: '',
+    notifications: {
+      email: true,
+      projects: true
+    }
+  };
+  
+  originalProfile: any = {};
 
   userStats = {
     projects: 12,
@@ -39,6 +59,17 @@ export class DashboardComponent implements OnInit {
   isEditingTask = false;
   showMeetingModal = false;
   showReportModal = false;
+  showProfileModal = false;
+  showSettingsModal = false;
+  showHelpModal = false;
+  isEditingProfile = false;
+  profileSaving = false;
+  
+  // Component states
+  showProfileComponent = false;
+  showSettingsComponent = false;
+  showReportsComponent = false;
+  showHelpComponent = false;
   
   // Filter and search states
   projectFilter = 'all';
@@ -189,8 +220,15 @@ export class DashboardComponent implements OnInit {
   async ngOnInit() {
     this.initializeLanguageSubscription();
     this.userName = await this.authService.getCurrentUserName();
+    await this.loadUserProfile();
     this.loadFromLocalStorage();
     this.updateTaskStats();
+    
+    // Listen for navigation events from navbar
+    window.addEventListener('navigate-to-section', (event: any) => {
+      const section = event.detail.section;
+      this.navigateTo(section);
+    });
   }
 
   private initializeLanguageSubscription() {
@@ -654,57 +692,227 @@ export class DashboardComponent implements OnInit {
 
   // Support
   async openChatSupport() {
-    // Navigate to chatbot component
-    this.router.navigate(['/chatbot']);
+    // Abrir chat ao vivo (simulação)
+    const chatWindow = window.open('', 'chat', 'width=400,height=600');
+    if (chatWindow) {
+      chatWindow.document.write(`
+        <html>
+          <head><title>Chat ao Vivo - Suporte</title></head>
+          <body style="font-family: Arial; padding: 20px;">
+            <h3>💬 Chat ao Vivo</h3>
+            <div style="background: #f5f5f5; padding: 15px; border-radius: 8px; margin: 10px 0;">
+              <strong>Suporte:</strong> Olá! Como posso ajudá-lo hoje?
+            </div>
+            <textarea placeholder="Digite sua mensagem..." style="width: 100%; height: 100px; margin: 10px 0;"></textarea>
+            <button onclick="alert('Mensagem enviada!')" style="background: #667eea; color: white; border: none; padding: 10px 20px; border-radius: 5px;">Enviar</button>
+            <hr>
+            <p><strong>Contatos Diretos:</strong></p>
+            <p>📧 Email: contato@arsmachinaconsultancy.com</p>
+            <p>📱 WhatsApp: +55 98 99964-9215</p>
+          </body>
+        </html>
+      `);
+    }
+    this.addActivity('Chat ao vivo iniciado', 'support', 'icon-chat', 'opened', 'Aberto');
   }
 
   async sendSupportEmail() {
-    try {
-      const userEmail = await this.authService.getCurrentUserName() + '@example.com'; // This is a placeholder
-      const subject = 'Suporte Técnico - Dashboard';
-      const message = `Olá,\n\nPreciso de ajuda com o sistema.\n\nAtenciosamente,\n${this.userName}`;
-
-      // Use sendWelcomeEmail as a placeholder for sending support email
-      await this.emailService.sendWelcomeEmail(userEmail, this.userName);
-
-      // Add activity
-      this.addActivity('Email de suporte enviado', 'support', 'icon-mail', 'sent', 'Enviado');
-
-      alert('Email de suporte enviado com sucesso!');
-    } catch (error) {
-      console.error('Erro ao enviar email de suporte:', error);
-      alert('Erro ao enviar email de suporte. Tente novamente.');
-    }
+    const subject = 'Suporte Técnico - Dashboard';
+    const body = `Olá,\n\nPreciso de ajuda com o sistema.\n\nUsuário: ${this.userName}\nData: ${new Date().toLocaleDateString()}\n\nDescreva seu problema aqui...\n\nAtenciosamente,\n${this.userName}`;
+    
+    const mailtoUrl = `mailto:contato@arsmachinaconsultancy.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    window.location.href = mailtoUrl;
+    
+    this.addActivity('Email de suporte enviado', 'support', 'icon-mail', 'sent', 'Enviado');
   }
 
   callSupport() {
-    // Simulate calling support
-    const supportNumber = '+55 11 99999-9999';
-    window.open(`tel:${supportNumber}`, '_self');
-
-    // Add activity
-    this.addActivity('Chamada para suporte iniciada', 'support', 'icon-phone', 'called', 'Chamado');
+    const supportNumber = '+5598999649215';
+    const message = `Olá! Sou ${this.userName} e preciso de suporte técnico com o dashboard.`;
+    const whatsappUrl = `https://wa.me/${supportNumber}?text=${encodeURIComponent(message)}`;
+    
+    window.open(whatsappUrl, '_blank');
+    this.addActivity('Contato via WhatsApp iniciado', 'support', 'icon-phone', 'called', 'Chamado');
   }
 
   // Navigation
   navigateTo(section: string) {
+    // Close all components first
+    this.closeAllComponents();
+    
     switch (section) {
       case 'profile':
-        this.router.navigate(['/profile']);
+        this.showProfileComponent = true;
         break;
       case 'settings':
-        this.router.navigate(['/settings']);
+        this.showSettingsComponent = true;
         break;
       case 'reports':
-        this.router.navigate(['/reports']);
+        this.showReportsComponent = true;
         break;
       case 'help':
-        this.router.navigate(['/help']);
+        this.showHelpComponent = true;
         break;
       default:
         console.log(`Navegando para: ${section}`);
         break;
     }
+  }
+  
+  closeAllComponents() {
+    this.showProfileComponent = false;
+    this.showSettingsComponent = false;
+    this.showReportsComponent = false;
+    this.showHelpComponent = false;
+  }
+  
+  // Modal methods
+  closeProfileModal() {
+    this.showProfileModal = false;
+  }
+  
+  closeSettingsModal() {
+    this.showSettingsModal = false;
+  }
+  
+  closeHelpModal() {
+    this.showHelpModal = false;
+  }
+  
+  // Component close methods
+  closeProfileComponent() {
+    this.showProfileComponent = false;
+  }
+  
+  closeSettingsComponent() {
+    this.showSettingsComponent = false;
+  }
+  
+  closeReportsComponent() {
+    this.showReportsComponent = false;
+  }
+  
+  closeHelpComponent() {
+    this.showHelpComponent = false;
+  }
+  
+  async startEditingProfile() {
+    await this.loadUserProfile();
+    this.originalProfile = JSON.parse(JSON.stringify(this.userProfile));
+    this.isEditingProfile = true;
+  }
+  
+  cancelEditingProfile() {
+    this.userProfile = JSON.parse(JSON.stringify(this.originalProfile));
+    this.isEditingProfile = false;
+  }
+  
+  async saveProfile() {
+    if (!this.userProfile.name || !this.userProfile.email) {
+      alert('Nome e email são obrigatórios!');
+      return;
+    }
+    
+    this.profileSaving = true;
+    
+    try {
+      // Simular salvamento (aqui você integraria com AWS Cognito)
+      await new Promise(resolve => setTimeout(resolve, 1500));
+      
+      // Salvar no localStorage como backup
+      localStorage.setItem('userProfile', JSON.stringify(this.userProfile));
+      
+      // Atualizar nome do usuário
+      this.userName = this.userProfile.name;
+      
+      this.addActivity(`Perfil atualizado com sucesso`, 'profile', 'icon-user', 'updated', 'Atualizado');
+      
+      this.isEditingProfile = false;
+      alert('Perfil atualizado com sucesso!');
+      
+    } catch (error) {
+      console.error('Erro ao salvar perfil:', error);
+      alert('Erro ao salvar perfil. Tente novamente.');
+    } finally {
+      this.profileSaving = false;
+    }
+  }
+  
+  async loadUserProfile() {
+    try {
+      // Tentar carregar do localStorage primeiro
+      const savedProfile = localStorage.getItem('userProfile');
+      if (savedProfile) {
+        this.userProfile = { ...this.userProfile, ...JSON.parse(savedProfile) };
+      }
+      
+      // Usar getCurrentUserName em vez de getCurrentUser
+      const userName = await this.authService.getCurrentUserName();
+      if (userName) {
+        this.userProfile.name = this.userProfile.name || userName;
+      }
+    } catch (error) {
+      console.error('Erro ao carregar perfil:', error);
+    }
+  }
+  
+  onAvatarSelected(event: any) {
+    const file = event.target.files[0];
+    if (file) {
+      if (file.size > 5 * 1024 * 1024) { // 5MB limit
+        alert('Arquivo muito grande. Máximo 5MB.');
+        return;
+      }
+      
+      const reader = new FileReader();
+      reader.onload = (e: any) => {
+        this.userProfile.avatar = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+  
+  removeAvatar() {
+    this.userProfile.avatar = '';
+  }
+  
+  changeLanguage(event: any) {
+    const newLang = event.target.value;
+    this.translationService.setLanguage(newLang);
+    this.addActivity(`Idioma alterado para ${newLang === 'pt' ? 'Português' : 'English'}`, 'settings', 'icon-settings', 'updated', 'Atualizado');
+  }
+  
+  saveSettings() {
+    this.addActivity('Configurações salvas', 'settings', 'icon-settings', 'saved', 'Salvo');
+    this.closeSettingsModal();
+    alert('Configurações salvas com sucesso!');
+  }
+  
+  showGuide(type: string) {
+    const guides: { [key: string]: string } = {
+      'projects': 'Para criar um projeto:\n1. Clique em "Novo Projeto"\n2. Preencha os dados\n3. Defina prazo e equipe\n4. Clique em "Criar"',
+      'tasks': 'Para gerenciar tarefas:\n1. Clique em "Nova Tarefa"\n2. Associe a um projeto\n3. Defina prioridade\n4. Acompanhe o progresso',
+      'reports': 'Para gerar relatórios:\n1. Clique em "Gerar Relatório"\n2. Escolha o tipo\n3. O arquivo será baixado automaticamente'
+    };
+    alert(guides[type] || 'Guia não encontrado');
+  }
+  
+  showFAQ(type: string) {
+    const faqs: { [key: string]: string } = {
+      'backup': 'Os dados são salvos automaticamente no navegador. Use "Exportar Dados" para backup completo.',
+      'sharing': 'Use a função "Gerar Relatório" para compartilhar informações dos projetos.',
+      'notifications': 'Acesse Configurações > Notificações para personalizar alertas.'
+    };
+    alert(faqs[type] || 'FAQ não encontrada');
+  }
+  
+  watchTutorial(type: string) {
+    alert(`Tutorial "${type}" será aberto em breve!`);
+  }
+  
+  contactSupport() {
+    this.closeHelpModal();
+    this.sendSupportEmail();
   }
 
   // Analytics methods

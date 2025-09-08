@@ -1,0 +1,305 @@
+<div class="settings-container">
+  <div class="settings-header">
+    <h2>⚙️ Configurações</h2>
+    <div class="header-actions">
+      <button class="btn-secondary" (click)="exportSettings()">📤 Exportar</button>
+      <button class="btn-secondary" (click)="fileInput.click()">📥 Importar</button>
+      <button class="btn-info" (click)="exportAllData()">📋 Backup Completo</button>
+      <input #fileInput type="file" accept=".json" (change)="importSettings($event)" style="display: none;">
+      <input #backupInput type="file" accept=".json" (change)="importAllData($event)" style="display: none;">
+    </div>
+  </div>
+
+  <div class="settings-content">
+    <div class="settings-tabs">
+      <button class="tab-btn" 
+              [class.active]="activeTab === 'general'"
+              (click)="setActiveTab('general')">
+        🌐 Geral
+      </button>
+      <button class="tab-btn" 
+              [class.active]="activeTab === 'notifications'"
+              (click)="setActiveTab('notifications')">
+        🔔 Notificações
+      </button>
+      <button class="tab-btn" 
+              [class.active]="activeTab === 'privacy'"
+              (click)="setActiveTab('privacy')">
+        🔒 Privacidade
+      </button>
+      <button class="tab-btn" 
+              [class.active]="activeTab === 'dashboard'"
+              (click)="setActiveTab('dashboard')">
+        📊 Dashboard
+      </button>
+      <button class="tab-btn" 
+              [class.active]="activeTab === 'security'"
+              (click)="setActiveTab('security')">
+        🛡️ Segurança
+      </button>
+      <button class="tab-btn" 
+              [class.active]="activeTab === 'advanced'"
+              (click)="setActiveTab('advanced')">
+        ⚙️ Avançado
+      </button>
+    </div>
+
+    <div class="settings-panel">
+      <!-- Geral -->
+      <div *ngIf="activeTab === 'general'" class="tab-content">
+        <div class="setting-group">
+          <h3>Idioma e Região</h3>
+          <div class="setting-item">
+            <label>Idioma do Sistema</label>
+            <select [(ngModel)]="settings.language" (change)="onSettingChange()">
+              <option *ngFor="let lang of availableLanguages" [value]="lang.code">
+                {{ lang.flag }} {{ lang.name }}
+              </option>
+            </select>
+          </div>
+        </div>
+
+        <div class="setting-group">
+          <h3>Aparência</h3>
+          <div class="setting-item">
+            <label>Tema</label>
+            <select [(ngModel)]="settings.theme" (change)="onSettingChange(); previewTheme(settings.theme)">
+              <option *ngFor="let theme of availableThemes" [value]="theme.value">
+                {{ theme.icon }} {{ theme.name }}
+              </option>
+            </select>
+          </div>
+        </div>
+
+        <div class="setting-group">
+          <h3>Sistema</h3>
+          <div class="setting-item">
+            <label>Uso de Armazenamento</label>
+            <div class="storage-info">
+              <span class="storage-size">{{ getStorageUsage() }}</span>
+              <button class="btn-warning" (click)="clearCache()">
+                🗑️ Limpar Cache
+              </button>
+            </div>
+            <small>Remove todos os dados armazenados localmente</small>
+          </div>
+        </div>
+      </div>
+
+      <!-- Notificações -->
+      <div *ngIf="activeTab === 'notifications'" class="tab-content">
+        <div class="setting-group">
+          <h3>Tipos de Notificação</h3>
+          <div class="setting-item checkbox-item">
+            <label class="checkbox-label">
+              <input type="checkbox" [(ngModel)]="settings.notifications.email" (change)="onSettingChange()">
+              <span class="checkmark"></span>
+              📧 Notificações por Email
+            </label>
+          </div>
+          <div class="setting-item checkbox-item">
+            <label class="checkbox-label">
+              <input type="checkbox" [(ngModel)]="settings.notifications.push" (change)="onSettingChange()">
+              <span class="checkmark"></span>
+              📱 Notificações Push
+            </label>
+          </div>
+          <div class="setting-item checkbox-item">
+            <label class="checkbox-label">
+              <input type="checkbox" [(ngModel)]="settings.notifications.desktop" (change)="onSettingChange()">
+              <span class="checkmark"></span>
+              💻 Notificações Desktop
+            </label>
+          </div>
+          <div class="setting-item checkbox-item">
+            <label class="checkbox-label">
+              <input type="checkbox" [(ngModel)]="settings.notifications.sound" (change)="onSettingChange()">
+              <span class="checkmark"></span>
+              🔊 Sons de Notificação
+            </label>
+            <label class="checkbox-label">
+              <input type="checkbox" [(ngModel)]="settings.notifications.projects" (change)="onSettingChange()">
+              <span class="checkmark"></span>
+              📁 Notificações de Projetos
+            </label>
+            <label class="checkbox-label">
+              <input type="checkbox" [(ngModel)]="settings.notifications.tasks" (change)="onSettingChange()">
+              <span class="checkmark"></span>
+              ✅ Notificações de Tarefas
+            </label>
+          </div>
+          <div class="setting-item">
+            <button class="btn-info" (click)="testNotifications()">
+              🔔 Testar Notificações
+            </button>
+            <small>Enviar uma notificação de teste</small>
+          </div>
+        </div>
+      </div>
+
+      <!-- Privacidade -->
+      <div *ngIf="activeTab === 'privacy'" class="tab-content">
+        <div class="setting-group">
+          <h3>Visibilidade do Perfil</h3>
+          <div class="setting-item checkbox-item">
+            <label class="checkbox-label">
+              <input type="checkbox" [(ngModel)]="settings.privacy.profileVisible" (change)="onSettingChange()">
+              <span class="checkmark"></span>
+              👤 Perfil Público
+            </label>
+          </div>
+          <div class="setting-item checkbox-item">
+            <label class="checkbox-label">
+              <input type="checkbox" [(ngModel)]="settings.privacy.activityVisible" (change)="onSettingChange()">
+              <span class="checkmark"></span>
+              📈 Atividades Visíveis
+            </label>
+          </div>
+          <div class="setting-item checkbox-item">
+            <label class="checkbox-label">
+              <input type="checkbox" [(ngModel)]="settings.privacy.emailVisible" (change)="onSettingChange()">
+              <span class="checkmark"></span>
+              📧 Email Visível
+            </label>
+            <label class="checkbox-label">
+              <input type="checkbox" [(ngModel)]="settings.privacy.shareData" (change)="onSettingChange()">
+              <span class="checkmark"></span>
+              📄 Compartilhar Dados Anônimos
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <!-- Dashboard -->
+      <div *ngIf="activeTab === 'dashboard'" class="tab-content">
+        <div class="setting-group">
+          <h3>Atualização Automática</h3>
+          <div class="setting-item checkbox-item">
+            <label class="checkbox-label">
+              <input type="checkbox" [(ngModel)]="settings.dashboard.autoRefresh" (change)="onSettingChange()">
+              <span class="checkmark"></span>
+              🔄 Atualização Automática
+            </label>
+          </div>
+          <div class="setting-item">
+            <label>Intervalo de Atualização (segundos)</label>
+            <input type="number" [(ngModel)]="settings.dashboard.refreshInterval" 
+                   min="10" max="300" (change)="onSettingChange()">
+          </div>
+        </div>
+
+        <div class="setting-group">
+          <h3>Interface</h3>
+          <div class="setting-item checkbox-item">
+            <label class="checkbox-label">
+              <input type="checkbox" [(ngModel)]="settings.dashboard.showAnimations" (change)="onSettingChange()">
+              <span class="checkmark"></span>
+              ✨ Mostrar Animações
+            </label>
+          </div>
+          <div class="setting-item checkbox-item">
+            <label class="checkbox-label">
+              <input type="checkbox" [(ngModel)]="settings.dashboard.compactMode" (change)="onSettingChange()">
+              <span class="checkmark"></span>
+              📱 Modo Compacto
+            </label>
+          </div>
+          <div class="setting-item">
+            <label>Visualização Padrão</label>
+            <select [(ngModel)]="settings.dashboard.defaultView" (change)="onSettingChange()">
+              <option value="overview">Visão Geral</option>
+              <option value="projects">Projetos</option>
+              <option value="tasks">Tarefas</option>
+              <option value="analytics">Analytics</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Segurança -->
+      <div *ngIf="activeTab === 'security'" class="tab-content">
+        <div class="setting-group">
+          <h3>Autenticação</h3>
+          <div class="setting-item checkbox-item">
+            <label class="checkbox-label">
+              <input type="checkbox" [(ngModel)]="settings.security.twoFactor" (change)="onSettingChange()">
+              <span class="checkmark"></span>
+              🔐 Autenticação de Dois Fatores
+            </label>
+          </div>
+          <div class="setting-item">
+            <label>Timeout da Sessão (minutos)</label>
+            <input type="number" [(ngModel)]="settings.security.sessionTimeout" 
+                   min="15" max="480" (change)="onSettingChange()">
+          </div>
+          <div class="setting-item checkbox-item">
+            <label class="checkbox-label">
+              <input type="checkbox" [(ngModel)]="settings.security.loginAlerts" (change)="onSettingChange()">
+              <span class="checkmark"></span>
+              🚨 Alertas de Login
+            </label>
+          </div>
+          <div class="setting-item">
+            <label>Expiração de Senha (dias)</label>
+            <input type="number" [(ngModel)]="settings.security.passwordExpiry" 
+                   min="30" max="365" (change)="onSettingChange()">
+          </div>
+        </div>
+      </div>
+
+      <!-- Avançado -->
+      <div *ngIf="activeTab === 'advanced'" class="tab-content">
+        <div class="setting-group">
+          <h3>Recursos Experimentais</h3>
+          <div class="setting-item checkbox-item">
+            <label class="checkbox-label">
+              <input type="checkbox" [(ngModel)]="settings.advanced.debugMode" (change)="onSettingChange()">
+              <span class="checkmark"></span>
+              🐛 Modo Debug
+            </label>
+          </div>
+          <div class="setting-item checkbox-item">
+            <label class="checkbox-label">
+              <input type="checkbox" [(ngModel)]="settings.advanced.betaFeatures" (change)="onSettingChange()">
+              <span class="checkmark"></span>
+              🎆 Recursos Beta
+            </label>
+          </div>
+          <div class="setting-item checkbox-item">
+            <label class="checkbox-label">
+              <input type="checkbox" [(ngModel)]="settings.advanced.dataCollection" (change)="onSettingChange()">
+              <span class="checkmark"></span>
+              📈 Coleta de Dados de Uso
+            </label>
+          </div>
+        </div>
+        
+        <div class="setting-group">
+          <h3>Backup e Restauração</h3>
+          <div class="setting-item">
+            <button class="btn-primary" (click)="exportAllData()">
+              📋 Exportar Backup Completo
+            </button>
+            <small>Inclui todas as configurações, perfil e dados</small>
+          </div>
+          <div class="setting-item">
+            <button class="btn-secondary" (click)="backupInput.click()">
+              📁 Importar Backup
+            </button>
+            <small>Restaurar dados de um backup anterior</small>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="settings-footer">
+    <button class="btn-secondary" (click)="resetSettings()">
+      🔄 Restaurar Padrões
+    </button>
+    <button class="btn-primary" (click)="saveSettings()" [disabled]="!hasChanges || isSaving">
+      <span *ngIf="isSaving" class="spinner"></span>
+      {{ isSaving ? 'Salvando...' : '💾 Salvar Alterações' }}
+    </button>
+  </div>
+</div>

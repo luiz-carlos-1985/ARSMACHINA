@@ -1,28 +1,39 @@
 <!-- Hero Section -->
 <section id="home" class="hero">
   <div class="container">
-    <h1 class="hero-title" style="text-align: center;">{{ getTranslation('hero.title') }}</h1>
-    <p class="hero-subtitle" style="text-align: center;">{{ getTranslation('hero.description') }}</p>
+    <div class="hero-content">
+      <h1 class="hero-title">{{ getTranslation('hero.mainTitle') }}</h1>
+      <p class="hero-subtitle">{{ getTranslation('hero.mainSubtitle') }}</p>
+      <p class="hero-description">{{ getTranslation('hero.mainDescription') }}</p>
+      <a href="https://wa.me/5598999649215?text=Olá! Gostaria de agendar uma consulta gratuita sobre soluções de TI." target="_blank" rel="noopener" class="cta-button">{{ getTranslation('hero.mainCta') }}</a>
+    </div>
+    <div class="hero-visual">
+      <div class="hero-placeholder">🚀</div>
+    </div>
   </div>
 </section>
 
 <!-- About Section -->
 <section id="about" class="about">
   <div class="container">
-    <h2>{{ getTranslation('about.title') }}</h2>
-    <p>{{ getTranslation('about.description') }}</p>
+    <h2>{{ getTranslation('about.whyChoose') }}</h2>
+    <p>{{ getTranslation('about.whyDescription') }}</p>
     <div class="stats">
       <div class="stat">
-        <h3>20+</h3>
-        <p>{{ getTranslation('about.projects') }}</p>
+        <h3>50</h3>
+        <p>{{ getTranslation('about.projectsDelivered') }}</p>
       </div>
       <div class="stat">
-        <h3>8+</h3>
-        <p>{{ getTranslation('about.clients') }}</p>
+        <h3>25</h3>
+        <p>{{ getTranslation('about.satisfiedClients') }}</p>
       </div>
       <div class="stat">
-        <h3>5+</h3>
-        <p>{{ getTranslation('about.experience') }}</p>
+        <h3>99</h3>
+        <p>{{ getTranslation('about.successRate') }}</p>
+      </div>
+      <div class="stat">
+        <h3>5</h3>
+        <p>{{ getTranslation('about.yearsExperience') }}</p>
       </div>
     </div>
   </div>
@@ -31,37 +42,37 @@
 <!-- Services Section -->
 <section id="services" class="services">
   <div class="container">
-    <h2>{{ getTranslation('services.title') }}</h2>
+    <h2>Nossos Serviços</h2>
     <div class="service-grid">
       <div class="service-card">
         <div class="service-icon">💻</div>
-        <h3>{{ getTranslation('services.software.title') }}</h3>
-        <p>{{ getTranslation('services.software.description') }}</p>
+        <h3>Desenvolvimento de Software</h3>
+        <p>Aplicações web e mobile personalizadas com tecnologias modernas como Angular, React e Node.js. Soluções escaláveis que crescem com seu negócio.</p>
       </div>
       <div class="service-card">
         <div class="service-icon">☁️</div>
-        <h3>{{ getTranslation('services.cloud.title') }}</h3>
-        <p>{{ getTranslation('services.cloud.description') }}</p>
+        <h3>Cloud Computing</h3>
+        <p>Migração e otimização para AWS, Azure e Google Cloud. Reduza custos em até 40% e aumente a performance com nossa expertise em nuvem.</p>
       </div>
       <div class="service-card">
         <div class="service-icon">🔒</div>
-        <h3>{{ getTranslation('services.security.title') }}</h3>
-        <p>{{ getTranslation('services.security.description') }}</p>
+        <h3>Cibersegurança</h3>
+        <p>Proteção completa contra ameaças digitais. Auditorias de segurança, implementação de protocolos e treinamento de equipes.</p>
       </div>
       <div class="service-card">
         <div class="service-icon">📊</div>
-        <h3>{{ getTranslation('services.analytics.title') }}</h3>
-        <p>{{ getTranslation('services.analytics.description') }}</p>
+        <h3>Business Intelligence</h3>
+        <p>Transforme dados em insights estratégicos. Dashboards interativos e análises preditivas para decisões mais inteligentes.</p>
       </div>
       <div class="service-card">
         <div class="service-icon">🤖</div>
-        <h3>{{ getTranslation('services.ai.title') }}</h3>
-        <p>{{ getTranslation('services.ai.description') }}</p>
+        <h3>Inteligência Artificial</h3>
+        <p>Automatize processos e otimize operações com IA. Chatbots, análise de dados e machine learning para o futuro do seu negócio.</p>
       </div>
       <div class="service-card">
         <div class="service-icon">📱</div>
-        <h3>{{ getTranslation('services.consulting.title') }}</h3>
-        <p>{{ getTranslation('services.consulting.description') }}</p>
+        <h3>Consultoria Estratégica</h3>
+        <p>Planejamento tecnológico alinhado aos seus objetivos. Roadmaps de transformação digital e otimização de processos.</p>
       </div>
     </div>
   </div>
@@ -81,26 +92,103 @@
   </div>
 </section> -->
 
+<!-- Testimonials Section -->
+<section class="testimonials">
+  <div class="container">
+    <h2>{{ getTranslation('testimonials.title') }}</h2>
+    <div class="testimonials-grid">
+      <div class="testimonial-card">
+        <div class="testimonial-quote">
+          A Ars Machina transformou completamente nossa operação. O sistema que desenvolveram aumentou nossa produtividade em 60% e reduziu custos significativamente.
+        </div>
+        <div class="testimonial-author">
+          <div class="author-avatar">MR</div>
+          <div class="author-info">
+            <h4>Maria Rodriguez</h4>
+            <p>CEO, TechStart Solutions</p>
+            <div class="testimonial-rating">
+              <span class="star">★</span>
+              <span class="star">★</span>
+              <span class="star">★</span>
+              <span class="star">★</span>
+              <span class="star">★</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card">
+        <div class="testimonial-quote">
+          Profissionais excepcionais! A migração para a nuvem foi perfeita e o suporte contínuo é impecável. Recomendo sem hesitação.
+        </div>
+        <div class="testimonial-author">
+          <div class="author-avatar">JS</div>
+          <div class="author-info">
+            <h4>Luiz Carlos</h4>
+            <p>CTO, Ars Machina Consultancy</p>
+            <div class="testimonial-rating">
+              <span class="star">★</span>
+              <span class="star">★</span>
+              <span class="star">★</span>
+              <span class="star">★</span>
+              <span class="star">★</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card">
+        <div class="testimonial-quote">
+          A consultoria em cibersegurança nos salvou de possíveis ataques. Agora dormimos tranquilos sabendo que estamos protegidos.
+        </div>
+        <div class="testimonial-author">
+          <div class="author-avatar">AC</div>
+          <div class="author-info">
+            <h4>Ana Costa</h4>
+            <p>Diretora, SecureBank</p>
+            <div class="testimonial-rating">
+              <span class="star">★</span>
+              <span class="star">★</span>
+              <span class="star">★</span>
+              <span class="star">★</span>
+              <span class="star">★</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- Contact Section -->
 <section id="contact" class="contact">
   <div class="container">
-    <h2>{{ getTranslation('contact.title') }}</h2>
-    <p>{{ getTranslation('contact.description') }}</p>
-    <div style="text-align: center; margin-bottom: 15px;">
-      <button type="button" class="cta-button" (click)="openWhatsApp()">Entrar em contato</button>
+    <h2>{{ getTranslation('contact.readyTitle') }}</h2>
+    <p>{{ getTranslation('contact.readyDescription') }}</p>
+    <div style="text-align: center; margin-bottom: 40px;">
+      <a rel="noopener" href="https://wa.me/5598999649215?text=Olá! Gostaria de agendar uma consulta gratuita sobre soluções de TI." target="_blank" class="cta-button">
+        {{ getTranslation('contact.whatsappCta') }}
+      </a>
     </div>
     <div class="contact-info">
       <div class="contact-item">
         <span class="contact-icon">📧</span>
-<p>contato&#64;arsmachinaconsultancy.com</p>
+        <div>
+          <h4>{{ getTranslation('contact.emailLabel') }}</h4>
+          <p>contato&#64;arsmachinaconsultancy.com</p>
+        </div>
       </div>
       <div class="contact-item">
         <span class="contact-icon">📞</span>
-        <p>+55 98 99964-9215</p>
+        <div>
+          <h4>{{ getTranslation('contact.whatsappLabel') }}</h4>
+          <p>+55 98 99964-9215</p>
+        </div>
       </div>
       <div class="contact-item">
         <span class="contact-icon">📍</span>
-        <p>{{ getTranslation('contact.location') }}</p>
+        <div>
+          <h4>{{ getTranslation('contact.locationLabel') }}</h4>
+          <p>{{ getTranslation('contact.locationValue') }}</p>
+        </div>
       </div>
     </div>
   </div>

@@ -30,8 +30,43 @@
       <a *ngIf="isLoggedIn" routerLink="/dashboard" routerLinkActive="active">
         <span class="nav-text">{{ getTranslation('nav.dashboard') }}</span>
       </a>
-      <button *ngIf="isLoggedIn" (click)="logout()" class="logout-btn desktop-logout">
-        {{ getTranslation('nav.logout') }}
+      
+      <!-- User Menu Dropdown -->
+      <div *ngIf="isLoggedIn" class="user-menu-dropdown">
+        <button class="user-menu-btn" (click)="toggleUserMenu()" [class.active]="isUserMenuOpen">
+          <span class="user-avatar">👤</span>
+          <svg class="dropdown-arrow" [class.rotated]="isUserMenuOpen" width="12" height="12" viewBox="0 0 12 12">
+            <path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" stroke-width="1.5" fill="none"/>
+          </svg>
+        </button>
+        <div class="user-dropdown" [class.show]="isUserMenuOpen">
+          <button class="user-option" (click)="navigateToSection('profile')">
+            <span class="option-icon">👤</span>
+            <span>Profile</span>
+          </button>
+          <button class="user-option" (click)="navigateToSection('settings')">
+            <span class="option-icon">⚙️</span>
+            <span>Settings</span>
+          </button>
+          <button class="user-option" (click)="navigateToSection('reports')">
+            <span class="option-icon">📊</span>
+            <span>Reports</span>
+          </button>
+          <button class="user-option" (click)="navigateToSection('help')">
+            <span class="option-icon">❓</span>
+            <span>Help</span>
+          </button>
+          <div class="dropdown-divider"></div>
+          <button class="user-option logout" (click)="logout()">
+            <span class="option-icon">🚪</span>
+            <span>{{ getTranslation('nav.logout') }}</span>
+          </button>
+        </div>
+      </div>
+      
+      <button *ngIf="!isLoggedIn" (click)="navigateToSection('help')" class="help-btn">
+        <span class="help-icon">❓</span>
+        <span class="nav-text">Help</span>
       </button>
       <div class="language-selector desktop-lang">
         <button class="language-btn" (click)="toggleLanguageDropdown()" [class.active]="isLanguageDropdownOpen">
@@ -208,6 +243,70 @@
               </svg>
             </div>
           </a>
+          
+          <!-- User Menu Items for Logged In Users -->
+          <div *ngIf="isLoggedIn" class="mobile-user-section">
+            <button (click)="navigateToSection('profile'); closeMenu()" class="mobile-nav-item">
+              <div class="mobile-nav-icon">
+                <span style="font-size: 20px;">👤</span>
+              </div>
+              <div class="mobile-nav-content">
+                <span class="mobile-nav-title">Profile</span>
+                <span class="mobile-nav-desc">Gerenciar perfil</span>
+              </div>
+              <div class="mobile-nav-arrow">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                  <path d="M9 18L15 12L9 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+            </button>
+            
+            <button (click)="navigateToSection('settings'); closeMenu()" class="mobile-nav-item">
+              <div class="mobile-nav-icon">
+                <span style="font-size: 20px;">⚙️</span>
+              </div>
+              <div class="mobile-nav-content">
+                <span class="mobile-nav-title">Settings</span>
+                <span class="mobile-nav-desc">Configurações</span>
+              </div>
+              <div class="mobile-nav-arrow">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                  <path d="M9 18L15 12L9 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+            </button>
+            
+            <button (click)="navigateToSection('reports'); closeMenu()" class="mobile-nav-item">
+              <div class="mobile-nav-icon">
+                <span style="font-size: 20px;">📊</span>
+              </div>
+              <div class="mobile-nav-content">
+                <span class="mobile-nav-title">Reports</span>
+                <span class="mobile-nav-desc">Relatórios</span>
+              </div>
+              <div class="mobile-nav-arrow">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                  <path d="M9 18L15 12L9 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+            </button>
+          </div>
+          
+          <!-- Help for all users -->
+          <button (click)="navigateToSection('help'); closeMenu()" class="mobile-nav-item">
+            <div class="mobile-nav-icon">
+              <span style="font-size: 20px;">❓</span>
+            </div>
+            <div class="mobile-nav-content">
+              <span class="mobile-nav-title">Help</span>
+              <span class="mobile-nav-desc">Central de ajuda</span>
+            </div>
+            <div class="mobile-nav-arrow">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                <path d="M9 18L15 12L9 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+          </button>
         </div>
 
         <!-- Settings Section -->

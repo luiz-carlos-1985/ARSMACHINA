@@ -82,7 +82,7 @@ Após ativar, você receberá emails assim:
 ```
 De: noreply@formsubmit.co
 Para: contato@arsmachinaconsultancy.com
-Assunto: Nova mensagem de João Silva - Ars Machina
+Assunto: Nova mensagem de Luiz Carlos - Ars Machina Consultancy
 
 Nome: João Silva
 Email: joao@email.com

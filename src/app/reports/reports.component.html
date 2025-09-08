@@ -1,0 +1,66 @@
+<div class="reports-container">
+  <div class="reports-header">
+    <h2>📊 Relatórios</h2>
+    <p>Gere e gerencie relatórios do sistema</p>
+  </div>
+
+  <div class="reports-content">
+    <div class="report-generator">
+      <h3>Gerar Novo Relatório</h3>
+      <div class="generator-form">
+        <div class="report-types">
+          <div class="type-option" 
+               *ngFor="let type of reportTypes"
+               [class.selected]="selectedReport === type.id"
+               (click)="selectedReport = type.id">
+            <div class="type-icon">{{ type.icon }}</div>
+            <div class="type-info">
+              <div class="type-name">{{ type.name }}</div>
+              <div class="type-format">Formato: {{ type.format }}</div>
+            </div>
+          </div>
+        </div>
+        
+        <button class="generate-btn" 
+                (click)="generateReport()" 
+                [disabled]="isGenerating">
+          <span *ngIf="isGenerating" class="spinner"></span>
+          {{ isGenerating ? 'Gerando...' : '🚀 Gerar Relatório' }}
+        </button>
+      </div>
+    </div>
+
+    <div class="reports-history">
+      <h3>Histórico de Relatórios</h3>
+      <div class="reports-list" *ngIf="generatedReports.length > 0">
+        <div class="report-item" *ngFor="let report of generatedReports">
+          <div class="report-icon">
+            {{ getReportIcon(report.type) }}
+          </div>
+          <div class="report-details">
+            <div class="report-name">{{ report.name }}</div>
+            <div class="report-meta">
+              <span>{{ report.generatedAt | date:'dd/MM/yyyy HH:mm' }}</span>
+              <span>{{ report.size }}</span>
+              <span>{{ report.format }}</span>
+            </div>
+          </div>
+          <div class="report-actions">
+            <button class="action-btn download" (click)="downloadReport(report)">
+              📥 Download
+            </button>
+            <button class="action-btn delete" (click)="deleteReport(report)">
+              🗑️
+            </button>
+          </div>
+        </div>
+      </div>
+      
+      <div class="empty-state" *ngIf="generatedReports.length === 0">
+        <div class="empty-icon">📄</div>
+        <p>Nenhum relatório gerado ainda</p>
+        <small>Gere seu primeiro relatório usando o formulário acima</small>
+      </div>
+    </div>
+  </div>
+</div>

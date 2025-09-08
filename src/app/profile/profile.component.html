@@ -1,0 +1,140 @@
+<div class="profile-container">
+  <div class="profile-header">
+    <div class="avatar-section">
+      <div class="avatar-container">
+        <img [src]="userProfile.avatar || 'assets/default-avatar.png'" 
+             alt="Avatar" class="avatar-image">
+        <button class="avatar-edit-btn" *ngIf="isEditing" (click)="fileInput.click()">
+          📷
+        </button>
+        <input #fileInput type="file" accept="image/*" 
+               (change)="onFileSelected($event)" style="display: none;">
+      </div>
+      <div class="user-info">
+        <h2>{{ userProfile.name }}</h2>
+        <p class="user-email">{{ userProfile.email }}</p>
+        <p class="join-date">Membro desde {{ userProfile.joinDate | date:'dd/MM/yyyy' }}</p>
+      </div>
+    </div>
+    <div class="profile-actions">
+      <button *ngIf="!isEditing" class="btn-primary" (click)="startEditing()">
+        ✏️ Editar Perfil
+      </button>
+      <button *ngIf="!isEditing" class="btn-secondary" (click)="exportProfile()">
+        📄 Exportar
+      </button>
+      <button *ngIf="!isEditing" class="btn-secondary" (click)="fileImport.click()">
+        📁 Importar
+      </button>
+      <input #fileImport type="file" accept=".json" (change)="importProfile($event)" style="display: none;">
+      
+      <div *ngIf="isEditing" class="edit-actions">
+        <button class="btn-success" (click)="saveProfile()" [disabled]="isSaving">
+          <span *ngIf="isSaving" class="spinner"></span>
+          {{ isSaving ? 'Salvando...' : '💾 Salvar' }}
+        </button>
+        <button class="btn-secondary" (click)="cancelEditing()" [disabled]="isSaving">❌ Cancelar</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="profile-content">
+    <div class="profile-section">
+      <h3>Informações Pessoais</h3>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Nome Completo</label>
+          <input type="text" [(ngModel)]="userProfile.name" 
+                 [readonly]="!isEditing" class="form-control">
+        </div>
+        <div class="form-group">
+          <label>Email</label>
+          <input type="email" [(ngModel)]="userProfile.email" 
+                 [readonly]="!isEditing" class="form-control">
+        </div>
+        <div class="form-group">
+          <label>Telefone</label>
+          <input type="tel" [(ngModel)]="userProfile.phone" 
+                 [readonly]="!isEditing" class="form-control">
+        </div>
+        <div class="form-group">
+          <label>Empresa</label>
+          <input type="text" [(ngModel)]="userProfile.company" 
+                 [readonly]="!isEditing" class="form-control">
+        </div>
+        <div class="form-group">
+          <label>Cargo</label>
+          <input type="text" [(ngModel)]="userProfile.position" 
+                 [readonly]="!isEditing" class="form-control">
+        </div>
+      </div>
+    </div>
+
+    <div class="profile-section">
+      <h3>Sobre Mim</h3>
+      <div class="form-group">
+        <textarea [(ngModel)]="userProfile.bio" 
+                  [readonly]="!isEditing" 
+                  class="form-control bio-textarea"
+                  placeholder="Conte um pouco sobre você..."
+                  maxlength="500"></textarea>
+        <small *ngIf="isEditing" class="char-count">{{ (userProfile.bio || '').length }}/500 caracteres</small>
+      </div>
+    </div>
+    
+    <div *ngIf="isEditing" class="profile-section">
+      <h3>Preferências de Notificação</h3>
+      <div class="notification-settings">
+        <label class="checkbox-item">
+          <input type="checkbox" [(ngModel)]="userProfile.notifications.email">
+          <span class="checkmark"></span>
+          Receber notificações por email
+        </label>
+        <label class="checkbox-item">
+          <input type="checkbox" [(ngModel)]="userProfile.notifications.projects">
+          <span class="checkmark"></span>
+          Atualizações de projetos
+        </label>
+        <label class="checkbox-item">
+          <input type="checkbox" [(ngModel)]="userProfile.notifications.tasks">
+          <span class="checkmark"></span>
+          Notificações de tarefas
+        </label>
+      </div>
+    </div>
+
+    <div class="profile-section">
+      <h3>Estatísticas</h3>
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon">📊</div>
+          <div class="stat-info">
+            <div class="stat-value">{{ userStats.projects }}</div>
+            <div class="stat-label">Projetos</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">✅</div>
+          <div class="stat-info">
+            <div class="stat-value">{{ userStats.tasks }}</div>
+            <div class="stat-label">Tarefas</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">🏆</div>
+          <div class="stat-info">
+            <div class="stat-value">{{ userStats.productivity }}%</div>
+            <div class="stat-label">Produtividade</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">⏰</div>
+          <div class="stat-info">
+            <div class="stat-value">{{ userProfile.lastLogin | date:'dd/MM' }}</div>
+            <div class="stat-label">Último Acesso</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

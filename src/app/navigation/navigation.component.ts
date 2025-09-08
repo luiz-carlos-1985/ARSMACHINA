@@ -18,6 +18,7 @@ export class NavigationComponent implements OnInit {
   currentLanguage = 'pt';
   availableLanguages: { code: string; name: string }[] = [];
   isLanguageDropdownOpen = false;
+  isUserMenuOpen = false;
 
   constructor(
     private authService: AuthService,
@@ -28,6 +29,17 @@ export class NavigationComponent implements OnInit {
   ngOnInit() {
     this.checkAuthStatus();
     this.initializeLanguageSettings();
+    
+    // Close dropdowns when clicking outside
+    document.addEventListener('click', (event) => {
+      const target = event.target as HTMLElement;
+      if (!target.closest('.user-menu-dropdown')) {
+        this.isUserMenuOpen = false;
+      }
+      if (!target.closest('.language-selector')) {
+        this.isLanguageDropdownOpen = false;
+      }
+    });
   }
 
   toggleMenu() {
@@ -91,6 +103,39 @@ export class NavigationComponent implements OnInit {
   selectLanguage(languageCode: string) {
     this.changeLanguage(languageCode);
     this.isLanguageDropdownOpen = false;
+  }
+  
+  toggleUserMenu() {
+    this.isUserMenuOpen = !this.isUserMenuOpen;
+    // Close language dropdown if open
+    if (this.isUserMenuOpen) {
+      this.isLanguageDropdownOpen = false;
+    }
+  }
+  
+  navigateToSection(section: string) {
+    this.isUserMenuOpen = false;
+    
+    if (section === 'help' && !this.isLoggedIn) {
+      // For non-logged users, navigate to a help page or show help modal
+      this.router.navigate(['/help']);
+      return;
+    }
+    
+    if (this.isLoggedIn) {
+      // Navigate to dashboard and trigger section
+      this.router.navigate(['/dashboard']).then(() => {
+        // Emit event to dashboard to show specific section
+        window.dispatchEvent(new CustomEvent('navigate-to-section', { 
+          detail: { section } 
+        }));
+      });
+    } else {
+      // Redirect to login for protected sections
+      if (['profile', 'settings', 'reports'].includes(section)) {
+        this.router.navigate(['/login']);
+      }
+    }
   }
 
   getTranslation(key: string): string {
