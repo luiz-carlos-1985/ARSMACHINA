@@ -182,29 +182,37 @@ export class ChatbotComponent implements OnInit, OnDestroy {
   getBusinessResponse(message: string): string {
     const lowerMessage = message.toLowerCase();
     
+    // Generate smart suggestions based on context
+    this.generateSmartSuggestions(lowerMessage);
+    
     if (lowerMessage.includes('serviços') || lowerMessage.includes('ars machina')) {
-      return `🏗️ **Nossos Serviços Especializados:**\n\n` +
-             `💻 **Desenvolvimento de Software**\n` +
-             `• Aplicações web modernas (React, Angular, Vue)\n` +
-             `• Sistemas mobile (iOS/Android)\n` +
-             `• APIs e microserviços\n\n` +
-             `☁️ **Consultoria em Nuvem**\n` +
-             `• Migração para AWS, Azure, Google Cloud\n` +
-             `• Arquitetura serverless\n` +
-             `• DevOps e CI/CD\n\n` +
-             `🔒 **Segurança da Informação**\n` +
-             `• Auditoria de segurança\n` +
-             `• Implementação LGPD\n` +
-             `• Pentest e compliance\n\n` +
-             `🤖 **Inteligência Artificial**\n` +
-             `• Chatbots inteligentes\n` +
-             `• Automação de processos\n` +
-             `• Análise de dados\n\n` +
-             `💼 **Consultoria Estratégica**\n` +
-             `• Transformação digital\n` +
-             `• Mentoria técnica\n` +
-             `• Treinamento de equipes\n\n` +
-             `**Qual área mais te interessa?**`;
+      return `🏗️ **Nossos Serviços Especializados com IA:**\n\n` +
+             `🤖 **Desenvolvimento com IA**\n` +
+             `• Aplicações web inteligentes (React, Angular, Vue)\n` +
+             `• Apps mobile com ML integrado\n` +
+             `• APIs inteligentes e microserviços\n` +
+             `• Chatbots avançados como este\n\n` +
+             `☁️ **Cloud Computing Inteligente**\n` +
+             `• Migração otimizada para AWS, Azure, GCP\n` +
+             `• Arquitetura serverless com IA\n` +
+             `• DevOps automatizado e CI/CD\n` +
+             `• Monitoramento preditivo\n\n` +
+             `🔒 **Cibersegurança Avançada**\n` +
+             `• Detecção de ameaças com IA\n` +
+             `• Compliance LGPD automatizado\n` +
+             `• Pentest inteligente\n` +
+             `• Análise comportamental\n\n` +
+             `🧠 **Inteligência Artificial**\n` +
+             `• Machine Learning personalizado\n` +
+             `• Processamento de linguagem natural\n` +
+             `• Visão computacional\n` +
+             `• Automação inteligente\n\n` +
+             `💼 **Consultoria Estratégica Digital**\n` +
+             `• Transformação digital com IA\n` +
+             `• Mentoria técnica especializada\n` +
+             `• Treinamento em tecnologias emergentes\n\n` +
+             `**🎆 Mais de 200 projetos entregues com sucesso!**\n` +
+             `**Qual área desperta seu interesse?**`;
     }
     
     if (lowerMessage.includes('ideia') || lowerMessage.includes('projeto')) {
@@ -280,7 +288,14 @@ export class ChatbotComponent implements OnInit, OnDestroy {
 
   // New methods
   getRandomGreeting(): string {
-    return this.currentGreeting;
+    const greetings = [
+      '👋 Olá! Como posso ajudar?',
+      '🤖 Oi! Sou sua IA assistente!',
+      '💡 Pronto para inovar juntos?',
+      '🎆 Vamos transformar sua ideia?',
+      '🚀 Que tal começar um projeto?'
+    ];
+    return greetings[Math.floor(Math.random() * greetings.length)];
   }
 
   getResponseTime(): string {
@@ -288,7 +303,43 @@ export class ChatbotComponent implements OnInit, OnDestroy {
   }
 
   getTypingText(): string {
-    return this.currentTypingText;
+    const typingTexts = [
+      '🧠 Analisando sua mensagem...',
+      '🔍 Processando informações...',
+      '⚙️ Gerando resposta inteligente...',
+      '💡 Preparando solução personalizada...',
+      '🎯 Otimizando resposta para você...'
+    ];
+    return typingTexts[Math.floor(Math.random() * typingTexts.length)];
+  }
+  
+  generateSmartSuggestions(message: string) {
+    this.smartSuggestions = [];
+    
+    if (message.includes('serviço') || message.includes('desenvolvimento')) {
+      this.smartSuggestions = [
+        { text: 'Quanto custa um projeto?', icon: '💰' },
+        { text: 'Qual o prazo de entrega?', icon: '⏰' },
+        { text: 'Vocês fazem manutenção?', icon: '🔧' }
+      ];
+    } else if (message.includes('ideia') || message.includes('projeto')) {
+      this.smartSuggestions = [
+        { text: 'Como validar minha ideia?', icon: '✅' },
+        { text: 'Preciso de um MVP?', icon: '🚀' },
+        { text: 'Qual tecnologia usar?', icon: '💻' }
+      ];
+    } else if (message.includes('dúvida') || message.includes('ajuda')) {
+      this.smartSuggestions = [
+        { text: 'Como funciona o processo?', icon: '🔄' },
+        { text: 'Vocês dão suporte?', icon: '🎆' },
+        { text: 'Posso ver cases de sucesso?', icon: '🏆' }
+      ];
+    }
+    
+    // Clear suggestions after 30 seconds
+    setTimeout(() => {
+      this.smartSuggestions = [];
+    }, 30000);
   }
 
   toggleSearch() {

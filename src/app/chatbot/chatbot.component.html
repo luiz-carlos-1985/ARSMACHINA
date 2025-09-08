@@ -1,10 +1,17 @@
 <div class="chatbot-container" [class.minimized]="isMinimized">
   <!-- Minimized State -->
   <div *ngIf="isMinimized" class="chatbot-minimized" (click)="toggleChat()">
-    <div class="chat-icon">💬</div>
+    <div class="chat-icon-wrapper">
+      <div class="chat-icon">🤖</div>
+      <div class="pulse-ring"></div>
+      <div class="pulse-ring-2"></div>
+    </div>
     <div *ngIf="unreadCount > 0" class="unread-badge">{{ unreadCount }}</div>
     <div *ngIf="showInfoBalloon" class="info-balloon">
-      {{ getRandomGreeting() }}
+      <div class="balloon-content">
+        <div class="greeting-text">{{ getRandomGreeting() }}</div>
+        <div class="ai-indicator">🧠 IA Avançada</div>
+      </div>
       <button (click)="showInfoBalloon = false; $event.stopPropagation()">×</button>
     </div>
   </div>
@@ -14,17 +21,44 @@
     <!-- Header -->
     <div class="chat-header">
       <div class="header-info">
-        <img src="assets/ars-machina-logo.svg" alt="Ars Machina" class="avatar">
+        <div class="avatar-container">
+          <img src="assets/ars-machina-logo.svg" alt="Ars Machina" class="avatar">
+          <div class="status-indicator"></div>
+        </div>
         <div class="info">
-          <h3>Ars Machina Assistant</h3>
-          <span class="status">Online • {{ getResponseTime() }}</span>
+          <h3>🤖 Ars Machina AI</h3>
+          <span class="status">
+            <span class="status-dot"></span>
+            Online • 🧠 IA Avançada
+          </span>
         </div>
       </div>
       <div class="header-actions">
-        <button (click)="toggleSearch()" title="Buscar">🔍</button>
-        <button (click)="exportConversation()" title="Exportar">📥</button>
-        <button (click)="clearConversation()" title="Limpar">🗑️</button>
-        <button (click)="toggleChat()" title="Minimizar">−</button>
+        <button (click)="toggleSearch()" title="Buscar" class="action-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+            <circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="2"/>
+            <path d="m21 21-4.35-4.35" stroke="currentColor" stroke-width="2"/>
+          </svg>
+        </button>
+        <button (click)="exportConversation()" title="Exportar" class="action-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" stroke="currentColor" stroke-width="2"/>
+            <polyline points="7,10 12,15 17,10" stroke="currentColor" stroke-width="2"/>
+            <line x1="12" y1="15" x2="12" y2="3" stroke="currentColor" stroke-width="2"/>
+          </svg>
+        </button>
+        <button (click)="clearConversation()" title="Limpar" class="action-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+            <polyline points="3,6 5,6 21,6" stroke="currentColor" stroke-width="2"/>
+            <path d="m19,6v14a2,2 0 0,1 -2,2H7a2,2 0 0,1 -2,-2V6m3,0V4a2,2 0 0,1 2,-2h4a2,2 0 0,1 2,2v2" stroke="currentColor" stroke-width="2"/>
+          </svg>
+        </button>
+        <button (click)="toggleChat()" title="Minimizar" class="action-btn close-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+            <line x1="18" y1="6" x2="6" y2="18" stroke="currentColor" stroke-width="2"/>
+            <line x1="6" y1="6" x2="18" y2="18" stroke="currentColor" stroke-width="2"/>
+          </svg>
+        </button>
       </div>
     </div>
 
@@ -59,10 +93,16 @@
 
       <!-- Typing Indicator -->
       <div *ngIf="isLoading" class="message typing">
-        <div class="typing-dots">
-          <span></span><span></span><span></span>
+        <div class="ai-avatar">
+          <div class="ai-brain">🧠</div>
+          <div class="thinking-animation"></div>
         </div>
-        {{ getTypingText() }}
+        <div class="typing-content">
+          <div class="typing-dots">
+            <span></span><span></span><span></span>
+          </div>
+          <div class="typing-text">{{ getTypingText() }}</div>
+        </div>
       </div>
     </div>
 
@@ -81,10 +121,37 @@
       
       <!-- Quick Actions -->
       <div class="quick-actions">
-        <button (click)="sendQuickMessage('Quais são os serviços da Ars Machina?')">🏗️ Nossos serviços</button>
-        <button (click)="sendQuickMessage('Tenho uma ideia de projeto')">💡 Tenho uma ideia</button>
-        <button (click)="sendQuickMessage('Preciso tirar algumas dúvidas')">❓ Tirar dúvidas</button>
-        <button (click)="sendQuickMessage('Quero falar com um consultor')">📞 Falar conosco</button>
+        <button (click)="sendQuickMessage('Quais são os serviços da Ars Machina?')" class="quick-action">
+          <div class="action-icon">🏗️</div>
+          <span>Nossos serviços</span>
+        </button>
+        <button (click)="sendQuickMessage('Tenho uma ideia de projeto')" class="quick-action">
+          <div class="action-icon">💡</div>
+          <span>Tenho uma ideia</span>
+        </button>
+        <button (click)="sendQuickMessage('Preciso tirar algumas dúvidas')" class="quick-action">
+          <div class="action-icon">❓</div>
+          <span>Tirar dúvidas</span>
+        </button>
+        <button (click)="sendQuickMessage('Quero falar com um consultor')" class="quick-action">
+          <div class="action-icon">📞</div>
+          <span>Falar conosco</span>
+        </button>
+      </div>
+      
+      <!-- AI Suggestions -->
+      <div *ngIf="smartSuggestions.length > 0" class="ai-suggestions">
+        <div class="suggestions-header">
+          <span class="ai-icon">🧠</span>
+          <span>Sugestões inteligentes:</span>
+        </div>
+        <div class="suggestions-list">
+          <button *ngFor="let suggestion of smartSuggestions" 
+                  (click)="sendQuickMessage(suggestion.text)"
+                  class="suggestion-btn">
+            {{ suggestion.icon }} {{ suggestion.text }}
+          </button>
+        </div>
       </div>
     </div>
   </div>
