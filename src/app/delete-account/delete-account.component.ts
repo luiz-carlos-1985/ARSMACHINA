@@ -46,6 +46,14 @@ export class DeleteAccountComponent implements OnInit {
     const value = control.value;
     return value === 'EXCLUIR CONTA' ? null : { invalidConfirmText: true };
   }
+  
+  isStep3FormValid(): boolean {
+    const reason = this.deleteForm.get('reason')?.value;
+    const confirmText = this.deleteForm.get('confirmText')?.value;
+    const password = this.deleteForm.get('password')?.value;
+    
+    return !!(reason && confirmText === 'EXCLUIR CONTA' && password);
+  }
 
   private async loadCurrentUser() {
     try {
@@ -101,28 +109,54 @@ export class DeleteAccountComponent implements OnInit {
   }
 
   async deleteAccount() {
-    if (!this.deleteForm.valid) {
-      this.errorMessage = 'Por favor, preencha todos os campos corretamente';
+    console.log('deleteAccount called');
+    console.log('Form valid:', this.deleteForm.valid);
+    console.log('Form value:', this.deleteForm.value);
+    
+    // Check individual field validations
+    const reason = this.deleteForm.get('reason')?.value;
+    const confirmText = this.deleteForm.get('confirmText')?.value;
+    const password = this.deleteForm.get('password')?.value;
+    
+    if (!reason) {
+      this.errorMessage = 'Por favor, selecione um motivo para a exclusão';
+      return;
+    }
+    
+    if (confirmText !== 'EXCLUIR CONTA') {
+      this.errorMessage = 'Digite exatamente "EXCLUIR CONTA" para confirmar';
+      return;
+    }
+    
+    if (!password) {
+      this.errorMessage = 'Senha é obrigatória';
       return;
     }
 
     this.isLoading = true;
     this.errorMessage = '';
+    this.successMessage = '';
 
     try {
-      const formValue = this.deleteForm.value;
+      console.log('Attempting to delete account for:', this.currentUserEmail);
       
       // Delete account
-      await this.authService.deleteAccount(this.currentUserEmail, formValue.password, formValue.reason);
+      const result = await this.authService.deleteAccount(this.currentUserEmail, password, reason);
       
-      this.successMessage = 'Conta excluída com sucesso. Você será redirecionado...';
+      console.log('Account deletion result:', result);
+      
+      this.successMessage = 'Conta excluída com sucesso. Redirecionando em 3 segundos...';
+      
+      // Clear form to prevent resubmission
+      this.deleteForm.reset();
       
       setTimeout(() => {
-        this.router.navigate(['/']);
+        this.router.navigate(['/home']);
       }, 3000);
       
     } catch (error: any) {
-      this.errorMessage = error.message || 'Erro ao excluir conta';
+      console.error('Delete account error:', error);
+      this.errorMessage = error.message || 'Erro ao excluir conta. Tente novamente.';
     } finally {
       this.isLoading = false;
     }

@@ -3,6 +3,7 @@ import { Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../auth.service';
 import { TranslationService } from '../translation.service';
+import { ThemeService } from '../theme.service';
 import { ThemeToggleComponent } from '../theme-toggle/theme-toggle.component';
 
 @Component({
@@ -20,19 +21,27 @@ export class NavigationComponent implements OnInit {
   availableLanguages: { code: string; name: string }[] = [];
   isLanguageDropdownOpen = false;
   isUserMenuOpen = false;
+  isThemeDropdownOpen = false;
   private isMobile = false;
   private touchStartTime = 0;
+  availableThemes = [
+    { code: 'light', name: 'Claro', icon: '☀️' },
+    { code: 'dark', name: 'Escuro', icon: '🌙' }
+  ];
+  currentTheme = 'light';
 
   constructor(
     private authService: AuthService,
     private router: Router,
     private translationService: TranslationService,
+    private themeService: ThemeService,
     private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit() {
     this.checkAuthStatus();
     this.initializeLanguageSettings();
+    this.initializeThemeSettings();
     this.detectMobileDevice();
     this.setupEventListeners();
   }
@@ -68,6 +77,14 @@ export class NavigationComponent implements OnInit {
         }
       }
       
+      // Close theme dropdown if clicking outside
+      if (!target.closest('.mobile-theme-selector')) {
+        if (this.isThemeDropdownOpen) {
+          this.isThemeDropdownOpen = false;
+          this.cdr.detectChanges();
+        }
+      }
+      
       // Close mobile menu if clicking on overlay
       if (target.classList.contains('mobile-menu-overlay') && this.isMenuOpen) {
         this.closeMenu();
@@ -94,6 +111,10 @@ export class NavigationComponent implements OnInit {
     }
     if (this.isLanguageDropdownOpen) {
       this.isLanguageDropdownOpen = false;
+      this.cdr.detectChanges();
+    }
+    if (this.isThemeDropdownOpen) {
+      this.isThemeDropdownOpen = false;
       this.cdr.detectChanges();
     }
   }
@@ -183,6 +204,14 @@ export class NavigationComponent implements OnInit {
   private initializeLanguageSettings() {
     this.availableLanguages = this.translationService.getAvailableLanguages();
     this.currentLanguage = this.translationService.getCurrentLanguage();
+  }
+  
+  private initializeThemeSettings() {
+    this.currentTheme = this.themeService.getCurrentTheme();
+    this.themeService.theme$.subscribe(theme => {
+      this.currentTheme = theme;
+      this.cdr.detectChanges();
+    });
   }
 
   changeLanguage(language: string) {
@@ -309,6 +338,14 @@ export class NavigationComponent implements OnInit {
           }
           break;
           
+        case 'delete-account':
+          if (this.isLoggedIn) {
+            this.router.navigate(['/delete-account']);
+          } else {
+            this.router.navigate(['/login']);
+          }
+          break;
+          
         default:
           console.warn('Unknown section:', section);
           if (this.isLoggedIn) {
@@ -332,5 +369,53 @@ export class NavigationComponent implements OnInit {
 
   getTranslation(key: string): string {
     return this.translationService.translate(key);
+  }
+  
+  toggleThemeDropdown(event?: Event) {
+    try {
+      if (event) {
+        event.preventDefault();
+        event.stopPropagation();
+      }
+
+      this.isThemeDropdownOpen = !this.isThemeDropdownOpen;
+      
+      // Close other dropdowns
+      if (this.isThemeDropdownOpen) {
+        this.isLanguageDropdownOpen = false;
+        this.isUserMenuOpen = false;
+      }
+      
+      this.cdr.detectChanges();
+    } catch (error) {
+      console.error('Error toggling theme dropdown:', error);
+      this.isThemeDropdownOpen = false;
+    }
+  }
+  
+  selectTheme(themeCode: string, event?: Event) {
+    try {
+      if (event) {
+        event.preventDefault();
+        event.stopPropagation();
+      }
+
+      this.themeService.setTheme(themeCode);
+      this.isThemeDropdownOpen = false;
+      this.cdr.detectChanges();
+    } catch (error) {
+      console.error('Error selecting theme:', error);
+      this.isThemeDropdownOpen = false;
+    }
+  }
+  
+  getCurrentThemeName(): string {
+    const currentThemeObj = this.availableThemes.find(theme => theme.code === this.currentTheme);
+    return currentThemeObj ? currentThemeObj.name : 'Claro';
+  }
+  
+  getCurrentThemeIcon(): string {
+    const currentThemeObj = this.availableThemes.find(theme => theme.code === this.currentTheme);
+    return currentThemeObj ? currentThemeObj.icon : '☀️';
   }
 }

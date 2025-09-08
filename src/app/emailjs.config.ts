@@ -3,6 +3,9 @@
 // Follow the setup instructions in EMAILJS_SETUP.md
 
 export const EMAILJS_CONFIG = {
+  // Development mode - emails disabled
+  enabled: false,
+  
   // Replace with your EmailJS Service ID (from Email Services section)
   serviceID: 'service_your_service_id',
 

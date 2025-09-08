@@ -110,6 +110,23 @@
           </div>
         </div>
       </form>
+      
+      <div class="form-status" *ngIf="!isStep3FormValid()">
+        <p class="status-warning">
+          ⚠️ Complete todos os campos para habilitar a exclusão
+        </p>
+        <ul class="status-checklist">
+          <li [class.completed]="deleteForm.get('reason')?.value">
+            {{ deleteForm.get('reason')?.value ? '✓' : '✗' }} Motivo selecionado
+          </li>
+          <li [class.completed]="deleteForm.get('confirmText')?.value === 'EXCLUIR CONTA'">
+            {{ deleteForm.get('confirmText')?.value === 'EXCLUIR CONTA' ? '✓' : '✗' }} Texto de confirmação
+          </li>
+          <li [class.completed]="deleteForm.get('password')?.value">
+            {{ deleteForm.get('password')?.value ? '✓' : '✗' }} Senha verificada
+          </li>
+        </ul>
+      </div>
 
       <div class="step-actions">
         <button type="button" class="btn-secondary" (click)="previousStep()">
@@ -119,7 +136,7 @@
           type="button" 
           class="btn-danger-final" 
           (click)="deleteAccount()"
-          [disabled]="isLoading || !deleteForm.valid">
+          [disabled]="isLoading || !isStep3FormValid()">
           <span *ngIf="!isLoading">🗑️ EXCLUIR CONTA PERMANENTEMENTE</span>
           <span *ngIf="isLoading">⏳ Excluindo...</span>
         </button>

@@ -355,6 +355,24 @@
                 </svg>
               </div>
             </button>
+            
+            <button (click)="navigateToSection('delete-account', $event)" 
+                    class="mobile-nav-item delete-account-mobile"
+                    type="button"
+                    tabindex="0">
+              <div class="mobile-nav-icon">
+                <span style="font-size: 20px;">🗑️</span>
+              </div>
+              <div class="mobile-nav-content">
+                <span class="mobile-nav-title">Excluir Conta</span>
+                <span class="mobile-nav-desc">Remover conta permanentemente</span>
+              </div>
+              <div class="mobile-nav-arrow">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                  <path d="M9 18L15 12L9 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+            </button>
           </div>
           
           <!-- Help for all users -->
@@ -384,15 +402,34 @@
           <!-- Theme Toggle -->
           <div class="mobile-theme-selector">
             <div class="mobile-nav-icon">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
+              <span style="font-size: 20px;">{{ getCurrentThemeIcon() }}</span>
             </div>
             <div class="mobile-nav-content">
               <span class="mobile-nav-title">Tema</span>
-              <div class="mobile-theme-options">
-                <app-theme-toggle></app-theme-toggle>
-              </div>
+              <span class="mobile-nav-desc">{{ getCurrentThemeName() }}</span>
+            </div>
+            <button class="mobile-theme-dropdown-btn" 
+                    (click)="toggleThemeDropdown($event)" 
+                    [class.active]="isThemeDropdownOpen"
+                    type="button"
+                    aria-label="Theme selector"
+                    [attr.aria-expanded]="isThemeDropdownOpen"
+                    tabindex="0">
+              <svg class="dropdown-arrow" [class.rotated]="isThemeDropdownOpen" width="12" height="12" viewBox="0 0 12 12">
+                <path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" stroke-width="1.5" fill="none"/>
+              </svg>
+            </button>
+            <div class="mobile-theme-dropdown" [class.show]="isThemeDropdownOpen">
+              <button
+                *ngFor="let theme of availableThemes"
+                class="mobile-theme-option"
+                [class.active]="theme.code === currentTheme"
+                (click)="selectTheme(theme.code, $event)"
+                type="button"
+                tabindex="0">
+                <span class="theme-icon">{{ theme.icon }}</span>
+                <span class="theme-name">{{ theme.name }}</span>
+              </button>
             </div>
           </div>
           
@@ -406,17 +443,29 @@
             </div>
             <div class="mobile-nav-content">
               <span class="mobile-nav-title">Idioma</span>
-              <div class="mobile-language-options">
-                <button
-                  *ngFor="let lang of availableLanguages"
-                  class="mobile-language-option"
-                  [class.active]="lang.code === currentLanguage"
-                  (click)="selectLanguage(lang.code, $event)"
-                  type="button"
-                  tabindex="0">
-                  {{ lang.name }}
-                </button>
-              </div>
+              <span class="mobile-nav-desc">{{ getCurrentLanguageName() }}</span>
+            </div>
+            <button class="mobile-language-dropdown-btn" 
+                    (click)="toggleLanguageDropdown($event)" 
+                    [class.active]="isLanguageDropdownOpen"
+                    type="button"
+                    aria-label="Language selector"
+                    [attr.aria-expanded]="isLanguageDropdownOpen"
+                    tabindex="0">
+              <svg class="dropdown-arrow" [class.rotated]="isLanguageDropdownOpen" width="12" height="12" viewBox="0 0 12 12">
+                <path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" stroke-width="1.5" fill="none"/>
+              </svg>
+            </button>
+            <div class="mobile-language-dropdown" [class.show]="isLanguageDropdownOpen">
+              <button
+                *ngFor="let lang of availableLanguages"
+                class="mobile-language-option"
+                [class.active]="lang.code === currentLanguage"
+                (click)="selectLanguage(lang.code, $event)"
+                type="button"
+                tabindex="0">
+                {{ lang.name }}
+              </button>
             </div>
           </div>
         </div>

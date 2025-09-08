@@ -8,14 +8,30 @@ import { EMAILJS_CONFIG } from './emailjs.config';
 export class EmailService {
 
   constructor() {
-    // Initialize EmailJS with user ID
-    emailjs.init(EMAILJS_CONFIG.userID);
+    // Initialize EmailJS only if enabled and configured
+    if (EMAILJS_CONFIG.enabled && EMAILJS_CONFIG.userID !== 'your_public_key_here') {
+      emailjs.init(EMAILJS_CONFIG.userID);
+    }
+  }
+
+  /**
+   * Check if EmailJS is properly configured
+   */
+  private isEmailJSConfigured(): boolean {
+    return EMAILJS_CONFIG.enabled && 
+           EMAILJS_CONFIG.userID !== 'your_public_key_here' &&
+           EMAILJS_CONFIG.serviceID !== 'service_your_service_id';
   }
 
   /**
    * Send password recovery email
    */
   async sendPasswordRecoveryEmail(email: string, resetToken: string, resetLink: string): Promise<EmailJSResponseStatus> {
+    if (!this.isEmailJSConfigured()) {
+      console.log('📧 EmailJS not configured - simulating password recovery email for:', email);
+      throw new Error('EmailJS not configured for development');
+    }
+
     const templateParams = {
       to_email: email,
       subject: 'Recuperação de Senha - Ars Machina Consultancy',
@@ -53,6 +69,11 @@ Equipe Ars Machina Consultancy`,
    * Send email verification email
    */
   async sendEmailVerification(email: string, verificationCode: string): Promise<EmailJSResponseStatus> {
+    if (!this.isEmailJSConfigured()) {
+      console.log('📧 EmailJS not configured - simulating verification email for:', email, 'Code:', verificationCode);
+      throw new Error('EmailJS not configured for development');
+    }
+
     const templateParams = {
       to_email: email,
       subject: 'Verificação de Email - Ars Machina Consultancy',
@@ -90,6 +111,11 @@ Equipe Ars Machina Consultancy`,
    * Send welcome email after successful registration
    */
   async sendWelcomeEmail(email: string, userName?: string): Promise<EmailJSResponseStatus> {
+    if (!this.isEmailJSConfigured()) {
+      console.log('📧 EmailJS not configured - simulating welcome email for:', email, 'User:', userName);
+      throw new Error('EmailJS not configured for development');
+    }
+
     const templateParams = {
       to_email: email,
       subject: 'Bem-vindo à Ars Machina Consultancy!',
@@ -123,6 +149,11 @@ Equipe Ars Machina Consultancy`
    * Send account deletion confirmation email
    */
   async sendAccountDeletionEmail(email: string, userName?: string): Promise<EmailJSResponseStatus> {
+    if (!this.isEmailJSConfigured()) {
+      console.log('📧 EmailJS not configured - simulating deletion email for:', email, 'User:', userName);
+      throw new Error('EmailJS not configured for development');
+    }
+
     const templateParams = {
       to_email: email,
       subject: 'Conta Excluída - Ars Machina Consultancy',

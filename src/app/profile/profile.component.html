@@ -2,7 +2,7 @@
   <div class="profile-header">
     <div class="avatar-section">
       <div class="avatar-container">
-        <img [src]="userProfile.avatar || 'assets/default-avatar.png'" 
+        <img [src]="userProfile.avatar || './assets/default-avatar.png'" 
              alt="Avatar" class="avatar-image">
         <button class="avatar-edit-btn" *ngIf="isEditing" (click)="fileInput.click()">
           📷
