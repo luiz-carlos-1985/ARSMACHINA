@@ -59,7 +59,7 @@
           </button>
           <button class="user-option" (click)="navigateToSection('help')">
             <span class="option-icon">❓</span>
-            <span>Help</span>
+            <span>{{ getTranslation('nav.help') }}</span>
           </button>
           <div class="dropdown-divider"></div>
           <button class="user-option logout" (click)="logout()">
@@ -71,7 +71,7 @@
       
       <button *ngIf="!isLoggedIn" (click)="navigateToSection('help')" class="help-btn">
         <span class="help-icon">❓</span>
-        <span class="nav-text">Help</span>
+        <span class="nav-text">{{ getTranslation('nav.help') }}</span>
       </button>
       <div class="language-selector desktop-lang">
         <button class="language-btn" (click)="toggleLanguageDropdown()" [class.active]="isLanguageDropdownOpen">
@@ -303,7 +303,7 @@
               <span style="font-size: 20px;">❓</span>
             </div>
             <div class="mobile-nav-content">
-              <span class="mobile-nav-title">Help</span>
+              <span class="mobile-nav-title">{{ getTranslation('nav.help') }}</span>
               <span class="mobile-nav-desc">Central de ajuda</span>
             </div>
             <div class="mobile-nav-arrow">

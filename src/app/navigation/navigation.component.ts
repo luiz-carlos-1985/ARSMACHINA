@@ -145,26 +145,39 @@ export class NavigationComponent implements OnInit {
   
   navigateToSection(section: string) {
     this.isUserMenuOpen = false;
+    this.closeMenu();
     
-    if (section === 'help' && !this.isLoggedIn) {
-      // For non-logged users, navigate to a help page or show help modal
-      this.router.navigate(['/help']);
+    if (section === 'help') {
+      if (this.isLoggedIn) {
+        // Navigate to dashboard and show help component
+        this.router.navigate(['/dashboard']).then(() => {
+          setTimeout(() => {
+            window.dispatchEvent(new CustomEvent('navigate-to-section', { 
+              detail: { section: 'help' } 
+            }));
+          }, 100);
+        });
+      } else {
+        // For non-logged users, try to navigate to help route or show alert
+        this.router.navigate(['/help']).catch(() => {
+          alert('Página de ajuda em desenvolvimento. Entre em contato conosco:\n\nWhatsApp: +55 98 99964-9215\nEmail: contato@arsmachinaconsultancy.com');
+        });
+      }
       return;
     }
     
     if (this.isLoggedIn) {
       // Navigate to dashboard and trigger section
       this.router.navigate(['/dashboard']).then(() => {
-        // Emit event to dashboard to show specific section
-        window.dispatchEvent(new CustomEvent('navigate-to-section', { 
-          detail: { section } 
-        }));
+        setTimeout(() => {
+          window.dispatchEvent(new CustomEvent('navigate-to-section', { 
+            detail: { section } 
+          }));
+        }, 100);
       });
     } else {
       // Redirect to login for protected sections
-      if (['profile', 'settings', 'reports'].includes(section)) {
-        this.router.navigate(['/login']);
-      }
+      this.router.navigate(['/login']);
     }
   }
 

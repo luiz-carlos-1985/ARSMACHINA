@@ -64,6 +64,8 @@ export class DashboardComponent implements OnInit {
   showHelpModal = false;
   isEditingProfile = false;
   profileSaving = false;
+  showActivityModal = false;
+  selectedActivity: any = null;
   
   // Component states
   showProfileComponent = false;
@@ -297,28 +299,56 @@ export class DashboardComponent implements OnInit {
   }
 
   generateReport() {
-    const reportType = prompt('Tipo de relatório:\n1. Projetos (CSV)\n2. Tarefas (CSV)\n3. Analytics (HTML)\n4. Completo (HTML)\n\nEscolha (1-4):');
-    
-    if (!reportType || !['1', '2', '3', '4'].includes(reportType)) {
-      return;
-    }
-    
+    this.showReportModal = true;
+  }
+
+  generateSelectedReport(type: string) {
     const date = new Date().toISOString().split('T')[0];
     
-    switch (reportType) {
-      case '1':
+    switch (type) {
+      case 'projects':
         this.generateProjectsCSV(date);
         break;
-      case '2':
+      case 'tasks':
         this.generateTasksCSV(date);
         break;
-      case '3':
+      case 'analytics':
         this.generateAnalyticsHTML(date);
         break;
-      case '4':
+      case 'complete':
         this.generateCompleteHTML(date);
         break;
     }
+    
+    this.closeReportModal();
+  }
+
+  closeReportModal() {
+    this.showReportModal = false;
+  }
+
+  showActivityDetails(activity: any) {
+    this.selectedActivity = activity;
+    this.showActivityModal = true;
+  }
+
+  closeActivityModal() {
+    this.showActivityModal = false;
+    this.selectedActivity = null;
+  }
+
+  getActivityTypeName(type: string): string {
+    const typeNames: { [key: string]: string } = {
+      'project': 'Projeto',
+      'task': 'Tarefa',
+      'meeting': 'Reunião',
+      'report': 'Relatório',
+      'analytics': 'Analytics',
+      'support': 'Suporte',
+      'profile': 'Perfil',
+      'settings': 'Configurações'
+    };
+    return typeNames[type] || type;
   }
   
   private generateProjectsCSV(date: string) {

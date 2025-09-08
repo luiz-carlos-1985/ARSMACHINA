@@ -20,6 +20,7 @@ export class TranslationService {
       'nav.logout': 'Sair',
       'nav.dashboard': 'Painel',
       'nav.language': 'Idioma',
+      'nav.help': 'Ajuda',
 
       // Landing page
       'hero.title': 'Ars Machina Consultancy',
@@ -219,6 +220,7 @@ export class TranslationService {
       'nav.logout': 'Logout',
       'nav.dashboard': 'Dashboard',
       'nav.language': 'Language',
+      'nav.help': 'Help',
 
       // Landing page
       'hero.title': 'Ars Machina Consultancy',
