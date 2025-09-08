@@ -46,9 +46,9 @@ export class ChatbotComponent implements OnInit, OnDestroy {
   feedbackRating: number = 0;
   feedbackText: string = '';
   
-  smartSuggestions: Array<{text: string, icon: string}> = [];
-  currentGreeting: string = 'Olá! Precisa de ajuda?';
-  currentTypingText: string = 'Digitando...';
+
+  currentGreeting: string = '';
+  currentTypingText: string = '';
   
   private subscriptions: Subscription[] = [];
 
@@ -63,6 +63,8 @@ export class ChatbotComponent implements OnInit, OnDestroy {
     this.initializeSubscriptions();
     setTimeout(() => this.showInfoBalloon = false, 5000);
   }
+
+
 
   ngOnDestroy() {
     this.subscriptions.forEach(sub => sub.unsubscribe());
@@ -91,15 +93,14 @@ export class ChatbotComponent implements OnInit, OnDestroy {
     if (!this.isMinimized) {
       this.showInfoBalloon = false;
       this.unreadCount = 0;
+      this.scrollToBottom();
     }
   }
 
   scrollToBottom() {
-    setTimeout(() => {
-      if (this.chatContainer) {
-        this.chatContainer.nativeElement.scrollTop = this.chatContainer.nativeElement.scrollHeight;
-      }
-    }, 100);
+    if (this.chatContainer?.nativeElement) {
+      this.chatContainer.nativeElement.scrollTop = this.chatContainer.nativeElement.scrollHeight;
+    }
   }
 
   async sendMessage() {
@@ -119,6 +120,7 @@ export class ChatbotComponent implements OnInit, OnDestroy {
     };
     this.messages.push(userMsg);
     this.filteredMessages = [...this.messages];
+    this.scrollToBottom();
     
     // Generate business response
     setTimeout(() => {
@@ -132,14 +134,9 @@ export class ChatbotComponent implements OnInit, OnDestroy {
       this.messages.push(botResponse);
       this.filteredMessages = [...this.messages];
       this.isLoading = false;
+      this.currentTypingText = '';
       this.scrollToBottom();
     }, 1500);
-    
-    try {
-      await this.chatbotAiService.processMessage(message);
-    } catch (error) {
-      console.error('Error processing message:', error);
-    }
   }
 
   onQuickReplyClick(quickReply: QuickReply) {
@@ -160,123 +157,192 @@ export class ChatbotComponent implements OnInit, OnDestroy {
   }
 
   exportConversation() {
-    const conversationData = this.chatbotAiService.exportConversation();
-    const blob = new Blob([conversationData], { type: 'application/json' });
+    const csvData = this.generateCSV();
+    const blob = new Blob([csvData], { type: 'text/csv;charset=utf-8;' });
     const url = window.URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url;
-    link.download = `conversation_${this.context.sessionId}.json`;
+    link.download = `conversa_ars_machina_${new Date().toISOString().split('T')[0]}.csv`;
     link.click();
     window.URL.revokeObjectURL(url);
+  }
+
+  private generateCSV(): string {
+    const headers = ['Data/Hora', 'Remetente', 'Mensagem'];
+    const csvRows = [headers.join(',')];
+    
+    this.messages.forEach(message => {
+      const timestamp = new Date(message.timestamp).toLocaleString('pt-BR');
+      const sender = message.sender === 'user' ? 'Usuário' : 'Ars Machina AI';
+      const content = message.message.replace(/["\n\r]/g, ' ').replace(/,/g, ';');
+      csvRows.push(`"${timestamp}","${sender}","${content}"`);
+    });
+    
+    return csvRows.join('\n');
   }
 
   trackByMessageId(index: number, message: ChatMessage): string {
     return message.id;
   }
 
-  sendQuickMessage(message: string) {
-    this.userInput = message;
-    this.sendMessage();
-  }
+
 
   getBusinessResponse(message: string): string {
     const lowerMessage = message.toLowerCase();
     
-    // Generate smart suggestions based on context
-    this.generateSmartSuggestions(lowerMessage);
+    // Mensagem inicial atrativa mostrando serviços - apenas para saudações
+    if (lowerMessage.includes('oi') || lowerMessage.includes('olá') || lowerMessage.includes('hello') || lowerMessage.includes('bom dia') || lowerMessage.includes('boa tarde') || lowerMessage.includes('boa noite')) {
+      return `🎯 **Excelente! Você está falando com o especialista certo.**\n\n` +
+             `Sou consultor sênior da **Ars Machina Consultancy** - referência em transformação digital corporativa.\n\n` +
+             `📊 **NOSSOS RESULTADOS COMPROVADOS:**\n` +
+             `✅ **+200 empresas** transformadas digitalmente\n` +
+             `✅ **ROI médio de 300%** em 12 meses\n` +
+             `✅ **98% de satisfação** dos clientes\n` +
+             `✅ Equipe **certificada** pelas principais clouds\n\n` +
+             `🏆 **ESPECIALIDADES ENTERPRISE:**\n\n` +
+             `💼 **Desenvolvimento Corporativo**\n` +
+             `• Sistemas ERP/CRM sob medida\n` +
+             `• Plataformas web de alta performance\n` +
+             `• Apps mobile enterprise\n\n` +
+             `☁️ **Cloud & DevOps**\n` +
+             `• Migração segura para nuvem\n` +
+             `• Redução de custos até 60%\n` +
+             `• Infraestrutura auto-escalável\n\n` +
+             `🛡️ **Cibersegurança & Compliance**\n` +
+             `• Auditoria ISO 27001\n` +
+             `• Implementação LGPD\n` +
+             `• SOC 24/7 terceirizado\n\n` +
+             `🤖 **IA & Automação**\n` +
+             `• IA generativa para negócios\n` +
+             `• RPA (automação de processos)\n` +
+             `• Analytics preditivos\n\n` +
+             `💎 **OFERTA EXCLUSIVA:** Consultoria estratégica **GRATUITA** de 60 minutos\n\n` +
+             `**Qual desafio tecnológico da sua empresa posso ajudar a resolver?**`;
+    }
     
-    if (lowerMessage.includes('serviços') || lowerMessage.includes('ars machina')) {
-      return `🏗️ **Nossos Serviços Especializados com IA:**\n\n` +
-             `🤖 **Desenvolvimento com IA**\n` +
-             `• Aplicações web inteligentes (React, Angular, Vue)\n` +
-             `• Apps mobile com ML integrado\n` +
-             `• APIs inteligentes e microserviços\n` +
-             `• Chatbots avançados como este\n\n` +
-             `☁️ **Cloud Computing Inteligente**\n` +
-             `• Migração otimizada para AWS, Azure, GCP\n` +
-             `• Arquitetura serverless com IA\n` +
-             `• DevOps automatizado e CI/CD\n` +
-             `• Monitoramento preditivo\n\n` +
-             `🔒 **Cibersegurança Avançada**\n` +
-             `• Detecção de ameaças com IA\n` +
-             `• Compliance LGPD automatizado\n` +
-             `• Pentest inteligente\n` +
-             `• Análise comportamental\n\n` +
-             `🧠 **Inteligência Artificial**\n` +
-             `• Machine Learning personalizado\n` +
-             `• Processamento de linguagem natural\n` +
+    if (lowerMessage.includes('serviços') || lowerMessage.includes('servicos') || lowerMessage.includes('desenvolvimento')) {
+      return `🏗️ **PORTFÓLIO COMPLETO ARS MACHINA:**\n\n` +
+             `🌟 **DESENVOLVIMENTO WEB & MOBILE**\n` +
+             `• Sites institucionais responsivos\n` +
+             `• Sistemas web complexos (React, Angular, Vue)\n` +
+             `• E-commerce Shopify/WooCommerce\n` +
+             `• Apps mobile nativas e híbridas\n` +
+             `• PWAs (Progressive Web Apps)\n` +
+             `💰 **A partir de R$ 8.500**\n\n` +
+             `☁️ **CLOUD & INFRAESTRUTURA**\n` +
+             `• Migração completa para nuvem\n` +
+             `• AWS, Azure, Google Cloud\n` +
+             `• DevOps e CI/CD\n` +
+             `• Monitoramento 24/7\n` +
+             `• Backup automático\n` +
+             `💰 **A partir de R$ 4.500/mês**\n\n` +
+             `🔐 **CIBERSEGURANÇA EMPRESARIAL**\n` +
+             `• Auditoria completa de segurança\n` +
+             `• Implementação LGPD\n` +
+             `• Pentest e análise de vulnerabilidades\n` +
+             `• Treinamento de equipes\n` +
+             `💰 **A partir de R$ 12.000**\n\n` +
+             `🤖 **INTELIGÊNCIA ARTIFICIAL**\n` +
+             `• Chatbots personalizados\n` +
+             `• Automação de processos\n` +
+             `• Análise de dados com ML\n` +
              `• Visão computacional\n` +
-             `• Automação inteligente\n\n` +
-             `💼 **Consultoria Estratégica Digital**\n` +
-             `• Transformação digital com IA\n` +
-             `• Mentoria técnica especializada\n` +
-             `• Treinamento em tecnologias emergentes\n\n` +
-             `**🎆 Mais de 200 projetos entregues com sucesso!**\n` +
-             `**Qual área desperta seu interesse?**`;
+             `💰 **A partir de R$ 15.000**\n\n` +
+             `**🎁 BÔNUS: Consultoria gratuita de 1h para novos clientes!**\n\n` +
+             `**Qual serviço desperta seu interesse?**`;
     }
     
-    if (lowerMessage.includes('ideia') || lowerMessage.includes('projeto')) {
-      return `💡 **Que ótimo! Adoramos transformar ideias em realidade!**\n\n` +
-             `Para desenvolver a melhor solução para você, me conte:\n\n` +
-             `🎯 **Qual é sua ideia?**\n` +
-             `• Que problema você quer resolver?\n` +
-             `• Quem é seu público-alvo?\n\n` +
-             `💰 **Investimento disponível:**\n` +
-             `• Projetos a partir de R$ 3.000\n` +
-             `• Orçamento personalizado\n\n` +
-             `⏰ **Prazo desejado:**\n` +
-             `• Projetos rápidos: 1-3 meses\n` +
-             `• Projetos complexos: 3-12 meses\n\n` +
-             `**Vamos agendar uma conversa gratuita de 30min para detalhar sua ideia?**`;
+    if (lowerMessage.includes('preço') || lowerMessage.includes('preco') || lowerMessage.includes('custo') || lowerMessage.includes('valor') || lowerMessage.includes('orçamento')) {
+      return `💰 **INVESTIMENTO INTELIGENTE EM TECNOLOGIA:**\n\n` +
+             `🎯 **PACOTES PROMOCIONAIS:**\n\n` +
+             `📱 **SITE PROFISSIONAL**\n` +
+             `• Design moderno e responsivo\n` +
+             `• SEO otimizado\n` +
+             `• Hospedagem inclusa (1 ano)\n` +
+             `• **R$ 8.500** (12x sem juros)\n\n` +
+             `🛒 **E-COMMERCE COMPLETO**\n` +
+             `• Loja virtual profissional\n` +
+             `• Integração com pagamentos\n` +
+             `• Gestão de estoque\n` +
+             `• **R$ 15.000** (até 18x)\n\n` +
+             `📱 **APP MOBILE**\n` +
+             `• iOS + Android\n` +
+             `• Design nativo\n` +
+             `• Publicação nas lojas\n` +
+             `• **R$ 25.000** (até 24x)\n\n` +
+             `☁️ **MIGRAÇÃO CLOUD**\n` +
+             `• Setup completo AWS/Azure\n` +
+             `• Migração de dados\n` +
+             `• Monitoramento 24/7\n` +
+             `• **R$ 4.500/mês**\n\n` +
+             `🎁 **OFERTA ESPECIAL:**\n` +
+             `• **20% OFF** para novos clientes\n` +
+             `• Consultoria gratuita\n` +
+             `• 3 meses de suporte incluso\n\n` +
+             `**Digite 'contato' para solicitar orçamento personalizado!**`;
     }
     
-    if (lowerMessage.includes('dúvidas') || lowerMessage.includes('duvidas')) {
-      return `❓ **Estou aqui para esclarecer tudo!**\n\n` +
-             `**Perguntas mais frequentes:**\n\n` +
-             `🕒 **Quanto tempo leva um projeto?**\n` +
-             `• Sites simples: 2-4 semanas\n` +
-             `• E-commerce: 2-3 meses\n` +
-             `• Apps mobile: 3-6 meses\n` +
-             `• Sistemas complexos: 6-12 meses\n\n` +
-             `💰 **Como funciona o investimento?**\n` +
-             `• Avaliação gratuita inicial\n` +
-             `• Orçamento fixo sem surpresas\n` +
-             `• Pagamento parcelado\n` +
-             `• 3 meses de suporte incluído\n\n` +
-             `🛠️ **Que tecnologias usamos?**\n` +
-             `• Sempre as mais modernas e seguras\n` +
-             `• Escolhemos a melhor para seu projeto\n` +
-             `• Código limpo e documentado\n\n` +
-             `**Qual sua dúvida específica?**`;
+    if (lowerMessage.includes('contato') || lowerMessage.includes('falar') || lowerMessage.includes('consultor') || lowerMessage.includes('whatsapp')) {
+      return `📞 **FALE CONOSCO AGORA - ATENDIMENTO VIP:**\n\n` +
+             `🚀 **CONTATO DIRETO (RESPOSTA RÁPIDA):**\n` +
+             `📱 **WhatsApp:** +55 98 99964-9215\n` +
+             `⚡ Resposta em até 30 minutos\n` +
+             `🕐 Disponível: Seg-Sex 8h-20h | Sáb 9h-15h\n\n` +
+             `📧 **Email Comercial:**\n` +
+             `✉️ contato@arsmachinaconsultancy.com\n` +
+             `⏰ Resposta em até 2 horas úteis\n\n` +
+             `🎯 **AGENDE SUA CONSULTORIA GRATUITA:**\n` +
+             `• Análise completa do seu projeto\n` +
+             `• Proposta técnica detalhada\n` +
+             `• Orçamento sem compromisso\n` +
+             `• Roadmap de desenvolvimento\n\n` +
+             `🏢 **Escritório São Luís/MA:**\n` +
+             `📍 Atendimento presencial disponível\n` +
+             `🕒 Segunda a sexta: 9h às 18h\n\n` +
+             `💡 **DICA:** Mencione que veio do chat e ganhe 15% de desconto!\n\n` +
+             `**Prefere WhatsApp ou email?**`;
     }
     
-    if (lowerMessage.includes('falar') || lowerMessage.includes('consultor') || lowerMessage.includes('contato')) {
-      return `📞 **Vamos conversar! Temos várias opções:**\n\n` +
-             `🚀 **URGENTE? WhatsApp direto:**\n` +
-             `• +55 98 99964-9215\n` +
-             `• Resposta em até 1 hora\n` +
-             `• Disponível 24h\n\n` +
-             `📧 **Email profissional:**\n` +
-             `• contato@arsmachinaconsultancy.com\n` +
-             `• Resposta em até 4 horas úteis\n\n` +
-             `📅 **Reunião gratuita de 30min:**\n` +
-             `• Análise do seu projeto\n` +
-             `• Proposta personalizada\n` +
-             `• Sem compromisso\n\n` +
-             `🏢 **Escritório em São Luís/MA:**\n` +
-             `• Atendimento presencial\n` +
-             `• Segunda a sexta: 9h às 18h\n\n` +
-             `**Como prefere falar conosco?**`;
+    if (lowerMessage.includes('ideia') || lowerMessage.includes('projeto') || lowerMessage.includes('startup')) {
+      return `💡 **TRANSFORMAMOS SUA IDEIA EM REALIDADE DIGITAL!**\n\n` +
+             `🎯 **PROCESSO ARS MACHINA:**\n\n` +
+             `1️⃣ **DESCOBERTA (GRATUITA)**\n` +
+             `• Entendemos sua visão\n` +
+             `• Análise de viabilidade\n` +
+             `• Definição de escopo\n\n` +
+             `2️⃣ **PLANEJAMENTO**\n` +
+             `• Arquitetura da solução\n` +
+             `• Cronograma detalhado\n` +
+             `• Orçamento transparente\n\n` +
+             `3️⃣ **DESENVOLVIMENTO**\n` +
+             `• Metodologia ágil\n` +
+             `• Entregas semanais\n` +
+             `• Testes rigorosos\n\n` +
+             `4️⃣ **LANÇAMENTO & SUPORTE**\n` +
+             `• Deploy profissional\n` +
+             `• Treinamento da equipe\n` +
+             `• Suporte contínuo\n\n` +
+             `🚀 **CASES DE SUCESSO:**\n` +
+             `• E-commerce que faturou R$ 2M no 1º ano\n` +
+             `• App com +50k downloads\n` +
+             `• Sistema que reduziu custos em 60%\n\n` +
+             `**Me conte sua ideia! Qual problema você quer resolver?**`;
     }
     
-    return `🤖 **Olá! Sou o assistente da Ars Machina Consultancy.**\n\n` +
-           `Somos especialistas em **transformar ideias em soluções digitais** que geram resultados reais para seu negócio.\n\n` +
-           `**Como posso ajudar você hoje?**\n\n` +
-           `🏗️ Conhecer nossos serviços\n` +
-           `💡 Discutir sua ideia de projeto\n` +
-           `❓ Tirar dúvidas sobre tecnologia\n` +
-           `📞 Falar com nossos especialistas\n\n` +
-           `**Mais de 200 projetos entregues com sucesso!**`;
+    // Resposta padrão atrativa
+    return `🤖 **Olá! Sou seu consultor digital da Ars Machina!**\n\n` +
+           `Estamos aqui para **revolucionar seu negócio** com tecnologia de ponta!\n\n` +
+           `💻 Digite **'serviços'** - Ver nosso portfólio completo\n` +
+           `💰 Digite **'preços'** - Conhecer nossos pacotes\n` +
+           `💡 Digite **'ideia'** - Transformar sua ideia em projeto\n` +
+           `📞 Digite **'contato'** - Falar com especialista\n\n` +
+           `🏆 **POR QUE ESCOLHER A ARS MACHINA?**\n` +
+           `✅ +200 projetos entregues com sucesso\n` +
+           `✅ Equipe especializada e certificada\n` +
+           `✅ Metodologia ágil comprovada\n` +
+           `✅ Suporte técnico 24/7\n` +
+           `✅ Garantia de qualidade\n\n` +
+           `**Vamos começar sua transformação digital agora?**`;
   }
 
   formatMessageText(text: string): string {
@@ -288,14 +354,17 @@ export class ChatbotComponent implements OnInit, OnDestroy {
 
   // New methods
   getRandomGreeting(): string {
-    const greetings = [
-      '👋 Olá! Como posso ajudar?',
-      '🤖 Oi! Sou sua IA assistente!',
-      '💡 Pronto para inovar juntos?',
-      '🎆 Vamos transformar sua ideia?',
-      '🚀 Que tal começar um projeto?'
-    ];
-    return greetings[Math.floor(Math.random() * greetings.length)];
+    if (!this.currentGreeting) {
+      const greetings = [
+        '👋 Olá! Como posso ajudar?',
+        '🤖 Oi! Sou sua IA assistente!',
+        '💡 Pronto para inovar juntos?',
+        '🎆 Vamos transformar sua ideia?',
+        '🚀 Que tal começar um projeto?'
+      ];
+      this.currentGreeting = greetings[Math.floor(Math.random() * greetings.length)];
+    }
+    return this.currentGreeting;
   }
 
   getResponseTime(): string {
@@ -303,44 +372,20 @@ export class ChatbotComponent implements OnInit, OnDestroy {
   }
 
   getTypingText(): string {
-    const typingTexts = [
-      '🧠 Analisando sua mensagem...',
-      '🔍 Processando informações...',
-      '⚙️ Gerando resposta inteligente...',
-      '💡 Preparando solução personalizada...',
-      '🎯 Otimizando resposta para você...'
-    ];
-    return typingTexts[Math.floor(Math.random() * typingTexts.length)];
+    if (!this.currentTypingText) {
+      const typingTexts = [
+        '🧠 Analisando sua mensagem...',
+        '🔍 Processando informações...',
+        '⚙️ Gerando resposta inteligente...',
+        '💡 Preparando solução personalizada...',
+        '🎯 Otimizando resposta para você...'
+      ];
+      this.currentTypingText = typingTexts[Math.floor(Math.random() * typingTexts.length)];
+    }
+    return this.currentTypingText;
   }
   
-  generateSmartSuggestions(message: string) {
-    this.smartSuggestions = [];
-    
-    if (message.includes('serviço') || message.includes('desenvolvimento')) {
-      this.smartSuggestions = [
-        { text: 'Quanto custa um projeto?', icon: '💰' },
-        { text: 'Qual o prazo de entrega?', icon: '⏰' },
-        { text: 'Vocês fazem manutenção?', icon: '🔧' }
-      ];
-    } else if (message.includes('ideia') || message.includes('projeto')) {
-      this.smartSuggestions = [
-        { text: 'Como validar minha ideia?', icon: '✅' },
-        { text: 'Preciso de um MVP?', icon: '🚀' },
-        { text: 'Qual tecnologia usar?', icon: '💻' }
-      ];
-    } else if (message.includes('dúvida') || message.includes('ajuda')) {
-      this.smartSuggestions = [
-        { text: 'Como funciona o processo?', icon: '🔄' },
-        { text: 'Vocês dão suporte?', icon: '🎆' },
-        { text: 'Posso ver cases de sucesso?', icon: '🏆' }
-      ];
-    }
-    
-    // Clear suggestions after 30 seconds
-    setTimeout(() => {
-      this.smartSuggestions = [];
-    }, 30000);
-  }
+
 
   toggleSearch() {
     this.showSearch = !this.showSearch;
@@ -401,9 +446,7 @@ export class ChatbotComponent implements OnInit, OnDestroy {
     this.isTyping = this.userInput.length > 0;
   }
 
-  clearSuggestions() {
-    this.smartSuggestions = [];
-  }
+
 
   setRating(rating: number) {
     this.feedbackRating = rating;

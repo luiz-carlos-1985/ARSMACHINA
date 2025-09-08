@@ -10,7 +10,7 @@
     <div *ngIf="showInfoBalloon" class="info-balloon">
       <div class="balloon-content">
         <div class="greeting-text">{{ getRandomGreeting() }}</div>
-        <div class="ai-indicator">🧠 IA Avançada</div>
+
       </div>
       <button (click)="showInfoBalloon = false; $event.stopPropagation()">×</button>
     </div>
@@ -28,8 +28,7 @@
         <div class="info">
           <h3>🤖 Ars Machina AI</h3>
           <span class="status">
-            <span class="status-dot"></span>
-            Online • 🧠 IA Avançada
+            Online
           </span>
         </div>
       </div>
@@ -119,40 +118,9 @@
         </button>
       </div>
       
-      <!-- Quick Actions -->
-      <div class="quick-actions">
-        <button (click)="sendQuickMessage('Quais são os serviços da Ars Machina?')" class="quick-action">
-          <div class="action-icon">🏗️</div>
-          <span>Nossos serviços</span>
-        </button>
-        <button (click)="sendQuickMessage('Tenho uma ideia de projeto')" class="quick-action">
-          <div class="action-icon">💡</div>
-          <span>Tenho uma ideia</span>
-        </button>
-        <button (click)="sendQuickMessage('Preciso tirar algumas dúvidas')" class="quick-action">
-          <div class="action-icon">❓</div>
-          <span>Tirar dúvidas</span>
-        </button>
-        <button (click)="sendQuickMessage('Quero falar com um consultor')" class="quick-action">
-          <div class="action-icon">📞</div>
-          <span>Falar conosco</span>
-        </button>
-      </div>
+
       
-      <!-- AI Suggestions -->
-      <div *ngIf="smartSuggestions.length > 0" class="ai-suggestions">
-        <div class="suggestions-header">
-          <span class="ai-icon">🧠</span>
-          <span>Sugestões inteligentes:</span>
-        </div>
-        <div class="suggestions-list">
-          <button *ngFor="let suggestion of smartSuggestions" 
-                  (click)="sendQuickMessage(suggestion.text)"
-                  class="suggestion-btn">
-            {{ suggestion.icon }} {{ suggestion.text }}
-          </button>
-        </div>
-      </div>
+
     </div>
   </div>
 </div>
