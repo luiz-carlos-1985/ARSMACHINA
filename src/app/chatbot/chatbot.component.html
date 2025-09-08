@@ -1,55 +1,91 @@
-<div class="chatbot-container" [ngClass]="{'minimized': isMinimized}" (click)="isMinimized ? toggleChat() : null">
-  <!-- Info Balloon -->
-  <div *ngIf="showInfoBalloon" class="info-balloon">
-    <div class="balloon-content">
-      <span class="balloon-text">Olá! Precisa de ajuda?</span>
-      <button class="balloon-close" (click)="showInfoBalloon = false; $event.stopPropagation()" aria-label="Fechar balão">×</button>
+<div class="chatbot-container" [class.minimized]="isMinimized">
+  <!-- Minimized State -->
+  <div *ngIf="isMinimized" class="chatbot-minimized" (click)="toggleChat()">
+    <div class="chat-icon">💬</div>
+    <div *ngIf="unreadCount > 0" class="unread-badge">{{ unreadCount }}</div>
+    <div *ngIf="showInfoBalloon" class="info-balloon">
+      {{ getRandomGreeting() }}
+      <button (click)="showInfoBalloon = false; $event.stopPropagation()">×</button>
     </div>
-    <div class="balloon-arrow"></div>
   </div>
 
-  <!-- Chat Header -->
-  <div class="chatbot-header" *ngIf="!isMinimized">
-    <div class="chatbot-avatar">
-      <img src="assets/ars-machina-logo.svg" alt="Ars Machina" class="avatar-img">
-    </div>
-    <div class="chatbot-info">
-      <h3>Ars Machina Assistant</h3>
-      <span class="status">Online</span>
-    </div>
-    <button class="minimize-btn" (click)="toggleChat(); $event.stopPropagation()" aria-label="Minimizar chat" title="Minimizar chat">−</button>
-  </div>
-
-  <div class="chat-messages" #chatContainer>
-    <div *ngFor="let message of messages" class="message" [ngClass]="{'user-message': message.sender === 'user', 'bot-message': message.sender === 'bot'}">
-      <div class="message-content">
-        {{ message.message }}
+  <!-- Expanded State -->
+  <div *ngIf="!isMinimized" class="chatbot-expanded">
+    <!-- Header -->
+    <div class="chat-header">
+      <div class="header-info">
+        <img src="assets/ars-machina-logo.svg" alt="Ars Machina" class="avatar">
+        <div class="info">
+          <h3>Ars Machina Assistant</h3>
+          <span class="status">Online • {{ getResponseTime() }}</span>
+        </div>
+      </div>
+      <div class="header-actions">
+        <button (click)="toggleSearch()" title="Buscar">🔍</button>
+        <button (click)="exportConversation()" title="Exportar">📥</button>
+        <button (click)="clearConversation()" title="Limpar">🗑️</button>
+        <button (click)="toggleChat()" title="Minimizar">−</button>
       </div>
     </div>
 
-    <div *ngIf="isLoading" class="message bot-message">
-      <div class="message-content typing">
-        <span class="typing-indicator">
-          <span></span>
-          <span></span>
-          <span></span>
-        </span>
+    <!-- Search Bar -->
+    <div *ngIf="showSearch" class="search-bar">
+      <input [(ngModel)]="searchQuery" (input)="searchMessages()" placeholder="Buscar mensagens...">
+      <button (click)="clearSearch()">×</button>
+    </div>
+
+    <!-- Messages -->
+    <div class="chat-messages" #chatContainer>
+      <div *ngFor="let message of filteredMessages; trackBy: trackByMessageId" 
+           class="message" 
+           [class.user]="message.sender === 'user'">
+        
+        <div class="message-content" [innerHTML]="formatMessageText(message.message)"></div>
+        
+        <!-- Quick Replies -->
+        <div *ngIf="message.metadata?.quickReplies" class="quick-replies">
+          <button *ngFor="let reply of message.metadata.quickReplies" 
+                  (click)="onQuickReplyClick(reply)"
+                  [disabled]="isLoading">
+            {{ reply.icon }} {{ reply.text }}
+          </button>
+        </div>
+
+        <!-- Message Footer -->
+        <div class="message-footer">
+          <span class="message-time">{{ formatTime(message.timestamp) }}</span>
+        </div>
+      </div>
+
+      <!-- Typing Indicator -->
+      <div *ngIf="isLoading" class="message typing">
+        <div class="typing-dots">
+          <span></span><span></span><span></span>
+        </div>
+        {{ getTypingText() }}
       </div>
     </div>
-  </div>
 
-  <div class="chat-input">
-    <input
-      type="text"
-      [(ngModel)]="userInput"
-      (keyup.enter)="sendMessage()"
-      placeholder="Digite sua mensagem..."
-      class="message-input"
-      aria-label="Digite sua mensagem">
-    <button (click)="sendMessage()" class="send-btn" [disabled]="!userInput.trim()" aria-label="Enviar mensagem" title="Enviar mensagem">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M22 2L11 13M22 2L15 22L11 13L2 9L22 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
-    </button>
+    <!-- Input -->
+    <div class="chat-input">
+      <div class="input-group">
+        <input 
+          [(ngModel)]="userInput"
+          (keydown.enter)="sendMessage()"
+          placeholder="Digite sua mensagem..."
+          [disabled]="isLoading">
+        <button (click)="sendMessage()" [disabled]="!userInput.trim() || isLoading">
+          {{ isLoading ? '⏳' : '➤' }}
+        </button>
+      </div>
+      
+      <!-- Quick Actions -->
+      <div class="quick-actions">
+        <button (click)="sendQuickMessage('Quais são os serviços da Ars Machina?')">🏗️ Nossos serviços</button>
+        <button (click)="sendQuickMessage('Tenho uma ideia de projeto')">💡 Tenho uma ideia</button>
+        <button (click)="sendQuickMessage('Preciso tirar algumas dúvidas')">❓ Tirar dúvidas</button>
+        <button (click)="sendQuickMessage('Quero falar com um consultor')">📞 Falar conosco</button>
+      </div>
+    </div>
   </div>
 </div>

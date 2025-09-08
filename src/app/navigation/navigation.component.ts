@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../auth.service';
@@ -23,7 +23,8 @@ export class NavigationComponent implements OnInit {
   constructor(
     private authService: AuthService,
     private router: Router,
-    private translationService: TranslationService
+    private translationService: TranslationService,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit() {
@@ -71,13 +72,42 @@ export class NavigationComponent implements OnInit {
   }
 
   private checkAuthStatus() {
+    // Check initial state from localStorage
+    const authUser = localStorage.getItem('auth_user');
+    if (authUser) {
+      try {
+        const user = JSON.parse(authUser);
+        this.isLoggedIn = user.isAuthenticated === true;
+        console.log('Initial auth state from localStorage:', this.isLoggedIn);
+      } catch (error) {
+        this.isLoggedIn = false;
+      }
+    }
+    
+    // Subscribe to auth state changes
     this.authService.isAuthenticated().subscribe(isAuth => {
+      console.log('Auth status changed from', this.isLoggedIn, 'to', isAuth);
       this.isLoggedIn = isAuth;
-      // Force change detection
-      setTimeout(() => {
-        this.isLoggedIn = isAuth;
-      }, 0);
+      this.cdr.detectChanges(); // Force change detection
     });
+    
+    // Also check periodically (temporary debug)
+    setInterval(() => {
+      const currentAuthUser = localStorage.getItem('auth_user');
+      if (currentAuthUser) {
+        try {
+          const user = JSON.parse(currentAuthUser);
+          const shouldBeLoggedIn = user.isAuthenticated === true;
+          if (shouldBeLoggedIn !== this.isLoggedIn) {
+            console.log('Auth state mismatch detected, updating...');
+            this.isLoggedIn = shouldBeLoggedIn;
+            this.cdr.detectChanges();
+          }
+        } catch (error) {
+          // ignore
+        }
+      }
+    }, 1000);
   }
 
   private initializeLanguageSettings() {

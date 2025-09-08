@@ -31,6 +31,11 @@
         <span class="nav-text">{{ getTranslation('nav.dashboard') }}</span>
       </a>
       
+      <!-- Logout Button -->
+      <button *ngIf="isLoggedIn" (click)="logout()" class="logout-btn">
+        <span class="nav-text">{{ getTranslation('nav.logout') }}</span>
+      </button>
+      
       <!-- User Menu Dropdown -->
       <div *ngIf="isLoggedIn" class="user-menu-dropdown">
         <button class="user-menu-btn" (click)="toggleUserMenu()" [class.active]="isUserMenuOpen">
