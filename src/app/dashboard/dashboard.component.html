@@ -300,8 +300,8 @@
 </div>
 
 <!-- Project Management Modal -->
-<div class="modal-overlay" *ngIf="showProjectModal" (click)="closeProjectModal()">
-  <div class="modal-content" (click)="$event.stopPropagation()">
+<div class="modal-overlay" *ngIf="showProjectModal">
+  <div class="modal-content">
     <div class="modal-header">
       <h3>{{ isEditingProject ? 'Editar Projeto' : 'Novo Projeto' }}</h3>
       <button class="modal-close" (click)="closeProjectModal()">×</button>
@@ -352,8 +352,8 @@
 </div>
 
 <!-- Task Management Modal -->
-<div class="modal-overlay" *ngIf="showTaskModal" (click)="closeTaskModal()">
-  <div class="modal-content" (click)="$event.stopPropagation()">
+<div class="modal-overlay" *ngIf="showTaskModal">
+  <div class="modal-content">
     <div class="modal-header">
       <h3>{{ isEditingTask ? 'Editar Tarefa' : 'Nova Tarefa' }}</h3>
       <button class="modal-close" (click)="closeTaskModal()">×</button>

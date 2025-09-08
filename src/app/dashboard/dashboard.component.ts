@@ -37,6 +37,25 @@ export class DashboardComponent implements OnInit {
   showTaskModal = false;
   isEditingProject = false;
   isEditingTask = false;
+  showMeetingModal = false;
+  showReportModal = false;
+  
+  // Filter and search states
+  projectFilter = 'all';
+  taskFilter = 'all';
+  searchTerm = '';
+  
+  // Meeting data
+  currentMeeting: any = {
+    id: null,
+    title: '',
+    date: '',
+    time: '',
+    participants: '',
+    description: ''
+  };
+  
+  meetings: any[] = [];
 
   // Current project/task being edited
   currentProject: any = {
@@ -236,13 +255,199 @@ export class DashboardComponent implements OnInit {
   }
 
   scheduleMeeting() {
-    // TODO: Implement actual schedule meeting logic
-    alert('Funcionalidade: Agendar Reunião\nEm breve disponível!');
+    this.openMeetingModal();
   }
 
   generateReport() {
-    // TODO: Implement actual generate report logic
-    alert('Funcionalidade: Gerar Relatório\nEm breve disponível!');
+    const reportType = prompt('Tipo de relatório:\n1. Projetos (CSV)\n2. Tarefas (CSV)\n3. Analytics (HTML)\n4. Completo (HTML)\n\nEscolha (1-4):');
+    
+    if (!reportType || !['1', '2', '3', '4'].includes(reportType)) {
+      return;
+    }
+    
+    const date = new Date().toISOString().split('T')[0];
+    
+    switch (reportType) {
+      case '1':
+        this.generateProjectsCSV(date);
+        break;
+      case '2':
+        this.generateTasksCSV(date);
+        break;
+      case '3':
+        this.generateAnalyticsHTML(date);
+        break;
+      case '4':
+        this.generateCompleteHTML(date);
+        break;
+    }
+  }
+  
+  private generateProjectsCSV(date: string) {
+    const headers = ['Nome,Descrição,Status,Progresso (%),Prazo,Equipe,Criado em'];
+    const rows = this.activeProjects.map(p => 
+      `"${p.name}","${p.description || ''}","${p.statusText}",${p.progress},"${p.deadline}",${p.teamSize},"${date}"`
+    );
+    
+    const csvContent = [headers, ...rows].join('\n');
+    this.downloadFile(csvContent, `relatorio-projetos-${date}.csv`, 'text/csv');
+    
+    this.addActivity('Relatório de Projetos (CSV) gerado', 'report', 'icon-chart', 'generated', 'Gerado');
+    alert('Relatório de Projetos gerado em CSV!');
+  }
+  
+  private generateTasksCSV(date: string) {
+    const headers = ['Título,Descrição,Projeto,Prioridade,Status,Data Vencimento,Criado em'];
+    const rows = this.tasks.map(t => {
+      const project = this.activeProjects.find(p => p.id === t.projectId);
+      return `"${t.title}","${t.description || ''}","${project?.name || 'N/A'}","${t.priority}","${t.completed ? 'Concluída' : 'Pendente'}","${t.dueDate || ''}","${date}"`;
+    });
+    
+    const csvContent = [headers, ...rows].join('\n');
+    this.downloadFile(csvContent, `relatorio-tarefas-${date}.csv`, 'text/csv');
+    
+    this.addActivity('Relatório de Tarefas (CSV) gerado', 'report', 'icon-chart', 'generated', 'Gerado');
+    alert('Relatório de Tarefas gerado em CSV!');
+  }
+  
+  private generateAnalyticsHTML(date: string) {
+    const html = `
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Relatório de Analytics - ${date}</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; }
+        .header { text-align: center; margin-bottom: 30px; }
+        .metric { background: #f5f5f5; padding: 20px; margin: 10px 0; border-radius: 8px; }
+        .metric h3 { margin: 0 0 10px 0; color: #333; }
+        .value { font-size: 2em; font-weight: bold; color: #667eea; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Relatório de Analytics</h1>
+        <p>Gerado em: ${new Date().toLocaleDateString('pt-BR')}</p>
+    </div>
+    
+    <div class="metric">
+        <h3>⚡ Produtividade</h3>
+        <div class="value">${this.productivityScore}%</div>
+    </div>
+    
+    <div class="metric">
+        <h3>👥 Performance da Equipe</h3>
+        <div class="value">${this.teamPerformance}%</div>
+    </div>
+    
+    <div class="metric">
+        <h3>😊 Satisfação do Cliente</h3>
+        <div class="value">${this.clientSatisfaction}%</div>
+    </div>
+    
+    <div class="metric">
+        <h3>💰 Receita</h3>
+        <div class="value">R$ ${this.revenue.toLocaleString('pt-BR')}</div>
+    </div>
+</body>
+</html>`;
+    
+    this.downloadFile(html, `relatorio-analytics-${date}.html`, 'text/html');
+    
+    this.addActivity('Relatório de Analytics (HTML) gerado', 'report', 'icon-chart', 'generated', 'Gerado');
+    alert('Relatório de Analytics gerado em HTML!');
+  }
+  
+  private generateCompleteHTML(date: string) {
+    const completedTasks = this.tasks.filter(t => t.completed).length;
+    
+    const html = `
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Relatório Completo - ${date}</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; }
+        .header { text-align: center; margin-bottom: 30px; }
+        .summary { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 30px; }
+        .summary-card { background: #f5f5f5; padding: 20px; border-radius: 8px; text-align: center; }
+        .summary-value { font-size: 2em; font-weight: bold; color: #667eea; }
+        .section { margin: 30px 0; }
+        table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+        th, td { border: 1px solid #ddd; padding: 12px; text-align: left; }
+        th { background-color: #667eea; color: white; }
+        .status-planning { background: #fff3cd; }
+        .status-in-progress { background: #d1ecf1; }
+        .status-review { background: #f8d7da; }
+        .status-completed { background: #d4edda; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Relatório Completo do Dashboard</h1>
+        <p>Gerado em: ${new Date().toLocaleDateString('pt-BR')}</p>
+    </div>
+    
+    <div class="summary">
+        <div class="summary-card">
+            <div class="summary-value">${this.activeProjects.length}</div>
+            <div>Projetos Ativos</div>
+        </div>
+        <div class="summary-card">
+            <div class="summary-value">${this.tasks.length}</div>
+            <div>Total de Tarefas</div>
+        </div>
+        <div class="summary-card">
+            <div class="summary-value">${completedTasks}</div>
+            <div>Tarefas Concluídas</div>
+        </div>
+        <div class="summary-card">
+            <div class="summary-value">${this.productivityScore}%</div>
+            <div>Produtividade</div>
+        </div>
+    </div>
+    
+    <div class="section">
+        <h2>Projetos</h2>
+        <table>
+            <tr><th>Nome</th><th>Status</th><th>Progresso</th><th>Prazo</th><th>Equipe</th></tr>
+            ${this.activeProjects.map(p => `
+                <tr class="status-${p.status}">
+                    <td>${p.name}</td>
+                    <td>${p.statusText}</td>
+                    <td>${p.progress}%</td>
+                    <td>${p.deadline}</td>
+                    <td>${p.teamSize} membros</td>
+                </tr>
+            `).join('')}
+        </table>
+    </div>
+    
+    <div class="section">
+        <h2>Atividades Recentes</h2>
+        <ul>
+            ${this.recentActivities.slice(0, 10).map(a => `<li>${a.text} - ${a.time}</li>`).join('')}
+        </ul>
+    </div>
+</body>
+</html>`;
+    
+    this.downloadFile(html, `relatorio-completo-${date}.html`, 'text/html');
+    
+    this.addActivity('Relatório Completo (HTML) gerado', 'report', 'icon-chart', 'generated', 'Gerado');
+    alert('Relatório Completo gerado em HTML!');
+  }
+  
+  private downloadFile(content: string, fileName: string, mimeType: string) {
+    const blob = new Blob([content], { type: mimeType });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = fileName;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    window.URL.revokeObjectURL(url);
   }
 
   // Project Management
@@ -251,7 +456,10 @@ export class DashboardComponent implements OnInit {
       // Update existing project
       const index = this.activeProjects.findIndex(p => p.id === this.currentProject.id);
       if (index !== -1) {
-        this.activeProjects[index] = { ...this.currentProject };
+        this.activeProjects[index] = { 
+          ...this.currentProject,
+          statusText: this.getStatusText(this.currentProject.status)
+        };
         this.addActivity(`Projeto "${this.currentProject.name}" foi atualizado`, 'project', 'icon-edit', 'updated', 'Atualizado');
       }
     } else {
@@ -259,7 +467,8 @@ export class DashboardComponent implements OnInit {
       const newProject = {
         ...this.currentProject,
         id: Date.now(), // Simple ID generation
-        progress: 0
+        progress: 0,
+        statusText: this.getStatusText(this.currentProject.status)
       };
       this.activeProjects.push(newProject);
       this.userStats.projects = this.activeProjects.length;
@@ -320,7 +529,11 @@ export class DashboardComponent implements OnInit {
 
   // Activities
   viewAllActivities() {
-    alert('Funcionalidade: Ver Todas as Atividades\nEm breve disponível!');
+    const activitiesText = this.recentActivities
+      .map((activity, index) => `${index + 1}. ${activity.text} (${activity.time})`)
+      .join('\n');
+    
+    alert(`Todas as Atividades Recentes:\n\n${activitiesText}`);
   }
 
   // Notifications
@@ -338,7 +551,18 @@ export class DashboardComponent implements OnInit {
   }
 
   viewAllNotifications() {
-    alert('Funcionalidade: Ver Todas as Notificações\nEm breve disponível!');
+    const notificationsText = this.notifications
+      .map((notification, index) => {
+        const status = notification.read ? '[Lida]' : '[Não lida]';
+        return `${index + 1}. ${status} ${notification.text} (${notification.time})`;
+      })
+      .join('\n');
+    
+    alert(`Todas as Notificações:\n\n${notificationsText}`);
+    
+    // Mark all as read
+    this.notifications.forEach(n => n.read = true);
+    this.saveToLocalStorage();
   }
 
   // Projects
@@ -525,6 +749,7 @@ export class DashboardComponent implements OnInit {
     const dashboardData = {
       activeProjects: this.activeProjects,
       tasks: this.tasks,
+      meetings: this.meetings,
       userStats: this.userStats,
       recentActivities: this.recentActivities,
       notifications: this.notifications
@@ -539,6 +764,7 @@ export class DashboardComponent implements OnInit {
         const data = JSON.parse(savedData);
         this.activeProjects = data.activeProjects || this.activeProjects;
         this.tasks = data.tasks || [];
+        this.meetings = data.meetings || [];
         this.userStats = { ...this.userStats, ...data.userStats };
         this.recentActivities = data.recentActivities || this.recentActivities;
         this.notifications = data.notifications || this.notifications;
@@ -546,6 +772,159 @@ export class DashboardComponent implements OnInit {
         console.error('Error loading dashboard data:', error);
       }
     }
+  }
+
+  // Filter and search methods
+  get filteredProjects() {
+    let filtered = this.activeProjects;
+    
+    if (this.projectFilter !== 'all') {
+      filtered = filtered.filter(p => p.status === this.projectFilter);
+    }
+    
+    if (this.searchTerm) {
+      filtered = filtered.filter(p => 
+        p.name.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
+        p.description.toLowerCase().includes(this.searchTerm.toLowerCase())
+      );
+    }
+    
+    return filtered;
+  }
+  
+  get filteredTasks() {
+    let filtered = this.tasks;
+    
+    if (this.taskFilter === 'completed') {
+      filtered = filtered.filter(t => t.completed);
+    } else if (this.taskFilter === 'pending') {
+      filtered = filtered.filter(t => !t.completed);
+    }
+    
+    if (this.searchTerm) {
+      filtered = filtered.filter(t => 
+        t.title.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
+        t.description.toLowerCase().includes(this.searchTerm.toLowerCase())
+      );
+    }
+    
+    return filtered;
+  }
+  
+  // Meeting management
+  openMeetingModal() {
+    this.currentMeeting = {
+      id: null,
+      title: '',
+      date: '',
+      time: '',
+      participants: '',
+      description: ''
+    };
+    this.showMeetingModal = true;
+  }
+  
+  closeMeetingModal() {
+    this.showMeetingModal = false;
+  }
+  
+  saveMeeting() {
+    const meeting = {
+      ...this.currentMeeting,
+      id: Date.now(),
+      createdAt: new Date().toISOString(),
+      participants: this.currentMeeting.participants.split(',').map((p: string) => p.trim())
+    };
+    
+    this.meetings.push(meeting);
+    this.addActivity(`Reunião "${meeting.title}" agendada para ${meeting.date}`, 'meeting', 'icon-calendar', 'scheduled', 'Agendada');
+    
+    this.closeMeetingModal();
+    this.saveToLocalStorage();
+  }
+  
+  // Task completion toggle
+  toggleTaskCompletion(task: any) {
+    task.completed = !task.completed;
+    const status = task.completed ? 'concluída' : 'reaberta';
+    this.addActivity(`Tarefa "${task.title}" foi ${status}`, 'task', 'icon-check', task.completed ? 'completed' : 'reopened', status.charAt(0).toUpperCase() + status.slice(1));
+    this.updateTaskStats();
+    this.saveToLocalStorage();
+  }
+  
+  // Project progress update
+  updateProjectProgress(project: any, newProgress: number) {
+    project.progress = Math.max(0, Math.min(100, newProgress));
+    this.addActivity(`Progresso do projeto "${project.name}" atualizado para ${project.progress}%`, 'project', 'icon-chart', 'updated', 'Atualizado');
+    this.saveToLocalStorage();
+  }
+  
+  // Bulk operations
+  markAllNotificationsAsRead() {
+    this.notifications.forEach(n => n.read = true);
+    this.saveToLocalStorage();
+  }
+  
+  clearAllNotifications() {
+    if (confirm('Tem certeza que deseja limpar todas as notificações?')) {
+      this.notifications = [];
+      this.saveToLocalStorage();
+    }
+  }
+  
+  // Data export/import
+  exportAllData() {
+    const allData = {
+      activeProjects: this.activeProjects,
+      tasks: this.tasks,
+      meetings: this.meetings,
+      userStats: this.userStats,
+      recentActivities: this.recentActivities,
+      notifications: this.notifications,
+      exportDate: new Date().toISOString()
+    };
+    
+    const blob = new Blob([JSON.stringify(allData, null, 2)], { type: 'application/json' });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `dashboard-backup-${new Date().toISOString().split('T')[0]}.json`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    window.URL.revokeObjectURL(url);
+    
+    this.addActivity('Backup completo dos dados exportado', 'report', 'icon-export', 'exported', 'Exportado');
+  }
+  
+  // Statistics calculations
+  get projectStats() {
+    const total = this.activeProjects.length;
+    const inProgress = this.activeProjects.filter(p => p.status === 'in-progress').length;
+    const completed = this.activeProjects.filter(p => p.status === 'completed').length;
+    const planning = this.activeProjects.filter(p => p.status === 'planning').length;
+    
+    return { total, inProgress, completed, planning };
+  }
+  
+  get taskStats() {
+    const total = this.tasks.length;
+    const completed = this.tasks.filter(t => t.completed).length;
+    const pending = total - completed;
+    const completionRate = total > 0 ? Math.round((completed / total) * 100) : 0;
+    
+    return { total, completed, pending, completionRate };
+  }
+  
+  // Helper method to get status text
+  private getStatusText(status: string): string {
+    const statusMap: { [key: string]: string } = {
+      'planning': 'Planejamento',
+      'in-progress': 'Em Andamento',
+      'review': 'Em Revisão',
+      'completed': 'Concluído'
+    };
+    return statusMap[status] || status;
   }
 
   // Helper method to add activities

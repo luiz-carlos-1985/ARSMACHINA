@@ -52,14 +52,11 @@ export const isDevelopmentMode = (): boolean => {
   const hasAccessKey = !!AWS_CONFIG.credentials.accessKeyId;
   const hasSecretKey = !!AWS_CONFIG.credentials.secretAccessKey;
   
-  // Log security status (without exposing credentials)
+  // Check credentials without logging
   if (!hasAccessKey || !hasSecretKey) {
-    console.log('🔒 AWS SES: Running in DEVELOPMENT mode (credentials not configured)');
-    console.log('📧 Contact form will use simulation mode');
     return true;
   }
   
-  console.log('✅ AWS SES: Running in PRODUCTION mode (credentials configured)');
   return false;
 };
 
