@@ -60,6 +60,10 @@ export class NavigationComponent implements OnInit {
   private checkAuthStatus() {
     this.authService.isAuthenticated().subscribe(isAuth => {
       this.isLoggedIn = isAuth;
+      // Force change detection
+      setTimeout(() => {
+        this.isLoggedIn = isAuth;
+      }, 0);
     });
   }
 

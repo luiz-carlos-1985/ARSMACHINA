@@ -178,7 +178,7 @@ export class TranslationService {
       'about.mission.title': 'Nossa Missão',
       'about.mission.description': 'Proporcionar soluções inovadoras em TI que impulsionam o crescimento e a eficiência dos nossos clientes, utilizando as melhores práticas e tecnologias de ponta.',
       'about.team.title': 'Nossa Equipe',
-      'about.team.member1.name': 'Luiz Carlos de Castro Júnior',
+      'about.team.member1.name': 'Luiz Carlos',
       'about.team.member1.role': 'Arquiteto e Engenheiro de Software & Fundador',
       'about.team.member1.description': 'Especialista em arquitetura de sistemas e liderança de equipes de desenvolvimento.',
 

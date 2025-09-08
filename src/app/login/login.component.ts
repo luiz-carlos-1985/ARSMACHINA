@@ -46,7 +46,10 @@ export class LoginComponent implements OnInit {
 
     try {
       await this.authService.signIn(this.email, this.password);
+      
+      // Navigate to dashboard after successful login
       this.router.navigate(['/dashboard']);
+      
     } catch (error: any) {
       this.errorMessage = error.message || this.getTranslation('login.error');
     } finally {
