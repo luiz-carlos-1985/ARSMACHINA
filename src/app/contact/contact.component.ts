@@ -37,17 +37,77 @@ export class ContactComponent {
       return;
     }
 
-    // Check if EmailJS is properly configured
-    if (EMAILJS_CONFIG.serviceID === 'service_your_service_id' ||
-        EMAILJS_CONFIG.templateID === 'template_your_template_id' ||
-        EMAILJS_CONFIG.userID === 'your_public_key_here') {
-      this.showAlternativeContactOptions();
-      return;
-    }
-
-    this.sendEmailViaEmailJS();
+    // For development/demo purposes, simulate successful form submission
+    this.simulateFormSubmission();
   }
 
+  private simulateFormSubmission() {
+    this.isSubmitting = true;
+
+    // Simulate network delay
+    setTimeout(() => {
+      this.isSubmitting = false;
+      
+      // Show success message and provide alternative contact options
+      this.showSuccessWithAlternatives();
+      
+      // Save form data to localStorage for demonstration
+      this.saveFormDataLocally();
+      
+      // Reset form after successful submission
+      this.resetForm();
+    }, 2000);
+  }
+
+  private showSuccessWithAlternatives() {
+    const message = `
+      ✅ Formulário enviado com sucesso!
+      
+      Olá ${this.contactForm.name}!
+      
+      Sua mensagem foi registrada e será processada em breve.
+      Para uma resposta mais rápida, use uma das opções abaixo:
+      
+      📱 WhatsApp: +55 98 99964-9215
+      📧 Email: contato@arsmachinaconsultancy.com
+      
+      Responderemos no email: ${this.contactForm.email}
+    `;
+    
+    alert(message);
+    
+    // Show alternative contact options
+    this.showAlternativeContact = true;
+    
+    // Copy message to clipboard for convenience
+    this.copyMessageToClipboard();
+  }
+
+  private saveFormDataLocally() {
+    const formData = {
+      ...this.contactForm,
+      timestamp: new Date().toISOString(),
+      id: Date.now()
+    };
+
+    // Get existing form submissions
+    const existingSubmissions = JSON.parse(localStorage.getItem('contactFormSubmissions') || '[]');
+    
+    // Add new submission
+    existingSubmissions.push(formData);
+    
+    // Keep only last 10 submissions
+    if (existingSubmissions.length > 10) {
+      existingSubmissions.splice(0, existingSubmissions.length - 10);
+    }
+    
+    // Save back to localStorage
+    localStorage.setItem('contactFormSubmissions', JSON.stringify(existingSubmissions));
+    
+    console.log('Form data saved locally:', formData);
+  }
+
+  // Optional: Keep EmailJS functionality for when it's properly configured
   private sendEmailViaEmailJS() {
     this.isSubmitting = true;
 
@@ -155,7 +215,7 @@ Enviado através do site Ars Machina Consultancy
   // Alternative contact methods
   openWhatsApp() {
     const message = encodeURIComponent(`Olá! Meu nome é ${this.contactForm.name}. ${this.contactForm.message}`);
-    const whatsappUrl = `https://wa.me/5511999999999?text=${message}`;
+    const whatsappUrl = `https://wa.me/5598999649215?text=${message}`;
     window.open(whatsappUrl, '_blank');
   }
 

@@ -62,6 +62,34 @@ export class AuthService {
 
   async signUp(email: string, password: string) {
     try {
+      if (this.isDevelopmentMode) {
+        // Development mode - simulate sign up
+        const verificationCode = this.generateVerificationCode();
+        
+        // Store user data for confirmation
+        localStorage.setItem('pending_signup', JSON.stringify({
+          email: email,
+          password: password,
+          verificationCode: verificationCode,
+          timestamp: new Date().toISOString()
+        }));
+
+        // Try to send verification email, but don't fail if it doesn't work
+        try {
+          await this.emailService.sendEmailVerification(email, verificationCode);
+        } catch (emailError) {
+          console.warn('Email service not configured, verification code stored locally');
+        }
+
+        return { 
+          isSignUpComplete: false,
+          nextStep: {
+            signUpStep: 'CONFIRM_SIGN_UP'
+          }
+        };
+      }
+
+      // Production mode - use AWS Amplify
       const signUpInput: SignUpInput = {
         username: email,
         password: password,
@@ -80,6 +108,29 @@ export class AuthService {
 
   async confirmSignUp(email: string, confirmationCode: string) {
     try {
+      if (this.isDevelopmentMode) {
+        // Development mode - validate confirmation code
+        const pendingSignup = localStorage.getItem('pending_signup');
+        if (pendingSignup) {
+          const { email: storedEmail, verificationCode } = JSON.parse(pendingSignup);
+          if (storedEmail === email && verificationCode === confirmationCode) {
+            // Complete signup in development mode
+            localStorage.removeItem('pending_signup');
+            
+            // Send welcome email
+            try {
+              await this.sendWelcomeEmail(email, email.split('@')[0]);
+            } catch (emailError) {
+              console.warn('Welcome email could not be sent');
+            }
+            
+            return { isSignUpComplete: true };
+          }
+        }
+        throw new Error('Invalid verification code');
+      }
+
+      // Production mode - use AWS Amplify
       const confirmSignUpInput: ConfirmSignUpInput = {
         username: email,
         confirmationCode: confirmationCode,
@@ -120,6 +171,29 @@ export class AuthService {
    */
   async resetPassword(email: string) {
     try {
+      if (this.isDevelopmentMode) {
+        // Development mode - simulate password reset
+        const resetToken = this.generateResetToken();
+        const resetLink = `${window.location.origin}/reset-password?token=${resetToken}&email=${encodeURIComponent(email)}`;
+        
+        // Store reset token for validation
+        localStorage.setItem('password_reset_token', JSON.stringify({
+          email: email,
+          token: resetToken,
+          timestamp: new Date().toISOString()
+        }));
+
+        // Try to send email, but don't fail if it doesn't work
+        try {
+          await this.emailService.sendPasswordRecoveryEmail(email, resetToken, resetLink);
+        } catch (emailError) {
+          console.warn('Email service not configured, password reset token stored locally');
+        }
+
+        return { isPasswordReset: true };
+      }
+
+      // Production mode - use AWS Amplify
       const result = await resetPassword({
         username: email,
       });
@@ -141,6 +215,21 @@ export class AuthService {
    */
   async confirmPasswordReset(email: string, confirmationCode: string, newPassword: string) {
     try {
+      if (this.isDevelopmentMode) {
+        // Development mode - validate reset token
+        const resetData = localStorage.getItem('password_reset_token');
+        if (resetData) {
+          const { email: storedEmail, token } = JSON.parse(resetData);
+          if (storedEmail === email && token === confirmationCode) {
+            // Update password in development mode (just simulate)
+            localStorage.removeItem('password_reset_token');
+            return { isPasswordReset: true };
+          }
+        }
+        throw new Error('Invalid reset token');
+      }
+
+      // Production mode - use AWS Amplify
       const result = await confirmResetPassword({
         username: email,
         confirmationCode: confirmationCode,
@@ -157,6 +246,28 @@ export class AuthService {
    */
   async resendEmailVerification(email: string) {
     try {
+      if (this.isDevelopmentMode) {
+        // Development mode - simulate email verification
+        const verificationCode = this.generateVerificationCode();
+        
+        // Store verification code for validation
+        localStorage.setItem('email_verification_code', JSON.stringify({
+          email: email,
+          code: verificationCode,
+          timestamp: new Date().toISOString()
+        }));
+
+        // Try to send email, but don't fail if it doesn't work
+        try {
+          await this.emailService.sendEmailVerification(email, verificationCode);
+        } catch (emailError) {
+          console.warn('Email service not configured, verification code stored locally');
+        }
+
+        return { isCodeDelivered: true };
+      }
+
+      // Production mode - use AWS Amplify
       const resendSignUpCodeInput: ResendSignUpCodeInput = {
         username: email,
       };
@@ -230,6 +341,9 @@ export class AuthService {
           this.isAuthenticatedSubject.next(user.isAuthenticated === true);
           return;
         }
+        // If no local auth data, set to false
+        this.isAuthenticatedSubject.next(false);
+        return;
       }
       
       // Production mode - use AWS Amplify
