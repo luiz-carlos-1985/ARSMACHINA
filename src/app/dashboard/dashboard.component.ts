@@ -8,12 +8,13 @@ import { EmailService } from '../email.service';
 import { ProfileComponent } from '../profile/profile.component';
 import { SettingsComponent } from '../settings/settings.component';
 import { ReportsComponent } from '../reports/reports.component';
+import { EnhancedReportsComponent } from '../reports/enhanced-reports.component';
 import { HelpComponent } from '../help/help.component';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, FormsModule, ProfileComponent, SettingsComponent, ReportsComponent, HelpComponent],
+  imports: [CommonModule, FormsModule, ProfileComponent, SettingsComponent, ReportsComponent, EnhancedReportsComponent, HelpComponent],
   providers: [AuthService],
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css']
@@ -230,6 +231,59 @@ export class DashboardComponent implements OnInit {
       this.navigateTo(section);
     });
   }
+  
+  private addMobileEventListeners() {
+    // Get all action buttons
+    const buttons = document.querySelectorAll('.hero-action-btn, .action-button');
+    
+    buttons.forEach((button, index) => {
+      // Remove existing listeners
+      button.removeEventListener('touchstart', this.handleTouch);
+      button.removeEventListener('click', this.handleClick);
+      
+      // Add new listeners
+      button.addEventListener('touchstart', (e) => {
+        e.preventDefault();
+        this.handleButtonClick(index);
+      }, { passive: false });
+      
+      button.addEventListener('click', (e) => {
+        e.preventDefault();
+        this.handleButtonClick(index);
+      });
+    });
+  }
+  
+  private handleButtonClick(index: number) {
+    console.log('Button clicked:', index);
+    
+    switch(index) {
+      case 0: // First hero button or first action button
+        this.createNewProject();
+        break;
+      case 1: // Second hero button or second action button
+        if (document.querySelector('.hero-action-btn.secondary')) {
+          this.generateReport();
+        } else {
+          this.addNewTask();
+        }
+        break;
+      case 2: // Third action button
+        this.scheduleMeeting();
+        break;
+      case 3: // Fourth action button
+        this.generateReport();
+        break;
+    }
+  }
+  
+  private handleTouch = (e: Event) => {
+    e.preventDefault();
+  }
+  
+  private handleClick = (e: Event) => {
+    e.preventDefault();
+  }
 
   private initializeLanguageSubscription() {
     this.translationService.currentLanguage$.subscribe(lang => {
@@ -266,6 +320,7 @@ export class DashboardComponent implements OnInit {
 
   // Quick Actions
   createNewProject() {
+    console.log('createNewProject called');
     this.currentProject = {
       id: null,
       name: '',
@@ -279,6 +334,7 @@ export class DashboardComponent implements OnInit {
   }
 
   addNewTask() {
+    console.log('addNewTask called');
     this.currentTask = {
       id: null,
       title: '',
@@ -293,10 +349,12 @@ export class DashboardComponent implements OnInit {
   }
 
   scheduleMeeting() {
+    console.log('scheduleMeeting called');
     this.openMeetingModal();
   }
 
   generateReport() {
+    console.log('generateReport called');
     this.showReportModal = true;
   }
 
@@ -753,11 +811,7 @@ export class DashboardComponent implements OnInit {
   }
 
   callSupport() {
-    const supportNumber = '+5598999649215';
-    const message = `Olá! Sou ${this.userName} e preciso de suporte técnico com o dashboard.`;
-    const whatsappUrl = `https://wa.me/${supportNumber}?text=${encodeURIComponent(message)}`;
-    
-    window.open(whatsappUrl, '_blank');
+    window.open('https://wa.me/message/KNSHISJA3H25K1', '_blank');
     this.addActivity('Contato via WhatsApp iniciado', 'support', 'icon-phone', 'called', 'Chamado');
   }
 

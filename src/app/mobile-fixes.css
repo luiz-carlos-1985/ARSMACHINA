@@ -1,0 +1,18 @@
+/* Mobile-specific fixes for touch events and responsiveness */
+button {
+    pointer-events: auto; /* Ensure buttons are clickable */
+}
+
+.mobile-nav-item {
+    position: relative; /* Ensure proper stacking context */
+    z-index: 10; /* Bring buttons above other elements */
+}
+
+.hamburger {
+    z-index: 1000; /* Ensure hamburger menu is always on top */
+}
+
+/* Additional styles to enhance touch responsiveness */
+.theme-toggle {
+    touch-action: manipulation; /* Prevent default touch actions */
+}

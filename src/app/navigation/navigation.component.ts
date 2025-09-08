@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, HostListener } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../auth.service';
@@ -19,6 +19,8 @@ export class NavigationComponent implements OnInit {
   availableLanguages: { code: string; name: string }[] = [];
   isLanguageDropdownOpen = false;
   isUserMenuOpen = false;
+  private isMobile = false;
+  private touchStartTime = 0;
 
   constructor(
     private authService: AuthService,
@@ -30,27 +32,94 @@ export class NavigationComponent implements OnInit {
   ngOnInit() {
     this.checkAuthStatus();
     this.initializeLanguageSettings();
+    this.detectMobileDevice();
+    this.setupEventListeners();
+  }
+
+  private detectMobileDevice() {
+    this.isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || 
+                   window.innerWidth <= 768;
     
-    // Close dropdowns when clicking outside
-    document.addEventListener('click', (event) => {
-      const target = event.target as HTMLElement;
-      if (!target.closest('.user-menu-dropdown')) {
-        this.isUserMenuOpen = false;
-      }
-      if (!target.closest('.language-selector')) {
-        this.isLanguageDropdownOpen = false;
-      }
+    // Listen for window resize to update mobile status
+    window.addEventListener('resize', () => {
+      this.isMobile = window.innerWidth <= 768;
     });
   }
 
+  private setupEventListeners() {
+    // Enhanced click outside handling for mobile
+    document.addEventListener('click', (event) => {
+      const target = event.target as HTMLElement;
+      
+      // Close user menu if clicking outside
+      if (!target.closest('.user-menu-dropdown')) {
+        if (this.isUserMenuOpen) {
+          this.isUserMenuOpen = false;
+          this.cdr.detectChanges();
+        }
+      }
+      
+      // Close language dropdown if clicking outside
+      if (!target.closest('.language-selector')) {
+        if (this.isLanguageDropdownOpen) {
+          this.isLanguageDropdownOpen = false;
+          this.cdr.detectChanges();
+        }
+      }
+      
+      // Close mobile menu if clicking on overlay
+      if (target.classList.contains('mobile-menu-overlay') && this.isMenuOpen) {
+        this.closeMenu();
+      }
+    });
+
+    // Handle touch events for better mobile interaction
+    if (this.isMobile) {
+      document.addEventListener('touchstart', (event) => {
+        this.touchStartTime = Date.now();
+      }, { passive: true });
+    }
+  }
+
+  // Listen for escape key to close menus
+  @HostListener('document:keydown.escape', ['$event'])
+  onEscapeKey(event: KeyboardEvent) {
+    if (this.isMenuOpen) {
+      this.closeMenu();
+    }
+    if (this.isUserMenuOpen) {
+      this.isUserMenuOpen = false;
+      this.cdr.detectChanges();
+    }
+    if (this.isLanguageDropdownOpen) {
+      this.isLanguageDropdownOpen = false;
+      this.cdr.detectChanges();
+    }
+  }
+
   toggleMenu() {
+    console.log('toggleMenu called, current state:', this.isMenuOpen);
     this.isMenuOpen = !this.isMenuOpen;
     this.updateBodyScroll();
+    this.cdr.detectChanges();
+    console.log('Menu toggled to:', this.isMenuOpen);
+    
+    // Force focus for mobile accessibility
+    if (this.isMobile && this.isMenuOpen) {
+      setTimeout(() => {
+        const firstMenuItem = document.querySelector('.mobile-nav-item') as HTMLElement;
+        if (firstMenuItem) {
+          firstMenuItem.focus();
+        }
+      }, 100);
+    }
   }
 
   closeMenu() {
+    console.log('closeMenu called');
     this.isMenuOpen = false;
     this.updateBodyScroll();
+    this.cdr.detectChanges();
   }
 
   private updateBodyScroll() {
@@ -121,8 +190,28 @@ export class NavigationComponent implements OnInit {
     this.closeMenu(); // Close menu on language change for better UX on mobile
   }
 
-  toggleLanguageDropdown() {
-    this.isLanguageDropdownOpen = !this.isLanguageDropdownOpen;
+  toggleLanguageDropdown(event?: Event) {
+    try {
+      if (event) {
+        event.preventDefault();
+        event.stopPropagation();
+      }
+
+      this.isLanguageDropdownOpen = !this.isLanguageDropdownOpen;
+      
+      // Close user menu if opening language dropdown
+      if (this.isLanguageDropdownOpen) {
+        this.isUserMenuOpen = false;
+      }
+      
+      // Force change detection for mobile
+      if (this.isMobile) {
+        this.cdr.detectChanges();
+      }
+    } catch (error) {
+      console.error('Error toggling language dropdown:', error);
+      this.isLanguageDropdownOpen = false;
+    }
   }
 
   getCurrentLanguageName(): string {
@@ -130,54 +219,103 @@ export class NavigationComponent implements OnInit {
     return currentLang ? currentLang.name : 'Português';
   }
 
-  selectLanguage(languageCode: string) {
-    this.changeLanguage(languageCode);
-    this.isLanguageDropdownOpen = false;
-  }
-  
-  toggleUserMenu() {
-    this.isUserMenuOpen = !this.isUserMenuOpen;
-    // Close language dropdown if open
-    if (this.isUserMenuOpen) {
+  selectLanguage(languageCode: string, event?: Event) {
+    try {
+      if (event) {
+        event.preventDefault();
+        event.stopPropagation();
+      }
+
+      this.changeLanguage(languageCode);
+      this.isLanguageDropdownOpen = false;
+      
+      // Force change detection for mobile
+      if (this.isMobile) {
+        this.cdr.detectChanges();
+      }
+    } catch (error) {
+      console.error('Error selecting language:', error);
       this.isLanguageDropdownOpen = false;
     }
   }
   
-  navigateToSection(section: string) {
-    this.isUserMenuOpen = false;
-    this.closeMenu();
-    
-    if (section === 'help') {
+  toggleUserMenu(event?: Event) {
+    try {
+      if (event) {
+        event.preventDefault();
+        event.stopPropagation();
+      }
+
+      this.isUserMenuOpen = !this.isUserMenuOpen;
+      
+      // Close language dropdown if opening user menu
+      if (this.isUserMenuOpen) {
+        this.isLanguageDropdownOpen = false;
+      }
+      
+      // Force change detection for mobile
+      if (this.isMobile) {
+        this.cdr.detectChanges();
+      }
+    } catch (error) {
+      console.error('Error toggling user menu:', error);
+      this.isUserMenuOpen = false;
+    }
+  }
+  
+  navigateToSection(section: string, event?: Event) {
+    try {
+      if (event) {
+        event.preventDefault();
+        event.stopPropagation();
+      }
+
+      // Close all menus
+      this.isUserMenuOpen = false;
+      this.closeMenu();
+      
+      if (section === 'help') {
+        if (this.isLoggedIn) {
+          // Navigate to dashboard and show help component
+          this.router.navigate(['/dashboard']).then(() => {
+            setTimeout(() => {
+              window.dispatchEvent(new CustomEvent('navigate-to-section', { 
+                detail: { section: 'help' } 
+              }));
+            }, 100);
+          });
+        } else {
+          // For non-logged users, try to navigate to help route or show alert
+          this.router.navigate(['/help']).catch(() => {
+            alert('Página de ajuda em desenvolvimento. Entre em contato conosco:\n\nWhatsApp: +55 98 99964-9215\nEmail: contato@arsmachinaconsultancy.com');
+          });
+        }
+        return;
+      }
+      
       if (this.isLoggedIn) {
-        // Navigate to dashboard and show help component
+        // Navigate to dashboard and trigger section
         this.router.navigate(['/dashboard']).then(() => {
           setTimeout(() => {
             window.dispatchEvent(new CustomEvent('navigate-to-section', { 
-              detail: { section: 'help' } 
+              detail: { section } 
             }));
           }, 100);
         });
       } else {
-        // For non-logged users, try to navigate to help route or show alert
-        this.router.navigate(['/help']).catch(() => {
-          alert('Página de ajuda em desenvolvimento. Entre em contato conosco:\n\nWhatsApp: +55 98 99964-9215\nEmail: contato@arsmachinaconsultancy.com');
-        });
+        // Redirect to login for protected sections
+        this.router.navigate(['/login']);
       }
-      return;
-    }
-    
-    if (this.isLoggedIn) {
-      // Navigate to dashboard and trigger section
-      this.router.navigate(['/dashboard']).then(() => {
-        setTimeout(() => {
-          window.dispatchEvent(new CustomEvent('navigate-to-section', { 
-            detail: { section } 
-          }));
-        }, 100);
-      });
-    } else {
-      // Redirect to login for protected sections
-      this.router.navigate(['/login']);
+      
+      // Force change detection for mobile
+      if (this.isMobile) {
+        this.cdr.detectChanges();
+      }
+    } catch (error) {
+      console.error('Error navigating to section:', error);
+      // Ensure menus are closed even if navigation fails
+      this.isUserMenuOpen = false;
+      this.closeMenu();
     }
   }
 

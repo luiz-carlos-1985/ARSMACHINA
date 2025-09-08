@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mobile Debug Test</title>
+    <style>
+        body { margin: 0; padding: 20px; font-family: Arial; }
+        .test-btn {
+            background: red !important;
+            color: white !important;
+            border: 3px solid black !important;
+            font-size: 24px !important;
+            padding: 30px !important;
+            margin: 20px 0 !important;
+            width: 100% !important;
+            height: 100px !important;
+            cursor: pointer !important;
+        }
+        #result { margin: 20px 0; font-size: 18px; }
+    </style>
+</head>
+<body>
+    <h1>Mobile Button Test</h1>
+    
+    <button class="test-btn" onclick="testClick(1)">
+        TESTE 1 - ONCLICK
+    </button>
+    
+    <button class="test-btn" id="test2">
+        TESTE 2 - LISTENER
+    </button>
+    
+    <button class="test-btn" ontouchstart="testTouch(3)">
+        TESTE 3 - TOUCH
+    </button>
+    
+    <div id="result">Clique nos botões para testar</div>
+    
+    <script>
+        function testClick(num) {
+            document.getElementById('result').innerHTML = `BOTÃO ${num} FUNCIONOU! (onclick)`;
+            console.log(`Botão ${num} clicado`);
+        }
+        
+        function testTouch(num) {
+            document.getElementById('result').innerHTML = `BOTÃO ${num} FUNCIONOU! (touch)`;
+            console.log(`Botão ${num} tocado`);
+        }
+        
+        document.getElementById('test2').addEventListener('click', function() {
+            document.getElementById('result').innerHTML = 'BOTÃO 2 FUNCIONOU! (listener)';
+            console.log('Botão 2 clicado via listener');
+        });
+        
+        // Log device info
+        console.log('User Agent:', navigator.userAgent);
+        console.log('Screen:', screen.width + 'x' + screen.height);
+        console.log('Viewport:', window.innerWidth + 'x' + window.innerHeight);
+    </script>
+</body>
+</html>

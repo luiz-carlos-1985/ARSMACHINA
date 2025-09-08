@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste Mobile Buttons</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .test-container {
+            max-width: 400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+            font-size: 24px;
+        }
+
+        .button-test {
+            margin-bottom: 20px;
+        }
+
+        .test-button {
+            width: 100%;
+            min-height: 48px;
+            padding: 15px 20px;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            touch-action: manipulation;
+            -webkit-tap-highlight-color: transparent;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
+        .hamburger-test {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .theme-test {
+            background: linear-gradient(135deg, #ffd700 0%, #ff8c00 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
+        }
+
+        .nav-test {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
+        }
+
+        .test-button:active {
+            transform: scale(0.95);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+
+        .feedback {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 20px;
+            border-left: 4px solid #28a745;
+        }
+
+        .feedback h3 {
+            color: #28a745;
+            margin-bottom: 10px;
+        }
+
+        .feedback p {
+            color: #666;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .status {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+
+        .working {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .not-working {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        @media (hover: none) and (pointer: coarse) {
+            .test-button:hover {
+                transform: none;
+            }
+            
+            .test-button:active {
+                background-color: rgba(0,0,0,0.1);
+                transform: scale(0.95);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>🔧 Teste Mobile Buttons</h1>
+        
+        <div class="button-test">
+            <button class="test-button hamburger-test" onclick="testHamburger()">
+                🍔 Teste Hamburger Menu
+                <span id="hamburger-status" class="status not-working">Não testado</span>
+            </button>
+        </div>
+
+        <div class="button-test">
+            <button class="test-button theme-test" onclick="testTheme()">
+                🌙 Teste Theme Toggle
+                <span id="theme-status" class="status not-working">Não testado</span>
+            </button>
+        </div>
+
+        <div class="button-test">
+            <button class="test-button nav-test" onclick="testNavigation()">
+                🧭 Teste Navigation
+                <span id="nav-status" class="status not-working">Não testado</span>
+            </button>
+        </div>
+
+        <div class="feedback">
+            <h3>📱 Instruções de Teste</h3>
+            <p>
+                1. Toque em cada botão acima<br>
+                2. Verifique se há feedback visual (escala/cor)<br>
+                3. Observe se não há zoom duplo<br>
+                4. Teste em diferentes navegadores móveis<br>
+                5. Verifique se funciona com toque rápido e longo
+            </p>
+        </div>
+
+        <div id="results" style="margin-top: 20px;"></div>
+    </div>
+
+    <script>
+        let testResults = {
+            hamburger: false,
+            theme: false,
+            navigation: false
+        };
+
+        function updateStatus(type, working) {
+            const statusElement = document.getElementById(type + '-status');
+            if (statusElement) {
+                statusElement.textContent = working ? 'Funcionando' : 'Com problema';
+                statusElement.className = 'status ' + (working ? 'working' : 'not-working');
+            }
+            testResults[type] = working;
+            updateResults();
+        }
+
+        function testHamburger() {
+            console.log('Hamburger button clicked!');
+            
+            // Simular feedback visual
+            const button = event.target;
+            button.style.transform = 'scale(0.9)';
+            
+            setTimeout(() => {
+                button.style.transform = '';
+                updateStatus('hamburger', true);
+                
+                // Adicionar vibração se disponível
+                if ('vibrate' in navigator) {
+                    navigator.vibrate(50);
+                }
+            }, 150);
+        }
+
+        function testTheme() {
+            console.log('Theme button clicked!');
+            
+            const button = event.target;
+            button.style.transform = 'scale(0.9)';
+            
+            // Alternar cores para simular mudança de tema
+            const currentBg = window.getComputedStyle(button).background;
+            const isLight = currentBg.includes('255, 215, 0') || currentBg.includes('ffd700');
+            if (isLight) {
+                button.style.background = 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
+            } else {
+                button.style.background = 'linear-gradient(135deg, #ffd700 0%, #ff8c00 100%)';
+            }
+            
+            setTimeout(() => {
+                button.style.transform = '';
+                updateStatus('theme', true);
+                
+                if ('vibrate' in navigator) {
+                    navigator.vibrate(50);
+                }
+            }, 150);
+        }
+
+        function testNavigation() {
+            console.log('Navigation button clicked!');
+            
+            const button = event.target;
+            button.style.transform = 'scale(0.9)';
+            
+            setTimeout(() => {
+                button.style.transform = '';
+                updateStatus('navigation', true);
+                
+                if ('vibrate' in navigator) {
+                    navigator.vibrate(50);
+                }
+            }, 150);
+        }
+
+        function updateResults() {
+            const resultsDiv = document.getElementById('results');
+            const workingCount = Object.values(testResults).filter(Boolean).length;
+            const totalTests = Object.keys(testResults).length;
+            
+            resultsDiv.innerHTML = `
+                <div class="feedback">
+                    <h3>📊 Resultados do Teste</h3>
+                    <p>
+                        <strong>${workingCount}/${totalTests}</strong> botões funcionando corretamente<br>
+                        <small>Dispositivo: ${navigator.userAgent.includes('Mobile') ? 'Mobile' : 'Desktop'}</small><br>
+                        <small>Tela: ${window.innerWidth}x${window.innerHeight}</small>
+                    </p>
+                </div>
+            `;
+        }
+
+        // Detectar tipo de dispositivo
+        window.addEventListener('load', () => {
+            const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+            console.log('Dispositivo móvel detectado:', isMobile);
+            console.log('Largura da tela:', window.innerWidth);
+            
+            if (!isMobile && window.innerWidth > 768) {
+                document.body.innerHTML += `
+                    <div style="position: fixed; top: 10px; left: 10px; background: orange; color: white; padding: 10px; border-radius: 5px; font-size: 12px;">
+                        ⚠️ Este teste é otimizado para dispositivos móveis
+                    </div>
+                `;
+            }
+        });
+
+        // Log de eventos de toque
+        document.addEventListener('touchstart', (e) => {
+            console.log('Touch start detected');
+        });
+
+        document.addEventListener('touchend', (e) => {
+            console.log('Touch end detected');
+        });
+    </script>
+</body>
+</html>

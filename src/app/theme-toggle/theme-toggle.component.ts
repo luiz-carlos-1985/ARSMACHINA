@@ -7,7 +7,12 @@ import { ThemeService } from '../theme.service';
   standalone: true,
   imports: [CommonModule],
   template: `
-    <button class="theme-toggle" (click)="toggleTheme()" [title]="getTooltip()" [class.dark]="currentTheme === 'dark'">
+    <button class="theme-toggle" 
+            (click)="toggleTheme($event)" 
+            [title]="getTooltip()" 
+            [class.dark]="currentTheme === 'dark'"
+            type="button"
+            aria-label="Toggle theme">
       <span class="theme-icon">{{ currentTheme === 'light' ? '🌙' : '☀️' }}</span>
     </button>
   `,
@@ -83,10 +88,51 @@ export class ThemeToggleComponent implements OnInit {
     });
   }
 
-  toggleTheme() {
-    this.themeService.toggleTheme();
+  toggleTheme(event?: Event) {
+    // Prevent default behavior and event bubbling
+    if (event) {
+      event.preventDefault();
+      event.stopPropagation();
+      
+      // Enhanced mobile detection and handling
+      const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || 
+                       window.innerWidth <= 768;
+      
+      if (isMobile) {
+        // Add haptic feedback if available
+        if ('vibrate' in navigator) {
+          navigator.vibrate(50);
+        }
+        
+        // Ensure the button doesn't get stuck in active state
+        const target = event.target as HTMLElement;
+        if (target) {
+          target.blur();
+          // Force visual feedback
+          target.style.transform = 'scale(0.9)';
+          setTimeout(() => {
+            target.style.transform = '';
+          }, 150);
+        }
+        
+        // Debug logging for mobile
+        console.log('Mobile theme toggle activated');
+      }
+    }
+    
+    try {
+      this.themeService.toggleTheme();
+    } catch (error) {
+      console.error('Error toggling theme:', error);
+      // Fallback: still try to toggle theme
+      try {
+        this.themeService.toggleTheme();
+      } catch (fallbackError) {
+        console.error('Fallback theme toggle also failed:', fallbackError);
+      }
+    }
   }
-
+  
   getTooltip(): string {
     return this.currentTheme === 'light' ? 'Ativar tema escuro' : 'Ativar tema claro';
   }

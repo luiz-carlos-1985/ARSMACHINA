@@ -13,6 +13,6 @@ export class ServicesComponent {
   constructor(public translationService: TranslationService) {}
 
   contactUs() {
-    window.open('https://wa.me/5598999649215', '_blank', 'noopener');
+    window.open('https://wa.me/message/KNSHISJA3H25K1', '_blank', 'noopener');
   }
 }

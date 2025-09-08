@@ -6,7 +6,7 @@
         <h1>Olá, <span class="user-highlight">{{ userName || 'Usuário' }}</span>!</h1>
         <p class="hero-subtitle">{{ getTranslation('dashboard.welcome') }}</p>
         <div class="hero-actions">
-          <button class="hero-action-btn primary" (click)="createNewProject()">
+<button class="hero-action-btn primary" (click)="createNewProject()">
             <span class="btn-icon">➕</span>
             {{ getTranslation('dashboard.newProject') }}
           </button>
@@ -41,7 +41,7 @@
   <!-- Quick Actions Bar -->
   <div class="quick-actions-bar">
     <div class="actions-container">
-      <div class="action-button primary" (click)="createNewProject()">
+<div class="action-button primary" (click)="createNewProject()">
         <div class="action-icon">➕</div>
         <div class="action-text">
           <div class="action-title">{{ getTranslation('dashboard.newProject') }}</div>
@@ -311,7 +311,7 @@
     
     <app-profile *ngIf="showProfileComponent"></app-profile>
     <app-settings *ngIf="showSettingsComponent"></app-settings>
-    <app-reports *ngIf="showReportsComponent"></app-reports>
+    <app-enhanced-reports *ngIf="showReportsComponent"></app-enhanced-reports>
     <app-help *ngIf="showHelpComponent"></app-help>
   </div>
 </div>

@@ -317,9 +317,7 @@ Enviado através do site Ars Machina Consultancy
 
   // Alternative contact methods
   openWhatsApp() {
-    const message = encodeURIComponent(`Olá! Meu nome é ${this.contactForm.name || 'visitante do site'}. ${this.contactForm.message || 'Gostaria de saber mais sobre os serviços da Ars Machina Consultancy.'}`);
-    const whatsappUrl = `https://wa.me/5598999649215?text=${message}`;
-    window.open(whatsappUrl, '_blank');
+    window.open('https://wa.me/message/KNSHISJA3H25K1', '_blank');
   }
 
   openEmailClient() {
