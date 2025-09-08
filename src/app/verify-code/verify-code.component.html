@@ -1,0 +1,71 @@
+<div class="verify-container">
+  <div class="verify-card">
+    <h2>Verificar Código</h2>
+    
+    <div class="email-info">
+      <p>Código enviado para: <strong>{{ email }}</strong></p>
+    </div>
+
+    <div class="code-display" *ngIf="showCode">
+      <div class="development-notice">
+        <p><strong>Modo Desenvolvimento:</strong></p>
+        <p>{{ successMessage }}</p>
+      </div>
+    </div>
+
+    <div class="attempts-info" *ngIf="attemptsRemaining < 5">
+      <p class="warning">Tentativas restantes: <strong>{{ attemptsRemaining }}</strong></p>
+    </div>
+
+    <form (ngSubmit)="onSubmit()" #verifyForm="ngForm">
+      <div class="form-group">
+        <label for="verificationCode">Código de Verificação (6 dígitos)</label>
+        <input
+          type="text"
+          id="verificationCode"
+          [(ngModel)]="verificationCode"
+          name="verificationCode"
+          required
+          placeholder="000000"
+          maxlength="6"
+          pattern="[0-9]{6}"
+          (input)="onCodeInput($event)"
+          [disabled]="isLoading"
+          class="code-input"
+          autocomplete="one-time-code">
+      </div>
+
+      <button
+        type="submit"
+        class="btn-primary"
+        [disabled]="isLoading || !verifyForm.form.valid">
+        <span *ngIf="isLoading">Verificando...</span>
+        <span *ngIf="!isLoading">Verificar Código</span>
+      </button>
+    </form>
+
+    <div class="resend-section">
+      <p>Não recebeu o código?</p>
+      <button
+        type="button"
+        class="btn-secondary"
+        (click)="resendCode()"
+        [disabled]="isLoading || isResending || !canResend">
+        <span *ngIf="!isResending && canResend">📧 Reenviar Código</span>
+        <span *ngIf="isResending">⏳ Reenviando...</span>
+        <span *ngIf="!canResend && resendCooldown > 0">Aguarde {{ resendCooldown }}s</span>
+      </button>
+    </div>
+
+    <div class="message" *ngIf="errorMessage" [ngClass]="{'error': errorMessage, 'success': successMessage && !errorMessage}">
+      <p>{{ errorMessage || successMessage }}</p>
+    </div>
+
+    <div class="navigation-links">
+      <button type="button" class="btn-link" (click)="goBackToRegister()">
+        ← Voltar ao Cadastro
+      </button>
+      <a routerLink="/login" class="login-link">Já tem conta? Fazer Login</a>
+    </div>
+  </div>
+</div>

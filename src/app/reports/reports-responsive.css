@@ -1,0 +1,187 @@
+/* Responsividade Global para Componentes de Relatórios */
+
+/* Reset e configurações base */
+* {
+  box-sizing: border-box;
+}
+
+/* Container principal responsivo */
+.reports-container,
+.enhanced-reports-container {
+  width: 100%;
+  max-width: 100vw;
+  overflow-x: hidden;
+  padding: 20px;
+  margin: 0 auto;
+}
+
+/* Grids responsivos */
+.report-types,
+.report-types-grid,
+.live-stats,
+.reports-grid,
+.templates-grid {
+  display: grid;
+  gap: 15px;
+  width: 100%;
+}
+
+/* Breakpoints para tablets */
+@media (max-width: 1024px) {
+  .reports-container,
+  .enhanced-reports-container {
+    padding: 15px;
+  }
+  
+  .live-stats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .report-types-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .reports-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Breakpoints para mobile */
+@media (max-width: 768px) {
+  .reports-container,
+  .enhanced-reports-container {
+    padding: 10px;
+    margin: 5px;
+  }
+  
+  .report-types,
+  .report-types-grid,
+  .reports-grid,
+  .templates-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .live-stats {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+  
+  /* Formulários responsivos */
+  .filters-grid {
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+  
+  .date-range {
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  /* Botões responsivos */
+  .generate-btn,
+  .action-btn {
+    width: 100%;
+    text-align: center;
+    padding: 12px;
+    font-size: 14px;
+  }
+  
+  /* Cards responsivos */
+  .report-item,
+  .report-card {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  
+  .report-actions {
+    width: 100%;
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  .report-meta {
+    flex-direction: column;
+    gap: 5px;
+    align-items: flex-start;
+  }
+}
+
+/* Breakpoints para mobile pequeno */
+@media (max-width: 480px) {
+  .reports-container,
+  .enhanced-reports-container {
+    padding: 8px;
+    margin: 2px;
+  }
+  
+  .live-stats {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+  
+  .stat-card {
+    padding: 12px;
+  }
+  
+  .stat-value {
+    font-size: 1.3em;
+  }
+  
+  .reports-header h2 {
+    font-size: 1.2em;
+  }
+  
+  .reports-header p {
+    font-size: 0.9em;
+  }
+  
+  .type-option,
+  .report-type-card {
+    padding: 10px;
+  }
+  
+  .generate-btn {
+    padding: 10px 15px;
+    font-size: 13px;
+  }
+}
+
+/* Orientação landscape para mobile */
+@media (max-width: 768px) and (orientation: landscape) {
+  .live-stats {
+    grid-template-columns: repeat(4, 1fr);
+  }
+  
+  .report-types-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .templates-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Melhorias para acessibilidade */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Alto contraste */
+@media (prefers-contrast: high) {
+  .report-item,
+  .report-card,
+  .type-option,
+  .report-type-card {
+    border: 2px solid #000;
+  }
+  
+  .generate-btn,
+  .action-btn {
+    border: 2px solid #000;
+  }
+}

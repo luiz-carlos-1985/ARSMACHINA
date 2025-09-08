@@ -37,6 +37,44 @@ export class AuthService {
 
   async signUp(email: string, password: string) {
     try {
+      // Validate input
+      if (!email || !password) {
+        throw new Error('Email e senha são obrigatórios');
+      }
+
+      // Validate email format
+      const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+      if (!emailRegex.test(email)) {
+        throw new Error('Formato de email inválido');
+      }
+
+      // Validate password strength
+      if (password.length < 8) {
+        throw new Error('Senha deve ter no mínimo 8 caracteres');
+      }
+
+      if (!/[A-Z]/.test(password)) {
+        throw new Error('Senha deve conter pelo menos uma letra maiúscula');
+      }
+
+      if (!/[a-z]/.test(password)) {
+        throw new Error('Senha deve conter pelo menos uma letra minúscula');
+      }
+
+      if (!/\d/.test(password)) {
+        throw new Error('Senha deve conter pelo menos um número');
+      }
+
+      if (!/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(password)) {
+        throw new Error('Senha deve conter pelo menos um caractere especial');
+      }
+
+      // Check if email already exists
+      const existingUsers = JSON.parse(localStorage.getItem('registered_users') || '[]');
+      if (existingUsers.some((user: any) => user.email === email)) {
+        throw new Error('Este email já está cadastrado');
+      }
+
       // Development mode - simulate sign up
       const verificationCode = this.generateVerificationCode();
       
@@ -45,14 +83,16 @@ export class AuthService {
         email: email,
         password: password,
         verificationCode: verificationCode,
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
+        attempts: 0
       }));
 
       // Try to send verification email, but don't fail if it doesn't work
       try {
         await this.emailService.sendEmailVerification(email, verificationCode);
+        console.log('Verification email sent successfully');
       } catch (emailError) {
-        console.warn('Email service not configured, verification code stored locally');
+        console.warn('Email service not configured, verification code stored locally:', verificationCode);
       }
 
       return { 
@@ -62,32 +102,74 @@ export class AuthService {
         }
       };
     } catch (error) {
+      console.error('SignUp error:', error);
       throw error;
     }
   }
 
   async confirmSignUp(email: string, confirmationCode: string) {
     try {
+      if (!email || !confirmationCode) {
+        throw new Error('Email e código de verificação são obrigatórios');
+      }
+
       // Development mode - validate confirmation code
       const pendingSignup = localStorage.getItem('pending_signup');
-      if (pendingSignup) {
-        const { email: storedEmail, verificationCode } = JSON.parse(pendingSignup);
-        if (storedEmail === email && verificationCode === confirmationCode) {
-          // Complete signup in development mode
-          localStorage.removeItem('pending_signup');
-          
-          // Send welcome email
-          try {
-            await this.sendWelcomeEmail(email, email.split('@')[0]);
-          } catch (emailError) {
-            console.warn('Welcome email could not be sent');
-          }
-          
-          return { isSignUpComplete: true };
-        }
+      if (!pendingSignup) {
+        throw new Error('Nenhum cadastro pendente encontrado');
       }
-      throw new Error('Invalid verification code');
+
+      const signupData = JSON.parse(pendingSignup);
+      const { email: storedEmail, verificationCode, timestamp, attempts = 0 } = signupData;
+
+      // Check if code has expired (24 hours)
+      const codeAge = Date.now() - new Date(timestamp).getTime();
+      const maxAge = 24 * 60 * 60 * 1000; // 24 hours
+      if (codeAge > maxAge) {
+        localStorage.removeItem('pending_signup');
+        throw new Error('Código de verificação expirado. Solicite um novo cadastro.');
+      }
+
+      // Check attempts limit
+      if (attempts >= 5) {
+        localStorage.removeItem('pending_signup');
+        throw new Error('Muitas tentativas inválidas. Solicite um novo cadastro.');
+      }
+
+      if (storedEmail !== email) {
+        throw new Error('Email não corresponde ao cadastro pendente');
+      }
+
+      if (verificationCode !== confirmationCode) {
+        // Increment attempts
+        signupData.attempts = attempts + 1;
+        localStorage.setItem('pending_signup', JSON.stringify(signupData));
+        throw new Error(`Código de verificação inválido. Tentativas restantes: ${5 - signupData.attempts}`);
+      }
+
+      // Complete signup in development mode
+      localStorage.removeItem('pending_signup');
+      
+      // Update registered users
+      const existingUsers = JSON.parse(localStorage.getItem('registered_users') || '[]');
+      const userIndex = existingUsers.findIndex((user: any) => user.email === email);
+      if (userIndex !== -1) {
+        existingUsers[userIndex].isVerified = true;
+        existingUsers[userIndex].verifiedAt = new Date().toISOString();
+        localStorage.setItem('registered_users', JSON.stringify(existingUsers));
+      }
+      
+      // Send welcome email
+      try {
+        await this.sendWelcomeEmail(email, email.split('@')[0]);
+        console.log('Welcome email sent successfully');
+      } catch (emailError) {
+        console.warn('Welcome email could not be sent:', emailError);
+      }
+      
+      return { isSignUpComplete: true };
     } catch (error) {
+      console.error('ConfirmSignUp error:', error);
       throw error;
     }
   }
@@ -231,6 +313,60 @@ export class AuthService {
       return 'Usuário'; // Fallback
     }
   }
+
+  /**
+   * Delete user account
+   */
+  async deleteAccount(email: string, password: string, reason: string) {
+    try {
+      // Validate input
+      if (!email || !password || !reason) {
+        throw new Error('Todos os campos são obrigatórios');
+      }
+
+      // Verify password first
+      const registeredUsers = JSON.parse(localStorage.getItem('registered_users') || '[]');
+      const user = registeredUsers.find((u: any) => u.email === email);
+      
+      if (!user || user.password !== password) {
+        throw new Error('Senha incorreta');
+      }
+
+      // Remove user data
+      const updatedUsers = registeredUsers.filter((u: any) => u.email !== email);
+      localStorage.setItem('registered_users', JSON.stringify(updatedUsers));
+
+      // Log deletion for audit
+      const deletionLog = {
+        email: email,
+        reason: reason,
+        deletedAt: new Date().toISOString(),
+        userAgent: navigator.userAgent
+      };
+      
+      const deletionLogs = JSON.parse(localStorage.getItem('deletion_logs') || '[]');
+      deletionLogs.push(deletionLog);
+      localStorage.setItem('deletion_logs', JSON.stringify(deletionLogs));
+
+      // Send deletion confirmation email
+      try {
+        await this.emailService.sendAccountDeletionEmail(email, email.split('@')[0]);
+      } catch (emailError) {
+        console.warn('Deletion confirmation email could not be sent');
+      }
+
+      // Clear all user data
+      await this.signOut();
+      
+      console.log('Account deleted successfully:', email);
+      return { isAccountDeleted: true };
+    } catch (error) {
+      console.error('Delete account error:', error);
+      throw error;
+    }
+  }
+
+
 
   private checkAuthState() {
     try {

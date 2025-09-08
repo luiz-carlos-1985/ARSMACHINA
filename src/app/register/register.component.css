@@ -161,6 +161,21 @@
   color: #ff6b6b;
 }
 
+.input-icon.checking {
+  color: #ffa726;
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+.form-group input.checking {
+  border-color: #ffa726;
+  box-shadow: 0 0 0 3px rgba(255, 167, 38, 0.1);
+}
+
 .toggle-password {
   position: absolute;
   right: 1rem;
@@ -489,6 +504,82 @@
   100% {
     transform: scale(1) rotate(360deg);
   }
+}
+
+/* Checkbox Styles */
+.checkbox-container {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 0.5rem;
+}
+
+.checkbox-container input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  margin: 0;
+  cursor: pointer;
+  accent-color: #667eea;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.checkbox-container input[type="checkbox"].invalid {
+  outline: 2px solid #ff6b6b;
+  outline-offset: 1px;
+}
+
+.checkbox-label {
+  font-size: 0.9rem;
+  line-height: 1.4;
+  color: var(--text-secondary, #666);
+  cursor: pointer;
+  margin: 0;
+}
+
+.theme-dark .checkbox-label {
+  color: #333333;
+}
+
+.checkbox-label a {
+  color: #667eea;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+.checkbox-label a:hover {
+  color: #5a67d8;
+  text-decoration: underline;
+}
+
+/* Form validation improvements */
+.form-group input.ng-invalid.ng-touched {
+  border-color: #ff6b6b;
+  box-shadow: 0 0 0 3px rgba(255, 107, 107, 0.1);
+}
+
+.form-group input.ng-valid.ng-touched {
+  border-color: #4CAF50;
+  box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1);
+}
+
+/* Loading state improvements */
+.register-btn.loading {
+  background: linear-gradient(135deg, #9ca3af 0%, #6b7280 100%);
+  cursor: not-allowed;
+}
+
+/* Success state */
+.register-btn.success {
+  background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+  animation: successPulse 0.6s ease-out;
+}
+
+@keyframes successPulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
 }
 
 /* Responsive design */

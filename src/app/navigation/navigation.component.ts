@@ -275,37 +275,47 @@ export class NavigationComponent implements OnInit {
       this.isUserMenuOpen = false;
       this.closeMenu();
       
-      if (section === 'help') {
-        if (this.isLoggedIn) {
-          // Navigate to dashboard and show help component
-          this.router.navigate(['/dashboard']).then(() => {
-            setTimeout(() => {
-              window.dispatchEvent(new CustomEvent('navigate-to-section', { 
-                detail: { section: 'help' } 
-              }));
-            }, 100);
-          });
-        } else {
-          // For non-logged users, try to navigate to help route or show alert
-          this.router.navigate(['/help']).catch(() => {
-            alert('Página de ajuda em desenvolvimento. Entre em contato conosco:\n\nWhatsApp: +55 98 99964-9215\nEmail: contato@arsmachinaconsultancy.com');
-          });
-        }
-        return;
-      }
-      
-      if (this.isLoggedIn) {
-        // Navigate to dashboard and trigger section
-        this.router.navigate(['/dashboard']).then(() => {
-          setTimeout(() => {
-            window.dispatchEvent(new CustomEvent('navigate-to-section', { 
-              detail: { section } 
-            }));
-          }, 100);
-        });
-      } else {
-        // Redirect to login for protected sections
-        this.router.navigate(['/login']);
+      // Navigate directly to the correct route
+      switch (section) {
+        case 'profile':
+          if (this.isLoggedIn) {
+            this.router.navigate(['/profile']);
+          } else {
+            this.router.navigate(['/login']);
+          }
+          break;
+          
+        case 'settings':
+          if (this.isLoggedIn) {
+            this.router.navigate(['/settings']);
+          } else {
+            this.router.navigate(['/login']);
+          }
+          break;
+          
+        case 'reports':
+          if (this.isLoggedIn) {
+            this.router.navigate(['/reports']);
+          } else {
+            this.router.navigate(['/login']);
+          }
+          break;
+          
+        case 'help':
+          if (this.isLoggedIn) {
+            this.router.navigate(['/help-dashboard']);
+          } else {
+            this.router.navigate(['/help']);
+          }
+          break;
+          
+        default:
+          console.warn('Unknown section:', section);
+          if (this.isLoggedIn) {
+            this.router.navigate(['/dashboard']);
+          } else {
+            this.router.navigate(['/login']);
+          }
       }
       
       // Force change detection for mobile

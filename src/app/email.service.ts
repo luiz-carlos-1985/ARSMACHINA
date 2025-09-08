@@ -118,4 +118,39 @@ Equipe Ars Machina Consultancy`
       throw error;
     }
   }
+
+  /**
+   * Send account deletion confirmation email
+   */
+  async sendAccountDeletionEmail(email: string, userName?: string): Promise<EmailJSResponseStatus> {
+    const templateParams = {
+      to_email: email,
+      subject: 'Conta Excluída - Ars Machina Consultancy',
+      user_name: userName || 'Usuário',
+      message: `Olá ${userName || 'Usuário'},
+
+Sua conta na Ars Machina Consultancy foi excluída com sucesso.
+
+Todos os seus dados foram removidos permanentemente de nossos sistemas.
+
+Se você não solicitou esta exclusão, entre em contato conosco imediatamente.
+
+Obrigado por ter usado nossos serviços.
+
+Atenciosamente,
+Equipe Ars Machina Consultancy`
+    };
+
+    try {
+      const result = await emailjs.send(
+        EMAILJS_CONFIG.serviceID,
+        'account_deletion_template',
+        templateParams
+      );
+      return result;
+    } catch (error) {
+      console.error('Error sending account deletion email:', error);
+      throw error;
+    }
+  }
 }

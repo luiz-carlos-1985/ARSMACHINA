@@ -230,6 +230,32 @@ body {
   background: var(--bg-secondary);
 }
 
+/* Verify Code dark theme */
+.theme-dark .verify-container {
+  background: linear-gradient(135deg, #2d2d2d 0%, #3d3d3d 100%);
+}
+
+.theme-dark .verify-card {
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+}
+
+.theme-dark .verify-card h2 {
+  color: var(--text-primary);
+}
+
+.theme-dark .code-input {
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  border-color: var(--border-color);
+}
+
+.theme-dark .code-input:focus {
+  background: var(--bg-tertiary);
+  border-color: #667eea;
+}
+
 /* Scrollbar dark theme */
 .theme-dark ::-webkit-scrollbar-track {
   background: var(--bg-secondary);
@@ -263,6 +289,63 @@ body {
   body {
     padding-top: 55px;
   }
+}
+
+/* Reports Responsive Styles */
+.theme-dark .reports-container,
+.theme-dark .enhanced-reports-container {
+  background: var(--bg-primary);
+  color: var(--text-primary);
+}
+
+.theme-dark .report-generator,
+.theme-dark .reports-history,
+.theme-dark .advanced-generator,
+.theme-dark .reports-history-enhanced,
+.theme-dark .report-templates {
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+}
+
+.theme-dark .type-option,
+.theme-dark .report-type-card,
+.theme-dark .report-item,
+.theme-dark .report-card,
+.theme-dark .template-card {
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  border-color: var(--border-color);
+}
+
+.theme-dark .type-option:hover,
+.theme-dark .report-type-card:hover,
+.theme-dark .report-item:hover,
+.theme-dark .report-card:hover,
+.theme-dark .template-card:hover {
+  background: var(--bg-tertiary);
+  border-color: #667eea;
+}
+
+.theme-dark .type-option.selected,
+.theme-dark .report-type-card.selected {
+  background: var(--gradient-primary);
+  color: white;
+}
+
+.theme-dark .advanced-filters {
+  background: var(--bg-tertiary);
+}
+
+.theme-dark .filter-group input,
+.theme-dark .filter-group select {
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  border-color: var(--border-color);
+}
+
+.theme-dark .stat-card {
+  background: var(--gradient-primary);
+  color: white;
 }
 
 /* Global Mobile Touch Improvements */
@@ -306,6 +389,51 @@ body {
   /* Adjust body padding for mobile navbar height */
   body {
     padding-top: 60px;
+  }
+  
+  /* Reports mobile specific improvements */
+  .reports-container,
+  .enhanced-reports-container {
+    padding: 10px !important;
+    margin: 5px !important;
+    border-radius: 8px !important;
+  }
+  
+  .report-types,
+  .report-types-grid {
+    grid-template-columns: 1fr !important;
+    gap: 10px !important;
+  }
+  
+  .type-option,
+  .report-type-card {
+    padding: 12px !important;
+    text-align: center !important;
+  }
+  
+  .generate-btn {
+    width: 100% !important;
+    padding: 12px 20px !important;
+    font-size: 14px !important;
+  }
+  
+  .report-item,
+  .report-card {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 10px !important;
+  }
+  
+  .report-actions {
+    width: 100% !important;
+    flex-direction: column !important;
+    gap: 8px !important;
+  }
+  
+  .action-btn {
+    width: 100% !important;
+    text-align: center !important;
+    padding: 10px !important;
   }
 }
 

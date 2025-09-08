@@ -275,10 +275,16 @@ interface ReportData {
     </div>
   `,
   styles: [`
+    * {
+      box-sizing: border-box;
+    }
+    
     .enhanced-reports-container {
       padding: 20px;
       max-width: 1400px;
       margin: 0 auto;
+      width: 100%;
+      overflow-x: hidden;
     }
 
     .reports-header {
@@ -780,26 +786,220 @@ interface ReportData {
     @media (max-width: 768px) {
       .enhanced-reports-container {
         padding: 10px;
+        margin: 5px;
+      }
+      
+      .reports-header h2 {
+        font-size: 1.5em;
       }
       
       .live-stats {
         grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+      }
+      
+      .stat-card {
+        padding: 15px;
+      }
+      
+      .stat-value {
+        font-size: 1.5em;
+      }
+      
+      .advanced-generator,
+      .reports-history-enhanced,
+      .report-templates {
+        padding: 15px;
       }
       
       .report-types-grid {
         grid-template-columns: 1fr;
+        gap: 10px;
+      }
+      
+      .report-type-card {
+        padding: 15px;
       }
       
       .filters-grid {
         grid-template-columns: 1fr;
+        gap: 15px;
+      }
+      
+      .date-range {
+        flex-direction: column;
+        gap: 5px;
+      }
+      
+      .date-range span {
+        text-align: center;
+        font-size: 0.9em;
+      }
+      
+      .additional-options {
+        margin-top: 15px;
+      }
+      
+      .checkbox-option {
+        margin-bottom: 8px;
+        font-size: 0.9em;
+      }
+      
+      .generate-btn {
+        width: 100%;
+        padding: 12px 20px;
+        font-size: 14px;
+      }
+      
+      .history-header {
+        flex-direction: column;
+        gap: 15px;
+        align-items: flex-start;
+      }
+      
+      .history-actions {
+        width: 100%;
+        justify-content: space-between;
       }
       
       .reports-grid {
         grid-template-columns: 1fr;
+        gap: 15px;
+      }
+      
+      .report-card {
+        padding: 15px;
+      }
+      
+      .report-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+      }
+      
+      .report-icon {
+        font-size: 1.5em;
+        margin-right: 0;
+      }
+      
+      .report-meta {
+        flex-direction: column;
+        gap: 5px;
+        align-items: flex-start;
+      }
+      
+      .report-actions {
+        flex-direction: column;
+        gap: 8px;
+        width: 100%;
+      }
+      
+      .action-btn {
+        width: 100%;
+        text-align: center;
+        padding: 10px;
       }
       
       .templates-grid {
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: 1fr;
+        gap: 15px;
+      }
+      
+      .template-card {
+        padding: 15px;
+      }
+      
+      .preview-modal {
+        max-width: 95vw;
+        max-height: 95vh;
+        margin: 10px;
+      }
+      
+      .modal-header,
+      .modal-body,
+      .modal-footer {
+        padding: 15px;
+      }
+      
+      .modal-footer {
+        flex-direction: column;
+        gap: 10px;
+      }
+      
+      .btn-primary,
+      .btn-secondary {
+        width: 100%;
+        padding: 12px;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      .enhanced-reports-container {
+        padding: 5px;
+      }
+      
+      .live-stats {
+        grid-template-columns: 1fr;
+        gap: 8px;
+      }
+      
+      .stat-card {
+        padding: 12px;
+      }
+      
+      .stat-value {
+        font-size: 1.3em;
+      }
+      
+      .stat-label {
+        font-size: 0.8em;
+      }
+      
+      .advanced-generator,
+      .reports-history-enhanced,
+      .report-templates {
+        padding: 10px;
+      }
+      
+      .report-type-card {
+        padding: 12px;
+      }
+      
+      .type-icon {
+        font-size: 1.5em;
+      }
+      
+      .type-name {
+        font-size: 0.9em;
+      }
+      
+      .type-description {
+        font-size: 0.8em;
+      }
+      
+      .generate-btn {
+        padding: 10px 15px;
+        font-size: 13px;
+      }
+      
+      .report-card {
+        padding: 12px;
+      }
+      
+      .template-card {
+        padding: 12px;
+      }
+      
+      .template-icon {
+        font-size: 2em;
+      }
+      
+      .template-info h4 {
+        font-size: 0.9em;
+      }
+      
+      .template-info p {
+        font-size: 0.8em;
       }
     }
   `]

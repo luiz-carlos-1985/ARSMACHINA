@@ -8,26 +8,26 @@
     </div>
     
     <!-- Desktop Menu -->
-    <div class="nav-menu desktop-menu">
-      <a routerLink="/home" routerLinkActive="active">
+    <div class="nav-menu desktop-menu" [class.logged-in]="isLoggedIn">
+      <a routerLink="/home" routerLinkActive="active" [title]="getTranslation('nav.home')">
         <span class="nav-text">{{ getTranslation('nav.home') }}</span>
       </a>
-      <a routerLink="/about" routerLinkActive="active">
+      <a routerLink="/about" routerLinkActive="active" [title]="getTranslation('nav.about')">
         <span class="nav-text">{{ getTranslation('nav.about') }}</span>
       </a>
-      <a routerLink="/services" routerLinkActive="active">
+      <a routerLink="/services" routerLinkActive="active" [title]="getTranslation('nav.services')">
         <span class="nav-text">{{ getTranslation('nav.services') }}</span>
       </a>
-      <a routerLink="/blog" routerLinkActive="active">
+      <a routerLink="/blog" routerLinkActive="active" [title]="getTranslation('nav.blog')">
         <span class="nav-text">{{ getTranslation('nav.blog') }}</span>
       </a>
-      <a routerLink="/contact" routerLinkActive="active">
+      <a routerLink="/contact" routerLinkActive="active" [title]="getTranslation('nav.contact')">
         <span class="nav-text">{{ getTranslation('nav.contact') }}</span>
       </a>
-      <a *ngIf="!isLoggedIn" routerLink="/login" routerLinkActive="active">
+      <a *ngIf="!isLoggedIn" routerLink="/login" routerLinkActive="active" [title]="getTranslation('nav.login')">
         <span class="nav-text">{{ getTranslation('nav.login') }}</span>
       </a>
-      <a *ngIf="isLoggedIn" routerLink="/dashboard" routerLinkActive="active">
+      <a *ngIf="isLoggedIn" routerLink="/dashboard" routerLinkActive="active" [title]="getTranslation('nav.dashboard')">
         <span class="nav-text">{{ getTranslation('nav.dashboard') }}</span>
       </a>
       
@@ -83,6 +83,13 @@
             <span>{{ getTranslation('nav.help') }}</span>
           </button>
           <div class="dropdown-divider"></div>
+          <button class="user-option delete-account" 
+                  (click)="navigateToSection('delete-account', $event)"
+                  type="button"
+                  tabindex="0">
+            <span class="option-icon">🗑️</span>
+            <span>Excluir Conta</span>
+          </button>
           <button class="user-option logout" 
                   (click)="logout()"
                   type="button"

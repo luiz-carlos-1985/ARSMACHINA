@@ -60,18 +60,21 @@
   margin: 0;
   padding: 0;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.25rem;
+  flex-wrap: wrap;
 }
 
 .desktop-menu a {
   color: white;
   text-decoration: none;
-  padding: 0.75rem 1.25rem;
-  border-radius: 12px;
+  padding: 0.5rem 0.75rem;
+  border-radius: 8px;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
   font-weight: 500;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.3px;
+  font-size: 0.9rem;
+  white-space: nowrap;
 }
 
 .desktop-menu a:hover {
@@ -108,27 +111,80 @@
 /* ===== LANGUAGE SELECTOR (DESKTOP) ===== */
 .desktop-lang {
   position: relative;
-  margin-left: 1rem;
+  margin-left: 0.5rem;
+}
+
+/* Navbar compacta quando logado */
+.desktop-menu.logged-in {
+  gap: 0.15rem;
+}
+
+.desktop-menu.logged-in a {
+  padding: 0.4rem 0.6rem;
+  font-size: 0.85rem;
+}
+
+.desktop-menu.logged-in .desktop-lang {
+  margin-left: 0.25rem;
+}
+
+/* Responsividade específica para usuário logado */
+@media (max-width: 950px) {
+  .desktop-menu.logged-in a .nav-text {
+    display: none;
+  }
+  
+  .desktop-menu.logged-in a {
+    padding: 0.4rem;
+    min-width: 36px;
+    text-align: center;
+    position: relative;
+  }
+  
+  .desktop-menu.logged-in a::after {
+    content: attr(title);
+    position: absolute;
+    bottom: -30px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    white-space: nowrap;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+    z-index: 1000;
+  }
+  
+  .desktop-menu.logged-in a:hover::after {
+    opacity: 1;
+    visibility: visible;
+  }
 }
 
 .language-btn {
   background: linear-gradient(135deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.1) 100%);
   color: white;
   border: 1px solid rgba(255, 255, 255, 0.4);
-  padding: 0.6rem 1.2rem;
-  border-radius: 25px;
+  padding: 0.4rem 0.8rem;
+  border-radius: 20px;
   cursor: pointer;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   display: flex;
   align-items: center;
-  gap: 0.6rem;
-  min-width: 130px;
+  gap: 0.4rem;
+  min-width: 80px;
   justify-content: space-between;
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   font-weight: 500;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.3px;
+  font-size: 0.85rem;
+  min-height: 36px;
 }
 
 .language-btn:hover {
@@ -774,6 +830,105 @@
 }
 
 /* ===== RESPONSIVE STYLES ===== */
+@media (max-width: 1200px) {
+  .desktop-menu {
+    gap: 0.15rem;
+  }
+  
+  .desktop-menu a {
+    padding: 0.4rem 0.6rem;
+    font-size: 0.85rem;
+  }
+  
+  .user-menu-btn {
+    padding: 5px 8px;
+    font-size: 12px;
+    min-width: 40px;
+    min-height: 32px;
+  }
+  
+  .language-btn {
+    padding: 0.3rem 0.6rem;
+    min-width: 70px;
+    font-size: 0.8rem;
+    min-height: 32px;
+  }
+  
+  .current-lang {
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 1024px) {
+  .nav-container {
+    padding: 1rem 1.5rem;
+  }
+  
+  .desktop-menu {
+    gap: 0.1rem;
+  }
+  
+  .desktop-menu a {
+    padding: 0.35rem 0.5rem;
+    font-size: 0.8rem;
+  }
+  
+  .user-menu-btn {
+    padding: 4px 6px;
+    font-size: 11px;
+    min-width: 36px;
+    min-height: 28px;
+  }
+  
+  .user-avatar {
+    width: 20px;
+    height: 20px;
+    font-size: 12px;
+  }
+  
+  .language-btn {
+    padding: 0.25rem 0.4rem;
+    min-width: 60px;
+    font-size: 0.75rem;
+    min-height: 28px;
+  }
+  
+  .current-lang {
+    font-size: 0.75rem;
+  }
+  
+  .logout-btn {
+    padding: 0.4rem 0.6rem;
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 850px) {
+  .desktop-menu a .nav-text {
+    display: none;
+  }
+  
+  .desktop-menu a {
+    padding: 0.4rem;
+    min-width: 36px;
+    text-align: center;
+  }
+  
+  .help-btn .nav-text {
+    display: none;
+  }
+  
+  .help-btn {
+    padding: 6px;
+    min-width: 36px;
+  }
+  
+  .logout-btn {
+    padding: 0.35rem 0.5rem;
+    font-size: 0.75rem;
+  }
+}
+
 @media (max-width: 768px) {
   .nav-container {
     padding: 1rem 1.5rem;
@@ -929,15 +1084,17 @@ body.menu-open {
 .user-menu-btn {
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 8px 12px;
+  gap: 6px;
+  padding: 6px 10px;
   background: rgba(255, 255, 255, 0.1);
   border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 25px;
+  border-radius: 20px;
   color: white;
   cursor: pointer;
   transition: all 0.3s ease;
-  font-size: 14px;
+  font-size: 13px;
+  min-width: 44px;
+  min-height: 36px;
 }
 
 .user-menu-btn:hover {

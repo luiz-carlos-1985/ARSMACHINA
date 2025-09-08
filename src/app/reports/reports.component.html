@@ -40,9 +40,9 @@
           <div class="report-details">
             <div class="report-name">{{ report.name }}</div>
             <div class="report-meta">
-              <span>{{ report.generatedAt | date:'dd/MM/yyyy HH:mm' }}</span>
-              <span>{{ report.size }}</span>
-              <span>{{ report.format }}</span>
+              <span class="meta-date">{{ report.generatedAt | date:'dd/MM/yyyy HH:mm' }}</span>
+              <span class="meta-size">{{ report.size }}</span>
+              <span class="meta-format">{{ report.format }}</span>
             </div>
           </div>
           <div class="report-actions">

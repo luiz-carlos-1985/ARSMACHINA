@@ -1,27 +1,25 @@
 <div class="register-container">
   <div class="register-form">
     <h2>{{ getTranslation('register.title') }}</h2>
-    <form (ngSubmit)="onSubmit()" #registerForm="ngForm">
+    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
       <div class="form-group">
         <label for="email">{{ getTranslation('register.email') }}:</label>
         <div class="input-container">
           <input
             type="email"
             id="email"
-            name="email"
-            [(ngModel)]="email"
-            (input)="onEmailChange()"
-            required
-            email
-            #emailInput="ngModel"
-            [class.valid]="emailValid && email.length > 0"
-            [class.invalid]="!emailValid && email.length > 0"
+            formControlName="email"
+            placeholder="seu@email.com"
+            [class.valid]="email?.valid && email?.value"
+            [class.invalid]="email?.invalid && email?.touched"
+            [class.checking]="isEmailChecking"
           />
-          <span class="input-icon" *ngIf="emailValid && email.length > 0">✓</span>
-          <span class="input-icon error" *ngIf="!emailValid && email.length > 0">✗</span>
+          <span class="input-icon checking" *ngIf="isEmailChecking">⏳</span>
+          <span class="input-icon" *ngIf="email?.valid && email?.value && !isEmailChecking">✓</span>
+          <span class="input-icon error" *ngIf="email?.invalid && email?.touched && !isEmailChecking">✗</span>
         </div>
-        <div *ngIf="emailInput.invalid && emailInput.touched" class="error">
-          Por favor, insira um email válido.
+        <div *ngIf="email?.touched && getFieldError('email')" class="error">
+          {{ getFieldError('email') }}
         </div>
       </div>
 
@@ -31,12 +29,10 @@
           <input
             [type]="showPassword ? 'text' : 'password'"
             id="password"
-            name="password"
-            [(ngModel)]="password"
-            (input)="onPasswordChange()"
-            required
-            minlength="8"
-            #passwordInput="ngModel"
+            formControlName="password"
+            placeholder="Mínimo 8 caracteres"
+            [class.valid]="password?.valid && password?.value"
+            [class.invalid]="password?.invalid && password?.touched"
           />
           <button type="button" class="toggle-password" (click)="togglePasswordVisibility()">
             {{ showPassword ? '👁️' : '🙈' }}
@@ -44,7 +40,7 @@
         </div>
         
         <!-- Password strength indicator -->
-        <div class="password-strength" *ngIf="password.length > 0">
+        <div class="password-strength" *ngIf="password?.value">
           <div class="strength-bar">
             <div class="strength-fill" [style.width.%]="passwordStrength" 
                  [class.weak]="passwordStrength < 40"
@@ -55,7 +51,7 @@
         </div>
 
         <!-- Password requirements checklist -->
-        <ul class="password-requirements" *ngIf="password.length > 0">
+        <ul class="password-requirements" *ngIf="password?.value">
           <li [class.met]="passwordRequirements.minLength">
             <span class="req-icon">{{ passwordRequirements.minLength ? '✓' : '✗' }}</span>
             Mínimo 8 caracteres
@@ -85,27 +81,43 @@
           <input
             [type]="showConfirmPassword ? 'text' : 'password'"
             id="confirmPassword"
-            name="confirmPassword"
-            [(ngModel)]="confirmPassword"
-            required
-            #confirmPasswordInput="ngModel"
-            [class.valid]="password === confirmPassword && confirmPassword.length > 0"
-            [class.invalid]="password !== confirmPassword && confirmPassword.length > 0"
+            formControlName="confirmPassword"
+            placeholder="Confirme sua senha"
+            [class.valid]="!registerForm.errors?.['passwordMismatch'] && confirmPassword?.value"
+            [class.invalid]="(registerForm.errors?.['passwordMismatch'] || confirmPassword?.invalid) && confirmPassword?.touched"
           />
           <button type="button" class="toggle-password" (click)="toggleConfirmPasswordVisibility()">
             {{ showConfirmPassword ? '👁️' : '🙈' }}
           </button>
-          <span class="input-icon" *ngIf="password === confirmPassword && confirmPassword.length > 0">✓</span>
-          <span class="input-icon error" *ngIf="password !== confirmPassword && confirmPassword.length > 0">✗</span>
+          <span class="input-icon" *ngIf="!registerForm.errors?.['passwordMismatch'] && confirmPassword?.value">✓</span>
+          <span class="input-icon error" *ngIf="(registerForm.errors?.['passwordMismatch'] || confirmPassword?.invalid) && confirmPassword?.touched">✗</span>
         </div>
-        <div *ngIf="password !== confirmPassword && confirmPassword.length > 0" class="error">
-          As senhas não coincidem.
+        <div *ngIf="confirmPassword?.touched && getFieldError('confirmPassword')" class="error">
+          {{ getFieldError('confirmPassword') }}
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div class="checkbox-container">
+          <input
+            type="checkbox"
+            id="acceptTerms"
+            formControlName="acceptTerms"
+            [class.invalid]="acceptTerms?.invalid && acceptTerms?.touched"
+          />
+          <label for="acceptTerms" class="checkbox-label">
+            Eu aceito os <a href="#" target="_blank">Termos de Uso</a> e a <a href="#" target="_blank">Política de Privacidade</a>
+          </label>
+        </div>
+        <div *ngIf="acceptTerms?.touched && getFieldError('acceptTerms')" class="error">
+          {{ getFieldError('acceptTerms') }}
         </div>
       </div>
 
       <button type="submit" [disabled]="!isFormValid() || isLoading" 
               class="register-btn" [class.loading]="isLoading">
-        {{ isLoading ? 'Criando conta...' : 'Criar Conta' }}
+        <span *ngIf="!isLoading">🚀 Criar Conta</span>
+        <span *ngIf="isLoading">⏳ Criando conta...</span>
       </button>
     </form>
 
