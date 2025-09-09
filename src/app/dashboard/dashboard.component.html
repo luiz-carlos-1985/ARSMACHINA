@@ -353,8 +353,10 @@
                     aria-label="Dispensar notificação">×</button>
           </div>
         </div>
-        <button class="view-all-notifications" (click)="viewAllNotifications()">
-          {{ getTranslation('dashboard.viewAll') }}
+        <button class="view-all-notifications enhanced" (click)="viewAllNotifications()">
+          <span class="btn-icon">🔔</span>
+          <span class="btn-text">Ver Todas</span>
+          <span class="btn-arrow">→</span>
         </button>
       </div>
     </div>

@@ -750,18 +750,7 @@ export class DashboardComponent implements OnInit {
   }
 
   viewAllNotifications() {
-    const notificationsText = this.notifications
-      .map((notification, index) => {
-        const status = notification.read ? '[Lida]' : '[Não lida]';
-        return `${index + 1}. ${status} ${notification.text} (${notification.time})`;
-      })
-      .join('\n');
-    
-    alert(`Todas as Notificações:\n\n${notificationsText}`);
-    
-    // Mark all as read
-    this.notifications.forEach(n => n.read = true);
-    this.saveToLocalStorage();
+    this.router.navigate(['/notifications']);
   }
 
   // Projects

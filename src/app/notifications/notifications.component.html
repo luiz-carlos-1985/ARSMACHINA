@@ -1,0 +1,113 @@
+<div class="notifications-wrapper">
+  <!-- Header -->
+  <div class="notifications-header">
+    <div class="header-content">
+      <button class="back-btn" (click)="goBack()">
+        <span class="back-icon">←</span>
+        Voltar ao Dashboard
+      </button>
+      <div class="header-info">
+        <h1>🔔 Todas as Notificações</h1>
+        <p>Gerencie e acompanhe todas as suas notificações</p>
+      </div>
+      <div class="header-actions">
+        <button class="mark-all-btn" (click)="markAllAsRead()" *ngIf="unreadCount > 0">
+          <span class="btn-icon">✅</span>
+          Marcar Todas
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Filters -->
+  <div class="filters-section">
+    <div class="filters-container">
+      <div class="search-box">
+        <span class="search-icon">🔍</span>
+        <input 
+          type="text" 
+          placeholder="Buscar notificações..." 
+          [(ngModel)]="searchTerm" 
+          (input)="onSearchChange()"
+        >
+      </div>
+      
+      <div class="filter-group">
+        <label>Tipo:</label>
+        <select [(ngModel)]="typeFilter" (change)="onTypeFilterChange()">
+          <option value="all">Todos</option>
+          <option value="info">Informação</option>
+          <option value="warning">Aviso</option>
+          <option value="success">Sucesso</option>
+          <option value="error">Erro</option>
+        </select>
+      </div>
+
+      <div class="filter-group">
+        <label>Status:</label>
+        <select [(ngModel)]="statusFilter" (change)="onStatusFilterChange()">
+          <option value="all">Todas</option>
+          <option value="unread">Não Lidas</option>
+          <option value="read">Lidas</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <!-- Stats -->
+  <div class="notifications-stats">
+    <div class="stat-card">
+      <div class="stat-icon">📊</div>
+      <div class="stat-info">
+        <div class="stat-number">{{ totalCount }}</div>
+        <div class="stat-label">Total</div>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon">🔔</div>
+      <div class="stat-info">
+        <div class="stat-number">{{ unreadCount }}</div>
+        <div class="stat-label">Não Lidas</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Notifications List -->
+  <div class="notifications-list">
+    <div class="notification-item" 
+         *ngFor="let notification of filteredNotifications" 
+         [class.unread]="!notification.read">
+      
+      <div class="notification-icon">{{ getTypeIcon(notification.type) }}</div>
+      
+      <div class="notification-content">
+        <div class="notification-text">{{ notification.text }}</div>
+        <div class="notification-time">{{ notification.time }}</div>
+      </div>
+      
+      <div class="notification-actions">
+        <button class="action-btn mark-read" 
+                (click)="markAsRead(notification)" 
+                *ngIf="!notification.read"
+                title="Marcar como lida">
+          ✓
+        </button>
+        <button class="action-btn delete" 
+                (click)="deleteNotification(notification)" 
+                title="Excluir">
+          🗑️
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Empty State -->
+  <div class="empty-state" *ngIf="filteredNotifications.length === 0">
+    <div class="empty-icon">🔔</div>
+    <h3>Nenhuma notificação encontrada</h3>
+    <p>Tente ajustar os filtros ou termos de busca</p>
+    <button class="clear-filters-btn" (click)="clearFilters()">
+      Limpar Filtros
+    </button>
+  </div>
+</div>
