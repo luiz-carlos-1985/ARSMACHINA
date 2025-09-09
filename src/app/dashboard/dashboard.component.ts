@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -10,16 +10,18 @@ import { SettingsComponent } from '../settings/settings.component';
 import { ReportsComponent } from '../reports/reports.component';
 import { EnhancedReportsComponent } from '../reports/enhanced-reports.component';
 import { HelpComponent } from '../help/help.component';
+import { ChatbotComponent } from '../chatbot/chatbot.component';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, FormsModule, ProfileComponent, SettingsComponent, ReportsComponent, EnhancedReportsComponent, HelpComponent],
+  imports: [CommonModule, FormsModule, ProfileComponent, SettingsComponent, ReportsComponent, EnhancedReportsComponent, HelpComponent, ChatbotComponent],
   providers: [AuthService],
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css']
 })
-export class DashboardComponent implements OnInit {
+export class DashboardComponent implements OnInit, AfterViewInit {
+  @ViewChild(ChatbotComponent) chatbot!: ChatbotComponent;
   currentLanguage = 'pt';
 
   // User data
@@ -298,6 +300,10 @@ export class DashboardComponent implements OnInit {
     private router: Router,
     private emailService: EmailService
   ) {}
+
+  ngAfterViewInit() {
+    // ViewChild is now available
+  }
 
   async ngOnInit() {
     this.initializeLanguageSubscription();
@@ -890,27 +896,13 @@ export class DashboardComponent implements OnInit {
 
   // Support
   async openChatSupport() {
-    // Abrir chat ao vivo (simulação)
-    const chatWindow = window.open('', 'chat', 'width=400,height=600');
-    if (chatWindow) {
-      chatWindow.document.write(`
-        <html>
-          <head><title>Chat ao Vivo - Suporte</title></head>
-          <body style="font-family: Arial; padding: 20px;">
-            <h3>💬 Chat ao Vivo</h3>
-            <div style="background: #f5f5f5; padding: 15px; border-radius: 8px; margin: 10px 0;">
-              <strong>Suporte:</strong> Olá! Como posso ajudá-lo hoje?
-            </div>
-            <textarea placeholder="Digite sua mensagem..." style="width: 100%; height: 100px; margin: 10px 0;"></textarea>
-            <button onclick="alert('Mensagem enviada!')" style="background: #667eea; color: white; border: none; padding: 10px 20px; border-radius: 5px;">Enviar</button>
-            <hr>
-            <p><strong>Contatos Diretos:</strong></p>
-            <p>📧 Email: contato@arsmachinaconsultancy.com</p>
-            <p>📱 WhatsApp: +55 98 99964-9215</p>
-          </body>
-        </html>
-      `);
-    }
+    // Simular clique no ícone do chatbot
+    setTimeout(() => {
+      const chatbotIcon = document.querySelector('.chatbot-minimized');
+      if (chatbotIcon) {
+        (chatbotIcon as HTMLElement).click();
+      }
+    }, 100);
     this.addActivity('Chat ao vivo iniciado', 'support', 'icon-chat', 'opened', 'Aberto');
   }
 

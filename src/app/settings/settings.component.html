@@ -51,7 +51,7 @@
           <h3>Idioma e Região</h3>
           <div class="setting-item">
             <label>Idioma do Sistema</label>
-            <select [(ngModel)]="settings.language" (change)="onSettingChange()">
+            <select [(ngModel)]="settings.language" (change)="onSettingChange()" title="Selecionar idioma do sistema">
               <option *ngFor="let lang of availableLanguages" [value]="lang.code">
                 {{ lang.flag }} {{ lang.name }}
               </option>
@@ -63,7 +63,7 @@
           <h3>Aparência</h3>
           <div class="setting-item">
             <label>Tema</label>
-            <select [(ngModel)]="settings.theme" (change)="onSettingChange(); previewTheme(settings.theme)">
+            <select [(ngModel)]="settings.theme" (change)="onSettingChange(); previewTheme(settings.theme)" title="Selecionar tema da aplicação">
               <option *ngFor="let theme of availableThemes" [value]="theme.value">
                 {{ theme.icon }} {{ theme.name }}
               </option>
@@ -184,7 +184,7 @@
           <div class="setting-item">
             <label>Intervalo de Atualização (segundos)</label>
             <input type="number" [(ngModel)]="settings.dashboard.refreshInterval" 
-                   min="10" max="300" (change)="onSettingChange()">
+                   min="10" max="300" (change)="onSettingChange()" title="Intervalo de atualização em segundos" placeholder="60">
           </div>
         </div>
 
@@ -206,7 +206,7 @@
           </div>
           <div class="setting-item">
             <label>Visualização Padrão</label>
-            <select [(ngModel)]="settings.dashboard.defaultView" (change)="onSettingChange()">
+            <select [(ngModel)]="settings.dashboard.defaultView" (change)="onSettingChange()" title="Selecionar visualização padrão do dashboard">
               <option value="overview">Visão Geral</option>
               <option value="projects">Projetos</option>
               <option value="tasks">Tarefas</option>
@@ -230,7 +230,7 @@
           <div class="setting-item">
             <label>Timeout da Sessão (minutos)</label>
             <input type="number" [(ngModel)]="settings.security.sessionTimeout" 
-                   min="15" max="480" (change)="onSettingChange()">
+                   min="15" max="480" (change)="onSettingChange()" title="Timeout da sessão em minutos" placeholder="60">
           </div>
           <div class="setting-item checkbox-item">
             <label class="checkbox-label">
@@ -242,7 +242,7 @@
           <div class="setting-item">
             <label>Expiração de Senha (dias)</label>
             <input type="number" [(ngModel)]="settings.security.passwordExpiry" 
-                   min="30" max="365" (change)="onSettingChange()">
+                   min="30" max="365" (change)="onSettingChange()" title="Expiração de senha em dias" placeholder="90">
           </div>
         </div>
       </div>

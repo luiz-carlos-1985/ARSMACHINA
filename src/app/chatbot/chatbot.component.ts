@@ -99,6 +99,13 @@ export class ChatbotComponent implements OnInit, OnDestroy {
     }
   }
 
+  openChat() {
+    this.isMinimized = false;
+    this.showInfoBalloon = false;
+    this.unreadCount = 0;
+    setTimeout(() => this.scrollToBottom(), 100);
+  }
+
   scrollToBottom() {
     if (this.chatContainer?.nativeElement) {
       this.chatContainer.nativeElement.scrollTop = this.chatContainer.nativeElement.scrollHeight;
