@@ -1,0 +1,103 @@
+<div class="activities-wrapper">
+  <!-- Header -->
+  <div class="activities-header">
+    <div class="header-content">
+      <button class="back-btn" (click)="goBack()">
+        <span class="back-icon">←</span>
+        Voltar ao Dashboard
+      </button>
+      <div class="header-info">
+        <h1>📋 Todas as Atividades</h1>
+        <p>Acompanhe todas as atividades recentes do sistema</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Filters -->
+  <div class="filters-section">
+    <div class="filters-container">
+      <div class="search-box">
+        <span class="search-icon">🔍</span>
+        <input 
+          type="text" 
+          placeholder="Buscar atividades..." 
+          [(ngModel)]="searchTerm" 
+          (input)="onSearchChange()"
+        >
+      </div>
+      
+      <div class="filter-group">
+        <label>Tipo:</label>
+        <select [(ngModel)]="typeFilter" (change)="onTypeFilterChange()">
+          <option value="all">Todas</option>
+          <option value="project">Projetos</option>
+          <option value="task">Tarefas</option>
+          <option value="meeting">Reuniões</option>
+          <option value="report">Relatórios</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <!-- Stats -->
+  <div class="activities-stats">
+    <div class="stat-card">
+      <div class="stat-icon">📊</div>
+      <div class="stat-info">
+        <div class="stat-number">{{ filteredActivities.length }}</div>
+        <div class="stat-label">Total</div>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon">📁</div>
+      <div class="stat-info">
+        <div class="stat-number">{{ projectCount }}</div>
+        <div class="stat-label">Projetos</div>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon">✅</div>
+      <div class="stat-info">
+        <div class="stat-number">{{ taskCount }}</div>
+        <div class="stat-label">Tarefas</div>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon">📅</div>
+      <div class="stat-info">
+        <div class="stat-number">{{ meetingCount }}</div>
+        <div class="stat-label">Reuniões</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Activities List -->
+  <div class="activities-list">
+    <div class="activity-item" 
+         *ngFor="let activity of filteredActivities" 
+         [ngClass]="getStatusClass(activity.status)">
+      
+      <div class="activity-icon">{{ getActivityIcon(activity.type) }}</div>
+      
+      <div class="activity-content">
+        <div class="activity-text">{{ activity.text }}</div>
+        <div class="activity-meta">
+          <span class="activity-time">{{ activity.time }}</span>
+          <span class="activity-type">{{ activity.type }}</span>
+        </div>
+      </div>
+      
+      <div class="activity-status" [ngClass]="getStatusClass(activity.status)">{{ activity.statusText }}</div>
+    </div>
+  </div>
+
+  <!-- Empty State -->
+  <div class="empty-state" *ngIf="filteredActivities.length === 0">
+    <div class="empty-icon">📋</div>
+    <h3>Nenhuma atividade encontrada</h3>
+    <p>Tente ajustar os filtros ou termos de busca</p>
+    <button class="clear-filters-btn" (click)="clearFilters()">
+      Limpar Filtros
+    </button>
+  </div>
+</div>

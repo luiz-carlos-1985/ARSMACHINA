@@ -798,6 +798,61 @@
   text-decoration: underline;
 }
 
+.view-all-btn.enhanced {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 20px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+  color: white;
+  border-radius: 15px;
+  font-size: 0.95rem;
+  position: relative;
+  overflow: hidden;
+  border: none;
+}
+
+.view-all-btn.enhanced::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+  transition: left 0.5s ease;
+}
+
+.view-all-btn.enhanced:hover::before {
+  left: 100%;
+}
+
+.view-all-btn.enhanced:hover {
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 15px 30px rgba(102, 126, 234, 0.4);
+  text-decoration: none;
+  color: white;
+}
+
+.view-all-btn.enhanced .btn-icon {
+  font-size: 16px;
+  animation: pulse 2s infinite;
+}
+
+.view-all-btn.enhanced .btn-text {
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+.view-all-btn.enhanced .btn-arrow {
+  font-size: 14px;
+  transition: transform 0.3s ease;
+}
+
+.view-all-btn.enhanced:hover .btn-arrow {
+  transform: translateX(3px);
+}
+
 .notification-count {
   background: #dc3545;
   color: white;

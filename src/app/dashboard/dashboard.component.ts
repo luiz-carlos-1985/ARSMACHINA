@@ -732,11 +732,7 @@ export class DashboardComponent implements OnInit {
 
   // Activities
   viewAllActivities() {
-    const activitiesText = this.recentActivities
-      .map((activity, index) => `${index + 1}. ${activity.text} (${activity.time})`)
-      .join('\n');
-    
-    alert(`Todas as Atividades Recentes:\n\n${activitiesText}`);
+    this.router.navigate(['/activities']);
   }
 
   // Notifications

@@ -313,8 +313,10 @@
       <div class="activities-panel">
         <div class="panel-header">
           <h3>{{ getTranslation('dashboard.recentActivity') }}</h3>
-          <button class="view-all-btn" (click)="viewAllActivities()">
-            {{ getTranslation('dashboard.viewActivity') }}
+          <button class="view-all-btn enhanced" (click)="viewAllActivities()">
+            <span class="btn-icon">📋</span>
+            <span class="btn-text">Ver Todas</span>
+            <span class="btn-arrow">→</span>
           </button>
         </div>
         <div class="activities-list">
