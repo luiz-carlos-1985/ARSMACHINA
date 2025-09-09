@@ -45,28 +45,28 @@
         <div class="action-icon">➕</div>
         <div class="action-text">
           <div class="action-title">{{ getTranslation('dashboard.newProject') }}</div>
-          <div class="action-subtitle">{{ getTranslation('dashboard.createNewProject') }}</div>
+          <div class="action-subtitle">Criar um novo projeto</div>
         </div>
       </div>
       <div class="action-button secondary" (click)="addNewTask()">
         <div class="action-icon">📝</div>
         <div class="action-text">
           <div class="action-title">{{ getTranslation('dashboard.newTask') }}</div>
-          <div class="action-subtitle">{{ getTranslation('dashboard.addNewTask') }}</div>
+          <div class="action-subtitle">Adicionar nova tarefa</div>
         </div>
       </div>
       <div class="action-button info" (click)="scheduleMeeting()">
         <div class="action-icon">📅</div>
         <div class="action-text">
           <div class="action-title">{{ getTranslation('dashboard.scheduleMeeting') }}</div>
-          <div class="action-subtitle">{{ getTranslation('dashboard.scheduleNewMeeting') }}</div>
+          <div class="action-subtitle">Agendar reunião</div>
         </div>
       </div>
       <div class="action-button success" (click)="generateReport()">
         <div class="action-icon">📊</div>
         <div class="action-text">
           <div class="action-title">{{ getTranslation('dashboard.generateReport') }}</div>
-          <div class="action-subtitle">{{ getTranslation('dashboard.generateNewReport') }}</div>
+          <div class="action-subtitle">Gerar relatório</div>
         </div>
       </div>
     </div>
@@ -78,9 +78,9 @@
       <!-- Client Management -->
       <div class="client-management">
         <div class="section-header">
-          <h2>🏢 {{ getTranslation('dashboard.clientManagement') }}</h2>
+          <h2>🏢 Gestão de Clientes</h2>
           <button class="manage-clients-btn" (click)="manageClients()">
-            {{ getTranslation('dashboard.manageClients') }}
+            Gerenciar Clientes
           </button>
         </div>
         <div class="clients-grid">
@@ -104,7 +104,7 @@
               </div>
               <div class="detail-item">
                 <span>📅</span>
-                <span>{{ getTranslation('dashboard.contractUntil') }}: {{ client.contractEnd }}</span>
+                <span>Contrato até: {{ client.contractEnd }}</span>
               </div>
             </div>
           </div>
@@ -114,7 +114,7 @@
       <!-- Financial Overview -->
       <div class="financial-overview">
         <div class="section-header">
-          <h2>💰 {{ getTranslation('dashboard.financialOverview') }}</h2>
+          <h2>💰 Visão Financeira</h2>
           <div class="section-actions">
             <button class="icon-btn" (click)="refreshFinancials()" title="Atualizar">🔄</button>
             <button class="icon-btn" (click)="exportFinancials()" title="Exportar">📤</button>
@@ -124,7 +124,7 @@
           <div class="financial-card revenue">
             <div class="financial-icon">💵</div>
             <div class="financial-info">
-              <h3>{{ getTranslation('dashboard.monthlyRevenue') }}</h3>
+              <h3>Receita Mensal</h3>
               <div class="financial-value">R$ {{ monthlyRevenue | number:'1.0-0' }}</div>
               <div class="financial-change positive">+18% vs mês anterior</div>
             </div>
@@ -132,7 +132,7 @@
           <div class="financial-card expenses">
             <div class="financial-icon">📊</div>
             <div class="financial-info">
-              <h3>{{ getTranslation('dashboard.expenses') }}</h3>
+              <h3>Despesas</h3>
               <div class="financial-value">R$ {{ monthlyExpenses | number:'1.0-0' }}</div>
               <div class="financial-change negative">+5% vs mês anterior</div>
             </div>
@@ -140,7 +140,7 @@
           <div class="financial-card profit">
             <div class="financial-icon">📈</div>
             <div class="financial-info">
-              <h3>{{ getTranslation('dashboard.netProfit') }}</h3>
+              <h3>Lucro Líquido</h3>
               <div class="financial-value">R$ {{ netProfit | number:'1.0-0' }}</div>
               <div class="financial-change positive">+25% vs mês anterior</div>
             </div>
@@ -148,9 +148,9 @@
           <div class="financial-card pending">
             <div class="financial-icon">⏳</div>
             <div class="financial-info">
-              <h3>{{ getTranslation('dashboard.toReceive') }}</h3>
+              <h3>A Receber</h3>
               <div class="financial-value">R$ {{ pendingReceivables | number:'1.0-0' }}</div>
-              <div class="financial-change neutral">{{ pendingInvoices }} {{ getTranslation('dashboard.invoices') }}</div>
+              <div class="financial-change neutral">{{ pendingInvoices }} faturas</div>
             </div>
           </div>
         </div>
@@ -159,9 +159,9 @@
       <!-- Team Performance -->
       <div class="team-performance">
         <div class="section-header">
-          <h2>👥 {{ getTranslation('dashboard.teamPerformanceTitle') }}</h2>
+          <h2>👥 Performance da Equipe</h2>
           <button class="manage-team-btn" (click)="manageTeam()">
-            {{ getTranslation('dashboard.viewTeam') }}
+            Ver Equipe
           </button>
         </div>
         <div class="team-grid">
@@ -172,11 +172,11 @@
               <div class="member-role">{{ member.role }}</div>
               <div class="member-stats">
                 <div class="stat">
-                  <span class="stat-label">{{ getTranslation('dashboard.projects') }}</span>
+                  <span class="stat-label">Projetos</span>
                   <span class="stat-value">{{ member.activeProjects }}</span>
                 </div>
                 <div class="stat">
-                  <span class="stat-label">{{ getTranslation('dashboard.efficiency') }}</span>
+                  <span class="stat-label">Eficiência</span>
                   <span class="stat-value">{{ member.efficiency }}%</span>
                 </div>
               </div>
