@@ -1,0 +1,13 @@
+<div class="delete-account-container">
+  <h2>{{ getTranslation('deleteAccount.title') }}</h2>
+  <p>{{ getTranslation('deleteAccount.warning') }}</p>
+  
+  <div class="delete-actions">
+    <button class="cancel-btn" (click)="cancel()">
+      {{ getTranslation('common.cancel') }}
+    </button>
+    <button class="delete-btn" (click)="confirmDelete()">
+      {{ getTranslation('deleteAccount.confirm') }}
+    </button>
+  </div>
+</div>
