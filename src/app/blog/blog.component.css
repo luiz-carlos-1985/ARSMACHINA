@@ -301,7 +301,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 1000;
+  z-index: 1100;
   animation: fadeIn 0.3s ease-out;
 }
 .post-modal-content {
@@ -325,6 +325,8 @@
   padding: 2rem 2rem 1rem 2rem;
   border-bottom: 1px solid #e5e7eb;
   background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+  position: absolute;
+  z-index: 1101;
 }
 
 .modal-header h3 {

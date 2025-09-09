@@ -266,8 +266,10 @@
       <div class="projects-overview">
         <div class="section-header">
           <h2>{{ getTranslation('dashboard.projectProgress') }}</h2>
-          <button class="manage-projects-btn" (click)="manageProjects()">
-            {{ getTranslation('dashboard.viewAll') }}
+          <button class="manage-projects-btn enhanced" (click)="manageProjects()">
+            <span class="btn-icon">📊</span>
+            <span class="btn-text">Ver Todas</span>
+            <span class="btn-arrow">→</span>
           </button>
         </div>
         <div class="projects-grid">

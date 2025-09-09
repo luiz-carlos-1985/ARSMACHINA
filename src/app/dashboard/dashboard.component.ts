@@ -770,10 +770,8 @@ export class DashboardComponent implements OnInit {
 
   // Projects
   manageProjects() {
-    // Navigate to a dedicated projects page or show all projects
-    console.log('Managing all projects');
-    // For now, just show an alert with project count
-    alert(`Você tem ${this.activeProjects.length} projetos ativos.\nFuncionalidade completa em desenvolvimento.`);
+    // Navigate to the dedicated projects page
+    this.router.navigate(['/projects']);
   }
 
   openProjectMenu(project: any) {
