@@ -69,30 +69,39 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       name: 'TechCorp Solutions',
       email: 'contato@techcorp.com',
       phone: '+55 11 9999-8888',
+      company: 'TechCorp Solutions',
       status: 'active',
       statusText: 'Ativo',
       contractValue: 85000,
-      contractEnd: '2024-12-31'
+      contractStart: '2024-01-01',
+      contractEnd: '2024-12-31',
+      notes: ''
     },
     {
       id: 2,
       name: 'InnovateHub',
       email: 'admin@innovatehub.com',
       phone: '+55 21 8888-7777',
+      company: 'InnovateHub',
       status: 'active',
       statusText: 'Ativo',
       contractValue: 120000,
-      contractEnd: '2025-06-30'
+      contractStart: '2024-07-01',
+      contractEnd: '2025-06-30',
+      notes: ''
     },
     {
       id: 3,
       name: 'DataFlow Systems',
       email: 'info@dataflow.com',
       phone: '+55 11 7777-6666',
+      company: 'DataFlow Systems',
       status: 'pending',
       statusText: 'Pendente',
       contractValue: 95000,
-      contractEnd: '2024-11-15'
+      contractStart: '2024-05-15',
+      contractEnd: '2024-11-15',
+      notes: ''
     }
   ];
 
@@ -143,6 +152,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   isEditingTask = false;
   showMeetingModal = false;
   showReportModal = false;
+  showTeamModal = false;
   showProfileModal = false;
   showSettingsModal = false;
   showHelpModal = false;
@@ -860,8 +870,214 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   }
 
   // Client Management
+  showClientModal = false;
+  showClientForm = false;
+  isEditingClient = false;
+  clientSearchTerm = '';
+  clientStatusFilter = 'all';
+  activeClientMenu: number | null = null;
+  currentClient: any = {
+    id: null,
+    name: '',
+    email: '',
+    phone: '',
+    company: '',
+    status: 'active',
+    contractValue: 0,
+    contractStart: '',
+    contractEnd: '',
+    notes: ''
+  };
+
   manageClients() {
-    alert(`Gestão de Clientes:\n\n${this.activeClients.length} clientes ativos\nReceita total: R$ ${this.activeClients.reduce((sum, c) => sum + c.contractValue, 0).toLocaleString('pt-BR')}\n\nFuncionalidade completa em desenvolvimento.`);
+    this.showClientModal = true;
+  }
+
+  closeClientModal() {
+    this.showClientModal = false;
+    this.isEditingClient = false;
+  }
+
+  createNewClient() {
+    this.currentClient = {
+      id: null,
+      name: '',
+      email: '',
+      phone: '',
+      company: '',
+      status: 'active',
+      contractValue: 0,
+      contractStart: '',
+      contractEnd: '',
+      notes: ''
+    };
+    this.isEditingClient = false;
+    this.showClientForm = true;
+  }
+
+  closeClientForm() {
+    this.showClientForm = false;
+    this.isEditingClient = false;
+    this.activeClientMenu = null;
+  }
+
+  toggleClientMenu(clientId: number) {
+    this.activeClientMenu = this.activeClientMenu === clientId ? null : clientId;
+  }
+
+  closeClientMenu() {
+    this.activeClientMenu = null;
+  }
+
+  getFilteredClients() {
+    let filtered = this.activeClients;
+    
+    if (this.clientStatusFilter !== 'all') {
+      filtered = filtered.filter(c => c.status === this.clientStatusFilter);
+    }
+    
+    if (this.clientSearchTerm) {
+      const term = this.clientSearchTerm.toLowerCase();
+      filtered = filtered.filter(c => 
+        c.name.toLowerCase().includes(term) ||
+        c.email.toLowerCase().includes(term) ||
+        c.phone.includes(term) ||
+        (c.company && c.company.toLowerCase().includes(term))
+      );
+    }
+    
+    return filtered;
+  }
+
+  getActiveClientsCount(): number {
+    return this.activeClients.filter(c => c.status === 'active').length;
+  }
+
+  getAverageContractValue(): number {
+    if (this.activeClients.length === 0) return 0;
+    return this.getTotalContractValue() / this.activeClients.length;
+  }
+
+  getClientAvatarColor(name: string): string {
+    const colors = ['#667eea', '#764ba2', '#f093fb', '#f5576c', '#4facfe', '#00f2fe'];
+    const index = name.charCodeAt(0) % colors.length;
+    return colors[index];
+  }
+
+  isContractExpired(client: any): boolean {
+    if (!client.contractEnd) return false;
+    return new Date(client.contractEnd) < new Date();
+  }
+
+  getDaysUntilExpiry(client: any): number {
+    if (!client.contractEnd) return 0;
+    const today = new Date();
+    const endDate = new Date(client.contractEnd);
+    const diffTime = endDate.getTime() - today.getTime();
+    return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+  }
+
+  viewClientDetails(client: any) {
+    const details = `
+      Cliente: ${client.name}
+      ${client.company ? `Empresa: ${client.company}` : ''}
+      Email: ${client.email}
+      Telefone: ${client.phone}
+      Status: ${client.statusText}
+      Valor do Contrato: R$ ${client.contractValue.toLocaleString('pt-BR')}
+      ${client.contractStart ? `Início: ${new Date(client.contractStart).toLocaleDateString('pt-BR')}` : ''}
+      ${client.contractEnd ? `Fim: ${new Date(client.contractEnd).toLocaleDateString('pt-BR')}` : ''}
+      ${client.notes ? `Observações: ${client.notes}` : ''}
+    `;
+    alert(details);
+  }
+
+  duplicateClient(client: any) {
+    this.currentClient = {
+      ...client,
+      id: null,
+      name: `${client.name} (Cópia)`,
+      email: '',
+      contractStart: '',
+      contractEnd: ''
+    };
+    this.isEditingClient = false;
+    this.showClientForm = true;
+  }
+
+  editClient(client: any) {
+    this.currentClient = { ...client };
+    this.isEditingClient = true;
+    this.showClientForm = true;
+  }
+
+  saveClient() {
+    if (!this.currentClient.name.trim()) {
+      alert('Nome do cliente é obrigatório!');
+      return;
+    }
+    if (!this.currentClient.email.trim()) {
+      alert('Email do cliente é obrigatório!');
+      return;
+    }
+    if (this.currentClient.contractValue <= 0) {
+      alert('Valor do contrato deve ser maior que zero!');
+      return;
+    }
+
+    if (this.isEditingClient) {
+      const index = this.activeClients.findIndex(c => c.id === this.currentClient.id);
+      if (index !== -1) {
+        this.activeClients[index] = {
+          ...this.currentClient,
+          statusText: this.getClientStatusText(this.currentClient.status)
+        };
+        this.addActivity(`Cliente "${this.currentClient.name}" foi atualizado`, 'client', 'icon-edit', 'updated', 'Atualizado');
+      }
+    } else {
+      const newClient = {
+        ...this.currentClient,
+        id: Date.now(),
+        statusText: this.getClientStatusText(this.currentClient.status)
+      };
+      this.activeClients.push(newClient);
+      this.addActivity(`Novo cliente "${newClient.name}" foi adicionado`, 'client', 'icon-plus', 'created', 'Criado');
+    }
+
+    this.saveToLocalStorage();
+  }
+
+  deleteClient(client: any) {
+    if (confirm(`Tem certeza que deseja excluir o cliente "${client.name}"?`)) {
+      const index = this.activeClients.findIndex(c => c.id === client.id);
+      if (index !== -1) {
+        this.activeClients.splice(index, 1);
+        this.addActivity(`Cliente "${client.name}" foi removido`, 'client', 'icon-delete', 'deleted', 'Removido');
+        this.saveToLocalStorage();
+      }
+    }
+  }
+
+  private getClientStatusText(status: string): string {
+    const statusMap: { [key: string]: string } = {
+      'active': 'Ativo',
+      'pending': 'Pendente',
+      'inactive': 'Inativo',
+      'suspended': 'Suspenso'
+    };
+    return statusMap[status] || status;
+  }
+
+  getTotalContractValue(): number {
+    return this.activeClients.reduce((sum, c) => sum + c.contractValue, 0);
+  }
+
+  getTotalActiveProjects(): number {
+    return this.teamMembers.reduce((sum, m) => sum + m.activeProjects, 0);
+  }
+
+  getAverageEfficiency(): number {
+    return Math.round(this.teamMembers.reduce((sum, m) => sum + m.efficiency, 0) / this.teamMembers.length);
   }
 
   // Financial Management
@@ -898,15 +1114,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
 
   // Team Management
   manageTeam() {
-    const teamStats = this.teamMembers.reduce((stats, member) => {
-      stats.totalProjects += member.activeProjects;
-      stats.avgEfficiency += member.efficiency;
-      return stats;
-    }, { totalProjects: 0, avgEfficiency: 0 });
-    
-    teamStats.avgEfficiency = Math.round(teamStats.avgEfficiency / this.teamMembers.length);
-    
-    alert(`Gestão da Equipe:\n\n${this.teamMembers.length} membros\n${teamStats.totalProjects} projetos ativos\nEficiência média: ${teamStats.avgEfficiency}%\n\nFuncionalidade completa em desenvolvimento.`);
+    this.showTeamModal = true;
   }
 
   // Support
@@ -1161,7 +1369,8 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       meetings: this.meetings,
       userStats: this.userStats,
       recentActivities: this.recentActivities,
-      notifications: this.notifications
+      notifications: this.notifications,
+      activeClients: this.activeClients
     };
     localStorage.setItem('dashboardData', JSON.stringify(dashboardData));
   }
@@ -1177,6 +1386,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
         this.userStats = { ...this.userStats, ...data.userStats };
         this.recentActivities = data.recentActivities || this.recentActivities;
         this.notifications = data.notifications || this.notifications;
+        this.activeClients = data.activeClients || this.activeClients;
       } catch (error) {
         console.error('Error loading dashboard data:', error);
       }
@@ -1236,6 +1446,12 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   closeMeetingModal() {
     this.showMeetingModal = false;
   }
+  
+  closeTeamModal() {
+    this.showTeamModal = false;
+  }
+  
+
   
   saveMeeting() {
     if (!this.currentMeeting.title.trim()) {

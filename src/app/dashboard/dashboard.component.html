@@ -160,28 +160,66 @@
       <div class="team-performance">
         <div class="section-header">
           <h2>👥 Performance da Equipe</h2>
-          <button class="manage-team-btn" (click)="manageTeam()">
-            Ver Equipe
+          <button class="manage-team-btn enhanced" (click)="manageTeam()">
+            <span class="btn-icon">👥</span>
+            <span class="btn-text">Ver Equipe</span>
+            <span class="btn-arrow">→</span>
           </button>
         </div>
-        <div class="team-grid">
-          <div class="team-member" *ngFor="let member of teamMembers">
-            <div class="member-avatar">{{ member.name.charAt(0) }}</div>
-            <div class="member-info">
-              <h4>{{ member.name }}</h4>
-              <div class="member-role">{{ member.role }}</div>
-              <div class="member-stats">
-                <div class="stat">
-                  <span class="stat-label">Projetos</span>
-                  <span class="stat-value">{{ member.activeProjects }}</span>
+        <div class="team-overview">
+          <div class="team-summary">
+            <div class="summary-stat">
+              <div class="summary-number">{{ teamMembers.length }}</div>
+              <div class="summary-label">Membros</div>
+            </div>
+            <div class="summary-stat">
+              <div class="summary-number">{{ getAverageEfficiency() }}%</div>
+              <div class="summary-label">Eficiência Média</div>
+            </div>
+            <div class="summary-stat">
+              <div class="summary-number">{{ getTotalActiveProjects() }}</div>
+              <div class="summary-label">Projetos Ativos</div>
+            </div>
+          </div>
+        </div>
+        <div class="team-grid-enhanced">
+          <div class="team-member-enhanced" *ngFor="let member of teamMembers">
+            <div class="member-card-header">
+              <div class="member-avatar-enhanced">{{ member.name.charAt(0) }}</div>
+              <div class="member-basic-info">
+                <h4>{{ member.name }}</h4>
+                <div class="member-role">{{ member.role }}</div>
+              </div>
+              <div class="member-status-enhanced" [ngClass]="member.status">
+                <span class="status-dot"></span>
+                {{ member.statusText }}
+              </div>
+            </div>
+            <div class="member-metrics-enhanced">
+              <div class="metric-item">
+                <div class="metric-icon">📁</div>
+                <div class="metric-info">
+                  <div class="metric-value">{{ member.activeProjects }}</div>
+                  <div class="metric-label">Projetos</div>
                 </div>
-                <div class="stat">
-                  <span class="stat-label">Eficiência</span>
-                  <span class="stat-value">{{ member.efficiency }}%</span>
+              </div>
+              <div class="metric-item">
+                <div class="metric-icon">⚡</div>
+                <div class="metric-info">
+                  <div class="metric-value">{{ member.efficiency }}%</div>
+                  <div class="metric-label">Eficiência</div>
                 </div>
               </div>
             </div>
-            <div class="member-status" [ngClass]="member.status">{{ member.statusText }}</div>
+            <div class="efficiency-progress">
+              <div class="progress-label">
+                <span>Performance</span>
+                <span>{{ member.efficiency }}%</span>
+              </div>
+              <div class="progress-bar-enhanced">
+                <div class="progress-fill-enhanced" [style.width.%]="member.efficiency"></div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -609,6 +647,202 @@
   </div>
 </div>
 
+<!-- Client Management Modal -->
+<div class="modal-overlay" *ngIf="showClientModal" (click)="closeClientModal()">
+  <div class="client-modal" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <div class="header-content">
+        <h3>🏢 Gerenciar Clientes</h3>
+        <p>Gerencie sua carteira de clientes e contratos</p>
+      </div>
+      <button class="modal-close" (click)="closeClientModal()" title="Fechar modal" aria-label="Fechar modal de clientes">×</button>
+    </div>
+    
+    <div class="client-dashboard">
+      <div class="client-stats-grid">
+        <div class="stat-card total">
+          <div class="stat-icon">📊</div>
+          <div class="stat-info">
+            <div class="stat-number">{{ activeClients.length }}</div>
+            <div class="stat-label">Total de Clientes</div>
+          </div>
+        </div>
+        <div class="stat-card revenue">
+          <div class="stat-icon">💰</div>
+          <div class="stat-info">
+            <div class="stat-number">R$ {{ getTotalContractValue() | number:'1.0-0' }}</div>
+            <div class="stat-label">Valor Total</div>
+          </div>
+        </div>
+        <div class="stat-card active">
+          <div class="stat-icon">✅</div>
+          <div class="stat-info">
+            <div class="stat-number">{{ getActiveClientsCount() }}</div>
+            <div class="stat-label">Clientes Ativos</div>
+          </div>
+        </div>
+        <div class="stat-card average">
+          <div class="stat-icon">📈</div>
+          <div class="stat-info">
+            <div class="stat-number">R$ {{ getAverageContractValue() | number:'1.0-0' }}</div>
+            <div class="stat-label">Valor Médio</div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="client-controls">
+        <div class="search-filter">
+          <div class="search-box">
+            <input type="text" [(ngModel)]="clientSearchTerm" placeholder="Buscar clientes..." class="search-input">
+            <span class="search-icon">🔍</span>
+          </div>
+          <select [(ngModel)]="clientStatusFilter" class="status-filter">
+            <option value="all">Todos os Status</option>
+            <option value="active">Ativos</option>
+            <option value="pending">Pendentes</option>
+            <option value="inactive">Inativos</option>
+            <option value="suspended">Suspensos</option>
+          </select>
+        </div>
+        <button class="btn-primary add-client" (click)="createNewClient()">
+          <span>➕</span> Novo Cliente
+        </button>
+      </div>
+    </div>
+    
+    <div class="clients-container">
+      <div class="clients-grid" *ngIf="!showClientForm">
+        <div class="client-card" *ngFor="let client of getFilteredClients()" [class.expired]="isContractExpired(client)">
+          <div class="client-header">
+            <div class="client-avatar" [style.background]="getClientAvatarColor(client.name)">
+              {{ client.name.charAt(0).toUpperCase() }}
+            </div>
+            <div class="client-info">
+              <h4>{{ client.name }}</h4>
+              <div class="client-contact">
+                <span class="email">📧 {{ client.email }}</span>
+                <span class="phone">📞 {{ client.phone }}</span>
+              </div>
+            </div>
+            <div class="client-menu">
+              <button class="menu-btn" (click)="toggleClientMenu(client.id)">⋮</button>
+              <div class="menu-dropdown" *ngIf="activeClientMenu === client.id">
+                <button (click)="editClient(client); closeClientMenu()">✏️ Editar</button>
+                <button (click)="viewClientDetails(client); closeClientMenu()">👁️ Ver Detalhes</button>
+                <button (click)="duplicateClient(client); closeClientMenu()">📋 Duplicar</button>
+                <button (click)="deleteClient(client); closeClientMenu()" class="danger">🗑️ Excluir</button>
+              </div>
+            </div>
+          </div>
+          
+          <div class="client-body">
+            <div class="contract-info">
+              <div class="contract-value">
+                <span class="label">Valor do Contrato</span>
+                <span class="value">R$ {{ client.contractValue | number:'1.0-0' }}</span>
+              </div>
+              <div class="contract-end">
+                <span class="label">Vencimento</span>
+                <span class="date" [class.expired]="isContractExpired(client)">{{ client.contractEnd | date:'dd/MM/yyyy' }}</span>
+              </div>
+            </div>
+            
+            <div class="client-status-bar">
+              <span class="status-badge" [ngClass]="client.status">{{ client.statusText }}</span>
+              <span class="days-remaining" *ngIf="!isContractExpired(client)">
+                {{ getDaysUntilExpiry(client) }} dias restantes
+              </span>
+              <span class="expired-label" *ngIf="isContractExpired(client)">
+                Contrato vencido
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Client Form -->
+      <div class="client-form-container" *ngIf="showClientForm">
+        <div class="form-header">
+          <h4>{{ isEditingClient ? '✏️ Editar Cliente' : '➕ Novo Cliente' }}</h4>
+          <button class="close-form" (click)="closeClientForm()">×</button>
+        </div>
+        
+        <form class="client-form">
+          <div class="form-section">
+            <h5>Informações Básicas</h5>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="client-name">Nome Completo *</label>
+                <input id="client-name" type="text" [(ngModel)]="currentClient.name" name="name" placeholder="Nome do cliente" required>
+              </div>
+              <div class="form-group">
+                <label for="client-company">Empresa</label>
+                <input id="client-company" type="text" [(ngModel)]="currentClient.company" name="company" placeholder="Nome da empresa">
+              </div>
+            </div>
+            
+            <div class="form-row">
+              <div class="form-group">
+                <label for="client-email">Email *</label>
+                <input id="client-email" type="email" [(ngModel)]="currentClient.email" name="email" placeholder="email@exemplo.com" required>
+              </div>
+              <div class="form-group">
+                <label for="client-phone">Telefone</label>
+                <input id="client-phone" type="tel" [(ngModel)]="currentClient.phone" name="phone" placeholder="(11) 99999-9999">
+              </div>
+            </div>
+          </div>
+          
+          <div class="form-section">
+            <h5>Contrato</h5>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="client-value">Valor do Contrato *</label>
+                <div class="input-with-prefix">
+                  <span class="prefix">R$</span>
+                  <input id="client-value" type="number" [(ngModel)]="currentClient.contractValue" name="contractValue" placeholder="0,00" min="0" step="0.01" required>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="client-start">Início do Contrato</label>
+                <input id="client-start" type="date" [(ngModel)]="currentClient.contractStart" name="contractStart">
+              </div>
+            </div>
+            
+            <div class="form-row">
+              <div class="form-group">
+                <label for="client-end">Fim do Contrato</label>
+                <input id="client-end" type="date" [(ngModel)]="currentClient.contractEnd" name="contractEnd">
+              </div>
+              <div class="form-group">
+                <label for="client-status">Status</label>
+                <select id="client-status" [(ngModel)]="currentClient.status" name="status">
+                  <option value="active">Ativo</option>
+                  <option value="pending">Pendente</option>
+                  <option value="inactive">Inativo</option>
+                  <option value="suspended">Suspenso</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          
+          <div class="form-section">
+            <h5>Observações</h5>
+            <div class="form-group full-width">
+              <textarea [(ngModel)]="currentClient.notes" name="notes" placeholder="Observações sobre o cliente..." rows="3"></textarea>
+            </div>
+          </div>
+          
+          <div class="form-actions">
+            <button type="button" class="btn-secondary" (click)="closeClientForm()">Cancelar</button>
+            <button type="button" class="btn-primary" (click)="saveClient()">{{ isEditingClient ? 'Atualizar Cliente' : 'Salvar Cliente' }}</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- Meeting Modal -->
 <div class="modal-overlay" *ngIf="showMeetingModal" (click)="closeMeetingModal()">
   <div class="modal-content" (click)="$event.stopPropagation()">
@@ -643,6 +877,58 @@
     <div class="modal-footer">
       <button class="btn-secondary" (click)="closeMeetingModal()">Cancelar</button>
       <button class="btn-primary" (click)="saveMeeting()">Agendar</button>
+    </div>
+  </div>
+</div>
+
+<!-- Team Modal -->
+<div class="modal-overlay" *ngIf="showTeamModal" (click)="closeTeamModal()">
+  <div class="team-modal" (click)="$event.stopPropagation()">
+    <div class="team-header">
+      <h2>👥 Performance da Equipe</h2>
+      <p>Visão detalhada dos membros da equipe e suas métricas</p>
+      <button class="modal-close" (click)="closeTeamModal()" title="Fechar modal" aria-label="Fechar modal da equipe">×</button>
+    </div>
+    
+    <div class="team-stats">
+      <div class="stat-item">
+        <div class="stat-number">{{ teamMembers.length }}</div>
+        <div class="stat-label">Membros</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number">{{ getTotalActiveProjects() }}</div>
+        <div class="stat-label">Projetos Ativos</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number">{{ getAverageEfficiency() }}%</div>
+        <div class="stat-label">Eficiência Média</div>
+      </div>
+    </div>
+    
+    <div class="team-grid">
+      <div class="team-member-card" *ngFor="let member of teamMembers">
+        <div class="member-header">
+          <div class="member-avatar">{{ member.name.charAt(0) }}</div>
+          <div class="member-info">
+            <h4>{{ member.name }}</h4>
+            <div class="member-role">{{ member.role }}</div>
+            <div class="member-status" [ngClass]="member.status">{{ member.statusText }}</div>
+          </div>
+        </div>
+        <div class="member-metrics">
+          <div class="metric">
+            <span class="metric-label">Projetos Ativos</span>
+            <span class="metric-value">{{ member.activeProjects }}</span>
+          </div>
+          <div class="metric">
+            <span class="metric-label">Eficiência</span>
+            <span class="metric-value">{{ member.efficiency }}%</span>
+          </div>
+          <div class="efficiency-bar">
+            <div class="efficiency-fill" [style.width.%]="member.efficiency"></div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </div>

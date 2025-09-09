@@ -59,21 +59,21 @@
                   type="button"
                   tabindex="0">
             <span class="option-icon">👤</span>
-            <span>Profile</span>
+            <span>{{ getTranslation('dashboard.profile') }}</span>
           </button>
           <button class="user-option" 
                   (click)="navigateToSection('settings', $event)"
                   type="button"
                   tabindex="0">
             <span class="option-icon">⚙️</span>
-            <span>Settings</span>
+            <span>{{ getTranslation('dashboard.settings') }}</span>
           </button>
           <button class="user-option" 
                   (click)="navigateToSection('reports', $event)"
                   type="button"
                   tabindex="0">
             <span class="option-icon">📊</span>
-            <span>Reports</span>
+            <span>{{ getTranslation('dashboard.reports') }}</span>
           </button>
           <button class="user-option" 
                   (click)="navigateToSection('help', $event)"
@@ -88,7 +88,7 @@
                   type="button"
                   tabindex="0">
             <span class="option-icon">🗑️</span>
-            <span>Excluir Conta</span>
+            <span>{{ getTranslation('deleteAccount.title') }}</span>
           </button>
           <button class="user-option logout" 
                   (click)="logout()"
@@ -164,7 +164,7 @@
       <!-- Mobile Menu Items -->
       <div class="mobile-menu-content">
         <div class="mobile-menu-section">
-          <h4 class="mobile-section-title">Navegação</h4>
+          <h4 class="mobile-section-title">{{ getTranslation('nav.navigation') }}</h4>
           <a routerLink="/home" (click)="closeMenu()" routerLinkActive="active" class="mobile-nav-item">
             <div class="mobile-nav-icon">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
@@ -174,7 +174,7 @@
             </div>
             <div class="mobile-nav-content">
               <span class="mobile-nav-title">{{ getTranslation('nav.home') }}</span>
-              <span class="mobile-nav-desc">Página inicial</span>
+              <span class="mobile-nav-desc">{{ getTranslation('nav.homeDesc') }}</span>
             </div>
             <div class="mobile-nav-arrow">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
@@ -193,7 +193,7 @@
             </div>
             <div class="mobile-nav-content">
               <span class="mobile-nav-title">{{ getTranslation('nav.about') }}</span>
-              <span class="mobile-nav-desc">Sobre nós</span>
+              <span class="mobile-nav-desc">{{ getTranslation('nav.aboutDesc') }}</span>
             </div>
             <div class="mobile-nav-arrow">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
@@ -210,7 +210,7 @@
             </div>
             <div class="mobile-nav-content">
               <span class="mobile-nav-title">{{ getTranslation('nav.services') }}</span>
-              <span class="mobile-nav-desc">Nossos serviços</span>
+              <span class="mobile-nav-desc">{{ getTranslation('nav.servicesDesc') }}</span>
             </div>
             <div class="mobile-nav-arrow">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
@@ -231,7 +231,7 @@
             </div>
             <div class="mobile-nav-content">
               <span class="mobile-nav-title">{{ getTranslation('nav.blog') }}</span>
-              <span class="mobile-nav-desc">Artigos e insights</span>
+              <span class="mobile-nav-desc">{{ getTranslation('nav.blogDesc') }}</span>
             </div>
             <div class="mobile-nav-arrow">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
@@ -248,7 +248,7 @@
             </div>
             <div class="mobile-nav-content">
               <span class="mobile-nav-title">{{ getTranslation('nav.contact') }}</span>
-              <span class="mobile-nav-desc">Entre em contato</span>
+              <span class="mobile-nav-desc">{{ getTranslation('nav.contactDesc') }}</span>
             </div>
             <div class="mobile-nav-arrow">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
@@ -260,7 +260,7 @@
 
         <!-- Account Section -->
         <div class="mobile-menu-section" *ngIf="!isLoggedIn || isLoggedIn">
-          <h4 class="mobile-section-title">Conta</h4>
+          <h4 class="mobile-section-title">{{ getTranslation('nav.account') }}</h4>
           <a *ngIf="!isLoggedIn" routerLink="/login" (click)="closeMenu()" routerLinkActive="active" class="mobile-nav-item">
             <div class="mobile-nav-icon">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
@@ -271,7 +271,7 @@
             </div>
             <div class="mobile-nav-content">
               <span class="mobile-nav-title">{{ getTranslation('nav.login') }}</span>
-              <span class="mobile-nav-desc">Acesse sua conta</span>
+              <span class="mobile-nav-desc">{{ getTranslation('nav.loginDesc') }}</span>
             </div>
             <div class="mobile-nav-arrow">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
@@ -291,7 +291,7 @@
             </div>
             <div class="mobile-nav-content">
               <span class="mobile-nav-title">{{ getTranslation('nav.dashboard') }}</span>
-              <span class="mobile-nav-desc">Painel de controle</span>
+              <span class="mobile-nav-desc">{{ getTranslation('nav.dashboardDesc') }}</span>
             </div>
             <div class="mobile-nav-arrow">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
@@ -310,8 +310,8 @@
                 <span style="font-size: 20px;">👤</span>
               </div>
               <div class="mobile-nav-content">
-                <span class="mobile-nav-title">Profile</span>
-                <span class="mobile-nav-desc">Gerenciar perfil</span>
+                <span class="mobile-nav-title">{{ getTranslation('dashboard.profile') }}</span>
+                <span class="mobile-nav-desc">{{ getTranslation('nav.profileDesc') }}</span>
               </div>
               <div class="mobile-nav-arrow">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
@@ -328,8 +328,8 @@
                 <span style="font-size: 20px;">⚙️</span>
               </div>
               <div class="mobile-nav-content">
-                <span class="mobile-nav-title">Settings</span>
-                <span class="mobile-nav-desc">Configurações</span>
+                <span class="mobile-nav-title">{{ getTranslation('dashboard.settings') }}</span>
+                <span class="mobile-nav-desc">{{ getTranslation('nav.settingsDesc') }}</span>
               </div>
               <div class="mobile-nav-arrow">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
@@ -346,8 +346,8 @@
                 <span style="font-size: 20px;">📊</span>
               </div>
               <div class="mobile-nav-content">
-                <span class="mobile-nav-title">Reports</span>
-                <span class="mobile-nav-desc">Relatórios</span>
+                <span class="mobile-nav-title">{{ getTranslation('dashboard.reports') }}</span>
+                <span class="mobile-nav-desc">{{ getTranslation('nav.reportsDesc') }}</span>
               </div>
               <div class="mobile-nav-arrow">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
@@ -364,8 +364,8 @@
                 <span style="font-size: 20px;">🗑️</span>
               </div>
               <div class="mobile-nav-content">
-                <span class="mobile-nav-title">Excluir Conta</span>
-                <span class="mobile-nav-desc">Remover conta permanentemente</span>
+                <span class="mobile-nav-title">{{ getTranslation('deleteAccount.title') }}</span>
+                <span class="mobile-nav-desc">{{ getTranslation('nav.deleteAccountDesc') }}</span>
               </div>
               <div class="mobile-nav-arrow">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
@@ -385,7 +385,7 @@
             </div>
             <div class="mobile-nav-content">
               <span class="mobile-nav-title">{{ getTranslation('nav.help') }}</span>
-              <span class="mobile-nav-desc">Central de ajuda</span>
+              <span class="mobile-nav-desc">{{ getTranslation('nav.helpDesc') }}</span>
             </div>
             <div class="mobile-nav-arrow">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
@@ -397,7 +397,7 @@
 
         <!-- Settings Section -->
         <div class="mobile-menu-section">
-          <h4 class="mobile-section-title">Configurações</h4>
+          <h4 class="mobile-section-title">{{ getTranslation('nav.settings') }}</h4>
           
           <!-- Theme Toggle -->
           <div class="mobile-theme-selector">
@@ -405,7 +405,7 @@
               <span style="font-size: 20px;">{{ getCurrentThemeIcon() }}</span>
             </div>
             <div class="mobile-nav-content">
-              <span class="mobile-nav-title">Tema</span>
+              <span class="mobile-nav-title">{{ getTranslation('nav.theme') }}</span>
               <span class="mobile-nav-desc">{{ getCurrentThemeName() }}</span>
             </div>
             <button class="mobile-theme-dropdown-btn" 
@@ -442,7 +442,7 @@
               </svg>
             </div>
             <div class="mobile-nav-content">
-              <span class="mobile-nav-title">Idioma</span>
+              <span class="mobile-nav-title">{{ getTranslation('nav.language') }}</span>
               <span class="mobile-nav-desc">{{ getCurrentLanguageName() }}</span>
             </div>
             <button class="mobile-language-dropdown-btn" 
