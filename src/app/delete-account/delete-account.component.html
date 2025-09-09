@@ -3,22 +3,22 @@
     <!-- Step 1: Initial Warning -->
     <div *ngIf="step === 1" class="step-content">
       <div class="warning-header">
-        <h2>⚠️ Excluir Conta</h2>
-        <p class="warning-text">Esta ação é <strong>irreversível</strong> e não pode ser desfeita.</p>
+        <h2 style="color: black;">⚠️ Excluir Conta</h2>
+        <p class="warning-text" style="color: red;">Esta ação é <strong>irreversível</strong> e não pode ser desfeita.</p>
       </div>
 
       <div class="warning-list">
         <h3>O que será perdido:</h3>
         <ul>
-          <li>✗ Todos os seus dados pessoais</li>
-          <li>✗ Histórico de atividades</li>
-          <li>✗ Configurações personalizadas</li>
-          <li>✗ Acesso à plataforma</li>
+          <li style="color: black;">✗ Todos os seus dados pessoais</li>
+          <li style="color: black;">✗ Histórico de atividades</li>
+          <li style="color: black;">✗ Configurações personalizadas</li>
+          <li style="color: black;">✗ Acesso à plataforma</li>
         </ul>
       </div>
 
       <div class="user-info">
-        <p>Conta a ser excluída: <strong>{{ currentUserEmail }}</strong></p>
+        <p style="color: black;">Conta a ser excluída: <strong>{{ currentUserEmail }}</strong></p>
       </div>
 
       <div class="step-actions">
@@ -34,13 +34,13 @@
     <!-- Step 2: Password Verification -->
     <div *ngIf="step === 2" class="step-content">
       <div class="auth-header">
-        <h2>🔐 Verificação de Identidade</h2>
-        <p>Digite sua senha atual para confirmar sua identidade</p>
+        <h2 style="color: black;">🔐 Verificação de Identidade</h2>
+        <p style="color: red;">Digite sua senha atual para confirmar sua identidade</p>
       </div>
 
       <form [formGroup]="deleteForm">
         <div class="form-group">
-          <label for="password">Senha Atual:</label>
+          <label for="password" style="color: black;">Senha Atual:</label>
           <div class="input-container">
             <input
               [type]="showPassword ? 'text' : 'password'"
@@ -77,7 +77,7 @@
     <!-- Step 3: Final Confirmation -->
     <div *ngIf="step === 3" class="step-content">
       <div class="final-warning">
-        <h2>🚨 Confirmação Final</h2>
+        <h2 style="color: black;">🚨 Confirmação Final</h2>
         <p class="danger-text">
           <strong>ÚLTIMA CHANCE!</strong> Esta ação excluirá permanentemente sua conta.
         </p>
@@ -85,7 +85,7 @@
 
       <form [formGroup]="deleteForm">
         <div class="form-group">
-          <label for="reason">Motivo da exclusão (obrigatório):</label>
+          <label for="reason" style="color: black;">Motivo da exclusão (obrigatório):</label>
           <select id="reason" formControlName="reason">
             <option value="">Selecione um motivo</option>
             <option value="not-using">Não uso mais o serviço</option>
@@ -97,7 +97,7 @@
         </div>
 
         <div class="form-group">
-          <label for="confirmText">
+          <label for="confirmText" style="color: black;">
             Digite <strong>"EXCLUIR CONTA"</strong> para confirmar:
           </label>
           <input
