@@ -66,6 +66,8 @@
   display: flex;
   align-items: center;
   padding: 0.8rem 3.0rem;
+  max-width: 500px;
+  max-height: 50px;
   background: linear-gradient(135deg, 
     rgba(255, 255, 255, 0.18) 0%, 
     rgba(255, 255, 255, 0.08) 50%, 
@@ -187,16 +189,17 @@
   -webkit-text-fill-color: transparent;
   background-clip: text;
   font-weight: 800;
-  font-size: 1.4rem;
+  font-size: 0.7rem;
   letter-spacing: 0.5px;
   text-shadow: 0 2px 8px rgba(0,0,0,0.2);
-  position: relative;
+  position: inherit;
   animation: brandGlow 3s ease-in-out infinite;
 }
 
 .brand-text::before {
   content: 'Ars Machina Consultancy';
   position: absolute;
+  
   top: 0;
   left: 0;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
