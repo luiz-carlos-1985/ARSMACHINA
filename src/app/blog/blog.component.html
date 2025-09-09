@@ -1,11 +1,27 @@
 <section class="blog">
   <div class="container">
-    <h2>{{ translationService.translate('blog.title') }}</h2>
+    <div class="blog-header">
+      <h2>{{ translationService.translate('blog.title') }}</h2>
+      <p class="blog-subtitle">{{ translationService.translate('blog.subtitle') }}</p>
+    </div>
     <div class="posts-grid">
-      <div class="post-card" *ngFor="let post of posts">
+      <div class="post-card" *ngFor="let post of posts; let i = index" [class]="'post-' + (i + 1)">
+        <div class="post-category">{{ post.category }}</div>
+        <div class="post-meta">
+          <span class="post-date">{{ post.date }}</span>
+          <span class="post-read-time">{{ post.readTime }}</span>
+        </div>
         <h3>{{ post.title }}</h3>
-        <p class="post-excerpt">{{ post.content | slice:0:150 }}...</p>
-        <button (click)="openPost(post)" class="read-more">{{ translationService.translate('blog.readMore') }}</button>
+        <p class="post-excerpt">{{ post.excerpt }}</p>
+        <div class="post-tags">
+          <span class="tag" *ngFor="let tag of post.tags">{{ tag }}</span>
+        </div>
+        <button (click)="openPost(post)" class="read-more">
+          {{ translationService.translate('blog.readMore') }}
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+            <path d="M5 12H19M19 12L12 5M19 12L12 19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
       </div>
     </div>
 

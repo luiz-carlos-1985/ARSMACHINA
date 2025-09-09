@@ -10,32 +10,91 @@ import { TranslationService } from '../translation.service';
   styleUrls: ['./blog.component.css'],
 })
 export class BlogComponent {
-  posts = [
-    {
-      title: 'Transformação Digital: Guia Completo para Empresas',
-      content: 'A transformação digital não é mais uma opção, mas uma necessidade para sobreviver no mercado competitivo atual. Neste artigo abrangente, exploramos as estratégias essenciais para implementar uma transformação digital bem-sucedida, incluindo avaliação de maturidade digital, escolha das tecnologias certas, gestão de mudança organizacional e métricas de sucesso. Aprenda como identificar oportunidades de digitalização em seus processos, integrar sistemas legados com soluções modernas e criar uma cultura de inovação que impulsione o crescimento sustentável do seu negócio.'
-    },
-    {
-      title: 'Cloud Computing: Vantagens e Estratégias de Migração',
-      content: 'O cloud computing revolucionou a forma como as empresas gerenciam seus recursos de TI. Descubra os benefícios econômicos e operacionais da migração para a nuvem, incluindo redução de custos operacionais, escalabilidade automática, maior segurança e acesso global aos dados. Este guia prático aborda diferentes modelos de cloud (IaaS, PaaS, SaaS), estratégias de migração seguras e melhores práticas para otimizar custos e performance na nuvem. Saiba como escolher o provedor certo e implementar uma estratégia de multi-cloud para maximizar a resiliência e eficiência.'
-    },
-    {
-      title: 'Cibersegurança: Protegendo seu Negócio no Mundo Digital',
-      content: 'Com o aumento exponencial de ataques cibernéticos, a cibersegurança tornou-se prioridade estratégica para todas as organizações. Este artigo detalha as principais ameaças digitais atuais, incluindo ransomware, phishing avançado e ataques de supply chain. Aprenda sobre frameworks de segurança como NIST e ISO 27001, implementação de defesa em profundidade, monitoramento contínuo de ameaças e resposta a incidentes. Descubra como criar uma cultura de segurança, treinar sua equipe e implementar tecnologias avançadas como IA para detecção de ameaças.'
-    },
-    {
-      title: 'Inteligência Artificial: Inovação e Automação Empresarial',
-      content: 'A IA está transformando fundamentalmente como as empresas operam e competem. Explore aplicações práticas da inteligência artificial em diferentes setores, desde automação de processos robóticos (RPA) até análise preditiva avançada. Este guia abrangente cobre implementação de chatbots inteligentes, sistemas de recomendação personalizados, manutenção preditiva e análise de dados em tempo real. Saiba como identificar casos de uso de alto impacto, avaliar fornecedores de IA e criar uma estratégia de adoção gradual que maximize o retorno sobre investimento.'
-    },
-    {
-      title: 'DevOps: Acelerando o Desenvolvimento e a Entrega de Software',
-      content: 'O DevOps representa uma mudança cultural fundamental na entrega de software, combinando desenvolvimento e operações para criar produtos de alta qualidade mais rapidamente. Aprenda sobre pipelines de CI/CD, infraestrutura como código, monitoramento contínuo e cultura de colaboração. Este artigo explora ferramentas essenciais como Docker, Kubernetes, Jenkins e Terraform, além de melhores práticas para implementar DevOps em organizações de diferentes tamanhos. Descubra como reduzir time-to-market, melhorar qualidade do código e aumentar a satisfação do cliente através de entregas frequentes e confiáveis.'
-    },
-    {
-      title: 'Análise de Dados: Transformando Dados em Decisões Estratégicas',
-      content: 'No mundo digital atual, os dados são o novo petróleo. Aprenda como implementar uma estratégia de análise de dados que gere insights acionáveis para tomada de decisões. Este guia completo aborda desde a coleta e armazenamento de dados até técnicas avançadas de machine learning e visualização interativa. Explore ferramentas como Power BI, Tableau e Python para análise de dados, além de conceitos como data warehousing, data lakes e governança de dados. Saiba como criar dashboards executivos, implementar análise preditiva e democratizar o acesso aos dados em toda a organização.'
-    },
-  ];
+  postsData = {
+    pt: [
+      {
+        title: 'Transformação Digital: O Futuro dos Negócios Chegou',
+        category: 'Estratégia Digital',
+        date: '15 Jan 2025',
+        readTime: '8 min de leitura',
+        excerpt: 'Descubra como a transformação digital está revolucionando empresas e criando vantagens competitivas sustentáveis no mercado atual.',
+        tags: ['Digital', 'Estratégia', 'Inovação'],
+        content: 'A transformação digital não é mais uma opção, mas uma necessidade crítica para sobreviver e prosperar no mercado competitivo atual. Este processo abrangente vai muito além da simples adoção de tecnologias - representa uma mudança fundamental na forma como as organizações operam, entregam valor aos clientes e se adaptam às demandas do mercado. Em nossa experiência consultiva, observamos que empresas que abraçam verdadeiramente a transformação digital experimentam aumentos médios de 23% na receita e 12% na eficiência operacional.'
+      },
+      {
+        title: 'Cloud Computing: Revolucionando a Infraestrutura Empresarial',
+        category: 'Cloud & DevOps',
+        date: '12 Jan 2025',
+        readTime: '10 min de leitura',
+        excerpt: 'Explore as vantagens estratégicas da migração para nuvem e como implementar uma estratégia cloud-first bem-sucedida.',
+        tags: ['Cloud', 'AWS', 'Migração'],
+        content: 'O cloud computing revolucionou fundamentalmente a forma como as empresas gerenciam recursos de TI, oferecendo flexibilidade, escalabilidade e eficiência de custos sem precedentes. Nossa experiência em mais de 200 migrações cloud revela que organizações bem-preparadas alcançam reduções de até 40% nos custos operacionais de TI.'
+      },
+      {
+        title: 'Cibersegurança: Blindagem Digital para Empresas Modernas',
+        category: 'Segurança',
+        date: '10 Jan 2025',
+        readTime: '12 min de leitura',
+        excerpt: 'Proteja seu negócio contra ameaças cibernéticas com estratégias avançadas de segurança e compliance.',
+        tags: ['Segurança', 'LGPD', 'Compliance'],
+        content: 'Com ataques cibernéticos aumentando 300% nos últimos dois anos, a cibersegurança tornou-se prioridade estratégica número um para organizações de todos os tamanhos. Nossa abordagem de defesa em profundidade implementa múltiplas camadas de proteção.'
+      },
+      {
+        title: 'Inteligência Artificial: Automatizando o Futuro dos Negócios',
+        category: 'IA & Automação',
+        date: '08 Jan 2025',
+        readTime: '9 min de leitura',
+        excerpt: 'Descubra como a IA está transformando operações empresariais e criando novas oportunidades de crescimento.',
+        tags: ['IA', 'Machine Learning', 'Automação'],
+        content: 'A Inteligência Artificial deixou de ser ficção científica para se tornar realidade empresarial, com 85% das organizações já implementando projetos de IA. Nossa experiência mostra ROI médio de 300% em projetos bem executados.'
+      }
+    ],
+    en: [
+      {
+        title: 'Digital Transformation: The Future of Business Has Arrived',
+        category: 'Digital Strategy',
+        date: 'Jan 15, 2025',
+        readTime: '8 min read',
+        excerpt: 'Discover how digital transformation is revolutionizing companies and creating sustainable competitive advantages in today\'s market.',
+        tags: ['Digital', 'Strategy', 'Innovation'],
+        content: 'Digital transformation is no longer an option, but a critical necessity to survive and thrive in today\'s competitive market. This comprehensive process goes far beyond simple technology adoption - it represents a fundamental change in how organizations operate, deliver value to customers, and adapt to market demands. In our consulting experience, we observe that companies that truly embrace digital transformation experience average increases of 23% in revenue and 12% in operational efficiency.'
+      },
+      {
+        title: 'Cloud Computing: Revolutionizing Enterprise Infrastructure',
+        category: 'Cloud & DevOps',
+        date: 'Jan 12, 2025',
+        readTime: '10 min read',
+        excerpt: 'Explore the strategic advantages of cloud migration and how to implement a successful cloud-first strategy.',
+        tags: ['Cloud', 'AWS', 'Migration'],
+        content: 'Cloud computing has fundamentally revolutionized how companies manage IT resources, offering unprecedented flexibility, scalability, and cost efficiency. Our experience in over 200 cloud migrations reveals that well-prepared organizations achieve reductions of up to 40% in IT operational costs.'
+      },
+      {
+        title: 'Cybersecurity: Digital Shield for Modern Enterprises',
+        category: 'Security',
+        date: 'Jan 10, 2025',
+        readTime: '12 min read',
+        excerpt: 'Protect your business against cyber threats with advanced security and compliance strategies.',
+        tags: ['Security', 'GDPR', 'Compliance'],
+        content: 'With cyber attacks increasing 300% in the last two years, cybersecurity has become the number one strategic priority for organizations of all sizes. Our defense-in-depth approach implements multiple layers of protection to create a robust and resilient security posture.'
+      },
+      {
+        title: 'Artificial Intelligence: Automating the Future of Business',
+        category: 'AI & Automation',
+        date: 'Jan 08, 2025',
+        readTime: '9 min read',
+        excerpt: 'Discover how AI is transforming business operations and creating new growth opportunities.',
+        tags: ['AI', 'Machine Learning', 'Automation'],
+        content: 'Artificial Intelligence has evolved from science fiction to business reality, with 85% of organizations already implementing AI projects. Our experience shows an average ROI of 300% in well-executed projects with typical payback of 12-18 months.'
+      }
+    ]
+  };
+
+  get posts() {
+    const currentLang = this.translationService.getCurrentLanguage();
+    return this.postsData[currentLang as keyof typeof this.postsData] || this.postsData.pt;
+  }
+
+
 
   selectedPost: any = null;
 

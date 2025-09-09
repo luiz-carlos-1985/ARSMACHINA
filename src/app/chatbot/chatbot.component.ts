@@ -37,6 +37,8 @@ export class ChatbotComponent implements OnInit, OnDestroy {
   showFeedbackModal: boolean = false;
   isRecording: boolean = false;
   isTyping: boolean = false;
+  showWhatsAppButton: boolean = false;
+  selectedService: string = '';
   
   searchQuery: string = '';
   highlightedMessageId: string = '';
@@ -109,6 +111,9 @@ export class ChatbotComponent implements OnInit, OnDestroy {
     const message = this.userInput.trim();
     this.userInput = '';
     this.isLoading = true;
+
+    // Verifica se o usuário mencionou algum serviço
+    this.checkForServiceMention(message);
 
     // Add user message
     const userMsg: ChatMessage = {
@@ -222,6 +227,8 @@ export class ChatbotComponent implements OnInit, OnDestroy {
     }
     
     if (lowerMessage.includes('serviços') || lowerMessage.includes('servicos') || lowerMessage.includes('desenvolvimento')) {
+      this.showWhatsAppButton = true;
+      this.selectedService = 'Desenvolvimento';
       return `🏗️ **PORTFÓLIO COMPLETO ARS MACHINA:**\n\n` +
              `🌟 **DESENVOLVIMENTO WEB & MOBILE**\n` +
              `• Sites institucionais responsivos\n` +
@@ -530,5 +537,31 @@ export class ChatbotComponent implements OnInit, OnDestroy {
     const words = message.toLowerCase().split(/\s+/);
     const englishWordCount = words.filter(word => englishWords.includes(word)).length;
     return englishWordCount >= 2 || message.toLowerCase().includes('hello') || message.toLowerCase().includes('services') || message.toLowerCase().includes('development');
+  }
+
+  openWhatsApp() {
+    const phoneNumber = '5598999649215';
+    const message = `Olá! Tenho interesse no serviço de ${this.selectedService}. Gostaria de mais informações.`;
+    const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+    window.open(whatsappUrl, '_blank');
+  }
+
+  checkForServiceMention(message: string) {
+    const lowerMessage = message.toLowerCase();
+    
+    // Detecta menção de serviços específicos
+    if (lowerMessage.includes('desenvolvimento') || lowerMessage.includes('site') || lowerMessage.includes('app')) {
+      this.selectedService = 'Desenvolvimento Web/Mobile';
+      this.showWhatsAppButton = true;
+    } else if (lowerMessage.includes('cloud') || lowerMessage.includes('aws') || lowerMessage.includes('azure')) {
+      this.selectedService = 'Cloud Computing';
+      this.showWhatsAppButton = true;
+    } else if (lowerMessage.includes('segurança') || lowerMessage.includes('cibersegurança') || lowerMessage.includes('lgpd')) {
+      this.selectedService = 'Cibersegurança';
+      this.showWhatsAppButton = true;
+    } else if (lowerMessage.includes('inteligência artificial') || lowerMessage.includes('ia') || lowerMessage.includes('automação')) {
+      this.selectedService = 'Inteligência Artificial';
+      this.showWhatsAppButton = true;
+    }
   }
 }

@@ -181,6 +181,7 @@ export class TranslationService {
 
       // Blog Section
       'blog.title': 'Últimas Postagens',
+      'blog.subtitle': 'Insights, tendências e conhecimento especializado em tecnologia',
       'blog.newPost': 'Nova Postagem',
       'blog.readMore': 'Leia mais sobre esta postagem fascinante...',
 
@@ -382,6 +383,7 @@ export class TranslationService {
 
       // Blog Section
       'blog.title': 'Latest Posts',
+      'blog.subtitle': 'Insights, trends and specialized knowledge in technology',
       'blog.newPost': 'New Post',
       'blog.readMore': 'Read more about this fascinating post...',
 

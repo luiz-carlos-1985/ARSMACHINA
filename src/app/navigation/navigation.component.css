@@ -1395,6 +1395,9 @@ body.menu-open {
   background: rgba(255, 255, 255, 0.05);
   margin-bottom: 8px;
   border-radius: 8px;
+  text-align: left;
+  justify-content: flex-start;
+  align-items: center;
 }
 
 .mobile-nav-item.delete-account-mobile {
@@ -1419,6 +1422,12 @@ body.menu-open {
 .mobile-nav-item.delete-account-mobile .mobile-nav-icon {
   background: rgba(220, 53, 69, 0.1);
   color: #dc3545;
+}
+
+.mobile-help-item {
+  text-align: left;
+  justify-content: flex-start;
+  align-items: center;
 }
 
 /* ===== MOBILE TOUCH IMPROVEMENTS ===== */
