@@ -530,36 +530,36 @@
     </div>
     <div class="modal-body">
       <div class="form-group">
-        <label for="project-name">{{ getTranslation('dashboard.projectName') }}</label>
+        <label for="project-name">Nome do Projeto</label>
         <input id="project-name" type="text" [(ngModel)]="currentProject.name" placeholder="Digite o nome do projeto" aria-label="Nome do projeto">
       </div>
       <div class="form-group">
-        <label for="project-description">{{ getTranslation('dashboard.description') }}</label>
+        <label for="project-description">Descrição</label>
         <textarea id="project-description" [(ngModel)]="currentProject.description" placeholder="Descreva o projeto" aria-label="Descrição do projeto"></textarea>
       </div>
       <div class="form-row">
         <div class="form-group">
-          <label for="project-status">{{ getTranslation('dashboard.status') }}</label>
+          <label for="project-status">Status</label>
           <select id="project-status" [(ngModel)]="currentProject.status" aria-label="Status do projeto">
-            <option value="planning">{{ getTranslation('dashboard.planning') }}</option>
-            <option value="in-progress">{{ getTranslation('dashboard.inProgress') }}</option>
-            <option value="review">{{ getTranslation('dashboard.review') }}</option>
-            <option value="completed">{{ getTranslation('dashboard.completed') }}</option>
+            <option value="planning">Planejamento</option>
+            <option value="in-progress">Em Andamento</option>
+            <option value="review">Em Revisão</option>
+            <option value="completed">Concluído</option>
           </select>
         </div>
         <div class="form-group">
-          <label for="project-team-size">{{ getTranslation('dashboard.teamSize') }}</label>
+          <label for="project-team-size">Tamanho da Equipe</label>
           <input id="project-team-size" type="number" [(ngModel)]="currentProject.teamSize" min="1" aria-label="Tamanho da equipe">
         </div>
       </div>
       <div class="form-group">
-        <label for="project-deadline">{{ getTranslation('dashboard.deadline') }}</label>
+        <label for="project-deadline">Data de Entrega</label>
         <input id="project-deadline" type="date" [(ngModel)]="currentProject.deadline" aria-label="Data de entrega">
       </div>
     </div>
     <div class="modal-footer">
-      <button class="btn-secondary" (click)="closeProjectModal()">{{ getTranslation('dashboard.cancel') }}</button>
-      <button class="btn-primary" (click)="saveProject()">{{ isEditingProject ? getTranslation('dashboard.update') : getTranslation('dashboard.create') }}</button>
+      <button class="btn-secondary" (click)="closeProjectModal()">Cancelar</button>
+      <button class="btn-primary" (click)="saveProject()">{{ isEditingProject ? 'Atualizar' : 'Criar' }}</button>
     </div>
   </div>
 </div>
@@ -582,29 +582,29 @@
       </div>
       <div class="form-row">
         <div class="form-group">
-          <label for="task-project">{{ getTranslation('dashboard.project') }}</label>
+          <label for="task-project">Projeto</label>
           <select id="task-project" [(ngModel)]="currentTask.projectId" aria-label="Projeto associado">
-            <option value="">{{ getTranslation('dashboard.noProject') }}</option>
+            <option value="">Nenhum projeto</option>
             <option *ngFor="let project of activeProjects" [value]="project.id">{{ project.name }}</option>
           </select>
         </div>
         <div class="form-group">
-          <label for="task-priority">{{ getTranslation('dashboard.priority') }}</label>
+          <label for="task-priority">Prioridade</label>
           <select id="task-priority" [(ngModel)]="currentTask.priority" aria-label="Prioridade da tarefa">
-            <option value="low">{{ getTranslation('dashboard.low') }}</option>
-            <option value="medium">{{ getTranslation('dashboard.medium') }}</option>
-            <option value="high">{{ getTranslation('dashboard.high') }}</option>
+            <option value="low">Baixa</option>
+            <option value="medium">Média</option>
+            <option value="high">Alta</option>
           </select>
         </div>
       </div>
       <div class="form-group">
-        <label for="task-due-date">{{ getTranslation('dashboard.dueDate') }}</label>
+        <label for="task-due-date">Data de Vencimento</label>
         <input id="task-due-date" type="date" [(ngModel)]="currentTask.dueDate" aria-label="Data de vencimento">
       </div>
     </div>
     <div class="modal-footer">
-      <button class="btn-secondary" (click)="closeTaskModal()">{{ getTranslation('dashboard.cancel') }}</button>
-      <button class="btn-primary" (click)="saveTask()">{{ isEditingTask ? getTranslation('dashboard.update') : getTranslation('dashboard.create') }}</button>
+      <button class="btn-secondary" (click)="closeTaskModal()">Cancelar</button>
+      <button class="btn-primary" (click)="saveTask()">{{ isEditingTask ? 'Atualizar' : 'Criar' }}</button>
     </div>
   </div>
 </div>
@@ -641,8 +641,8 @@
       </div>
     </div>
     <div class="modal-footer">
-      <button class="btn-secondary" (click)="closeMeetingModal()">{{ getTranslation('dashboard.cancel') }}</button>
-      <button class="btn-primary" (click)="saveMeeting()">{{ getTranslation('dashboard.schedule') }}</button>
+      <button class="btn-secondary" (click)="closeMeetingModal()">Cancelar</button>
+      <button class="btn-primary" (click)="saveMeeting()">Agendar</button>
     </div>
   </div>
 </div>
