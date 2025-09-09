@@ -693,8 +693,9 @@
       <div class="client-controls">
         <div class="search-filter">
           <div class="search-box">
-            <input type="text" [(ngModel)]="clientSearchTerm" placeholder="Buscar clientes..." class="search-input">
-            <span class="search-icon">🔍</span>
+            <input type="text" [(ngModel)]="clientSearchTerm" placeholder="Buscar por nome, email, telefone..." class="search-input">
+          <button *ngIf="clientSearchTerm" class="clear-search" (click)="clearClientSearch()" title="Limpar busca">×</button>
+            <span class="search-icon" *ngIf="!clientSearchTerm">🔍</span>
           </div>
           <select [(ngModel)]="clientStatusFilter" class="status-filter">
             <option value="all">Todos os Status</option>
@@ -712,7 +713,11 @@
     
     <div class="clients-container">
       <div class="clients-grid" *ngIf="!showClientForm">
-        <div class="client-card" *ngFor="let client of getFilteredClients()" [class.expired]="isContractExpired(client)">
+        <div *ngIf="getFilteredClients().length === 0 && clientSearchTerm" class="no-results">
+          <p>Nenhum cliente encontrado para "{{ clientSearchTerm }}"</p>
+          <button (click)="clearClientSearch()">Limpar busca</button>
+        </div>
+        <div class="client-card" *ngFor="let client of getFilteredClients(); trackBy: trackByClientId" [class.expired]="isContractExpired(client)">
           <div class="client-header">
             <div class="client-avatar" [style.background]="getClientAvatarColor(client.name)">
               {{ client.name.charAt(0).toUpperCase() }}

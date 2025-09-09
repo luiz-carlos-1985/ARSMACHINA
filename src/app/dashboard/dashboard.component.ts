@@ -921,6 +921,12 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     this.activeClientMenu = null;
   }
 
+  // Método para resetar filtros
+  resetClientFilters() {
+    this.clientSearchTerm = '';
+    this.clientStatusFilter = 'all';
+  }
+
   toggleClientMenu(clientId: number) {
     this.activeClientMenu = this.activeClientMenu === clientId ? null : clientId;
   }
@@ -932,21 +938,40 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   getFilteredClients() {
     let filtered = this.activeClients;
     
+    // Filtro por status
     if (this.clientStatusFilter !== 'all') {
       filtered = filtered.filter(c => c.status === this.clientStatusFilter);
     }
     
-    if (this.clientSearchTerm) {
-      const term = this.clientSearchTerm.toLowerCase();
+    // Busca por termo
+    if (this.clientSearchTerm && this.clientSearchTerm.trim()) {
+      const term = this.clientSearchTerm.toLowerCase().trim();
       filtered = filtered.filter(c => 
         c.name.toLowerCase().includes(term) ||
         c.email.toLowerCase().includes(term) ||
-        c.phone.includes(term) ||
-        (c.company && c.company.toLowerCase().includes(term))
+        c.phone.replace(/\D/g, '').includes(term.replace(/\D/g, '')) ||
+        (c.company && c.company.toLowerCase().includes(term)) ||
+        c.contractValue.toString().includes(term) ||
+        (c.notes && c.notes.toLowerCase().includes(term))
       );
     }
     
     return filtered;
+  }
+
+  // Método para limpar busca
+  clearClientSearch() {
+    this.clientSearchTerm = '';
+  }
+
+  trackByClientId(index: number, client: any): number {
+    return client.id;
+  }
+
+  // Método para busca rápida por status
+  filterByStatus(status: string) {
+    this.clientStatusFilter = status;
+    this.clientSearchTerm = '';
   }
 
   getActiveClientsCount(): number {
