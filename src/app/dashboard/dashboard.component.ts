@@ -305,6 +305,11 @@ export class DashboardComponent implements OnInit {
     await this.loadUserProfile();
     this.loadFromLocalStorage();
     this.updateTaskStats();
+    this.applyUserSettings();
+    this.setupAutoRefresh();
+    
+    // Ensure translation service is initialized
+    this.currentLanguage = this.translationService.getCurrentLanguage();
     
     // Listen for navigation events from navbar
     window.addEventListener('navigate-to-section', (event: any) => {
@@ -367,13 +372,23 @@ export class DashboardComponent implements OnInit {
   }
 
   private initializeLanguageSubscription() {
+    // Get current language immediately
+    this.currentLanguage = this.translationService.getCurrentLanguage();
+    
+    // Subscribe to language changes
     this.translationService.currentLanguage$.subscribe(lang => {
       this.currentLanguage = lang;
+      console.log('Language changed to:', lang);
     });
   }
 
   getTranslation(key: string): string {
-    return this.translationService.translate(key);
+    const translation = this.translationService.translate(key);
+    // Debug: log if translation is missing
+    if (translation === key) {
+      console.warn(`Translation missing for key: ${key}`);
+    }
+    return translation;
   }
 
   // Icon helper methods
@@ -1343,6 +1358,31 @@ export class DashboardComponent implements OnInit {
   }
 
   // Helper method to add activities
+  private applyUserSettings() {
+    const settings = JSON.parse(localStorage.getItem('userSettings') || '{}');
+    
+    // Aplicar animações
+    if (settings.dashboard?.showAnimations !== false) {
+      document.body.classList.add('animations-enabled');
+    }
+    
+    // Aplicar modo compacto
+    if (settings.dashboard?.compactMode) {
+      document.body.classList.add('compact-mode');
+    }
+  }
+  
+  private setupAutoRefresh() {
+    const refreshConfig = JSON.parse(localStorage.getItem('dashboardAutoRefresh') || '{}');
+    
+    if (refreshConfig.enabled && refreshConfig.interval) {
+      setInterval(() => {
+        this.refreshAnalytics();
+        this.loadFromLocalStorage();
+      }, refreshConfig.interval);
+    }
+  }
+
   private addActivity(text: string, type: string, icon: string, status: string, statusText: string) {
     const newActivity = {
       type: type,

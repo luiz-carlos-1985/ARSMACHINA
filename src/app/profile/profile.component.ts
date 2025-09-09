@@ -167,12 +167,40 @@ export class ProfileComponent implements OnInit {
   }
   
   exportProfile() {
-    const dataStr = JSON.stringify(this.userProfile, null, 2);
+    const exportData = {
+      '=== PERFIL DO USUÁRIO ===': '',
+      'Nome Completo': this.userProfile.name,
+      'Email': this.userProfile.email,
+      'Telefone': this.userProfile.phone || 'Não informado',
+      'Empresa': this.userProfile.company,
+      'Cargo': this.userProfile.position || 'Não informado',
+      'Biografia': this.userProfile.bio || 'Não informada',
+      '': '',
+      '=== CONFIGURAÇÕES ===': '',
+      'Notificações por Email': this.userProfile.notifications.email ? 'Ativadas' : 'Desativadas',
+      'Notificações de Projetos': this.userProfile.notifications.projects ? 'Ativadas' : 'Desativadas',
+      'Notificações de Tarefas': this.userProfile.notifications.tasks ? 'Ativadas' : 'Desativadas',
+      ' ': '',
+      '=== ESTATÍSTICAS ===': '',
+      'Total de Projetos': this.userStats.projects,
+      'Total de Tarefas': this.userStats.tasks,
+      'Tarefas Concluídas': this.userStats.completed,
+      'Produtividade': `${this.userStats.productivity}%`,
+      '  ': '',
+      '=== INFORMAÇÕES DO SISTEMA ===': '',
+      'Data de Cadastro': new Date(this.userProfile.joinDate).toLocaleDateString('pt-BR'),
+      'Último Acesso': new Date(this.userProfile.lastLogin).toLocaleDateString('pt-BR'),
+      'Data da Exportação': new Date().toLocaleDateString('pt-BR') + ' às ' + new Date().toLocaleTimeString('pt-BR'),
+      '   ': '',
+      '_dados_sistema': this.userProfile
+    };
+    
+    const dataStr = JSON.stringify(exportData, null, 2);
     const blob = new Blob([dataStr], { type: 'application/json' });
     const url = window.URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = 'perfil-usuario.json';
+    a.download = `perfil-${this.userProfile.name.replace(/\s+/g, '-').toLowerCase()}-${new Date().toISOString().split('T')[0]}.json`;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
@@ -187,12 +215,26 @@ export class ProfileComponent implements OnInit {
       const reader = new FileReader();
       reader.onload = (e: any) => {
         try {
-          const importedProfile = JSON.parse(e.target.result);
-          this.userProfile = { ...this.userProfile, ...importedProfile };
-          alert('Perfil importado com sucesso!');
+          const importedData = JSON.parse(e.target.result);
+          
+          // Verificar se é um arquivo exportado pelo sistema (tem _dados_sistema)
+          if (importedData._dados_sistema) {
+            this.userProfile = { ...this.userProfile, ...importedData._dados_sistema };
+            alert(`Perfil de "${importedData['Nome Completo']}" importado com sucesso!\n\nDados importados:\n- ${importedData['Total de Projetos']} projetos\n- ${importedData['Total de Tarefas']} tarefas\n- Exportado em: ${importedData['Data da Exportação']}`);
+          } 
+          // Tentar importar formato antigo ou direto
+          else if (importedData.name || importedData.email) {
+            this.userProfile = { ...this.userProfile, ...importedData };
+            alert('Perfil importado com sucesso!');
+          }
+          else {
+            alert('Formato de arquivo não reconhecido. Use um arquivo exportado pelo sistema.');
+            return;
+          }
+          
           this.addDashboardActivity('Perfil importado');
         } catch (error) {
-          alert('Erro ao importar perfil. Verifique o arquivo.');
+          alert('Erro ao importar perfil. Verifique se o arquivo é válido.');
         }
       };
       reader.readAsText(file);

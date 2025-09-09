@@ -76,26 +76,7 @@ export class HelpComponent implements OnInit {
     }
   ];
 
-  tutorials = [
-    {
-      id: 'intro',
-      title: 'Introdução ao Dashboard',
-      duration: '5 min',
-      description: 'Conheça as principais funcionalidades do sistema'
-    },
-    {
-      id: 'advanced',
-      title: 'Recursos Avançados',
-      duration: '10 min',
-      description: 'Aprenda a usar funcionalidades avançadas'
-    },
-    {
-      id: 'tips',
-      title: 'Dicas de Produtividade',
-      duration: '7 min',
-      description: 'Maximize sua eficiência com essas dicas'
-    }
-  ];
+  tutorials: any[] = [];
 
   constructor(private translationService: TranslationService) {}
 
@@ -120,12 +101,7 @@ export class HelpComponent implements OnInit {
     }
   }
 
-  watchTutorial(tutorialId: string) {
-    const tutorial = this.tutorials.find(t => t.id === tutorialId);
-    if (tutorial) {
-      alert(`Tutorial: ${tutorial.title}\n\nDuração: ${tutorial.duration}\n\n${tutorial.description}\n\nEm breve disponível!`);
-    }
-  }
+
 
   contactSupport() {
     const subject = 'Solicitação de Suporte - Dashboard';
@@ -150,7 +126,6 @@ export class HelpComponent implements OnInit {
     switch (this.activeSection) {
       case 'guides': return this.guides;
       case 'faqs': return this.faqs;
-      case 'tutorials': return this.tutorials;
       default: return [];
     }
   }

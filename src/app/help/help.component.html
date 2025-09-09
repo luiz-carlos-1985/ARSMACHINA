@@ -26,11 +26,6 @@
               (click)="setActiveSection('faqs')">
         ❓ FAQ
       </button>
-      <button class="tab-btn" 
-              [class.active]="activeSection === 'tutorials'"
-              (click)="setActiveSection('tutorials')">
-        🎥 Tutoriais
-      </button>
     </div>
 
     <div class="help-section">
@@ -59,22 +54,7 @@
         </div>
       </div>
 
-      <!-- Tutoriais -->
-      <div *ngIf="activeSection === 'tutorials'" class="content-grid">
-        <div class="tutorial-card" *ngFor="let item of filteredContent">
-          <div class="card-header">
-            <div class="card-icon">🎥</div>
-            <h3>{{ getItemTitle(item) }}</h3>
-          </div>
-          <p class="card-description">{{ getItemDescription(item) }}</p>
-          <div class="tutorial-meta">
-            <span class="duration">⏱️ {{ getItemDuration(item) }}</span>
-          </div>
-          <button class="card-action" (click)="watchTutorial(item.id)">
-            Assistir Tutorial
-          </button>
-        </div>
-      </div>
+
 
       <!-- Empty State -->
       <div *ngIf="filteredContent.length === 0" class="empty-state">

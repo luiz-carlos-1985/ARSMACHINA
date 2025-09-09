@@ -362,6 +362,35 @@ body {
   color: white;
 }
 
+/* Settings Effects */
+.animations-enabled * {
+  transition: all 0.3s ease !important;
+}
+
+.animations-enabled .stat-card:hover,
+.animations-enabled .project-card:hover,
+.animations-enabled button:hover {
+  transform: translateY(-3px) !important;
+}
+
+.compact-mode .stat-card,
+.compact-mode .project-card {
+  padding: 15px !important;
+  margin: 10px 0 !important;
+}
+
+.compact-mode .dashboard-hero {
+  padding: 20px !important;
+}
+
+.compact-mode .section-header h2 {
+  font-size: 1.3rem !important;
+}
+
+.compact-mode .quick-actions-bar {
+  padding: 15px !important;
+}
+
 /* Global Mobile Touch Improvements */
 @media (max-width: 768px) {
   /* Ensure all interactive elements have proper touch targets */

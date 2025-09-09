@@ -786,220 +786,714 @@ interface ReportData {
     @media (max-width: 768px) {
       .enhanced-reports-container {
         padding: 10px;
-        margin: 5px;
+        margin: 0;
+        max-width: 100vw;
+        overflow-x: hidden;
+      }
+      
+      .reports-header {
+        margin-bottom: 20px;
+        padding: 0 5px;
       }
       
       .reports-header h2 {
-        font-size: 1.5em;
+        font-size: 1.4em;
+        margin-bottom: 8px;
+      }
+      
+      .reports-header p {
+        font-size: 0.9em;
+        line-height: 1.4;
       }
       
       .live-stats {
         grid-template-columns: repeat(2, 1fr);
-        gap: 10px;
-      }
-      
-      .stat-card {
-        padding: 15px;
-      }
-      
-      .stat-value {
-        font-size: 1.5em;
-      }
-      
-      .advanced-generator,
-      .reports-history-enhanced,
-      .report-templates {
-        padding: 15px;
-      }
-      
-      .report-types-grid {
-        grid-template-columns: 1fr;
-        gap: 10px;
-      }
-      
-      .report-type-card {
-        padding: 15px;
-      }
-      
-      .filters-grid {
-        grid-template-columns: 1fr;
-        gap: 15px;
-      }
-      
-      .date-range {
-        flex-direction: column;
-        gap: 5px;
-      }
-      
-      .date-range span {
-        text-align: center;
-        font-size: 0.9em;
-      }
-      
-      .additional-options {
-        margin-top: 15px;
-      }
-      
-      .checkbox-option {
-        margin-bottom: 8px;
-        font-size: 0.9em;
-      }
-      
-      .generate-btn {
-        width: 100%;
-        padding: 12px 20px;
-        font-size: 14px;
-      }
-      
-      .history-header {
-        flex-direction: column;
-        gap: 15px;
-        align-items: flex-start;
-      }
-      
-      .history-actions {
-        width: 100%;
-        justify-content: space-between;
-      }
-      
-      .reports-grid {
-        grid-template-columns: 1fr;
-        gap: 15px;
-      }
-      
-      .report-card {
-        padding: 15px;
-      }
-      
-      .report-header {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 10px;
-      }
-      
-      .report-icon {
-        font-size: 1.5em;
-        margin-right: 0;
-      }
-      
-      .report-meta {
-        flex-direction: column;
-        gap: 5px;
-        align-items: flex-start;
-      }
-      
-      .report-actions {
-        flex-direction: column;
         gap: 8px;
-        width: 100%;
-      }
-      
-      .action-btn {
-        width: 100%;
-        text-align: center;
-        padding: 10px;
-      }
-      
-      .templates-grid {
-        grid-template-columns: 1fr;
-        gap: 15px;
-      }
-      
-      .template-card {
-        padding: 15px;
-      }
-      
-      .preview-modal {
-        max-width: 95vw;
-        max-height: 95vh;
-        margin: 10px;
-      }
-      
-      .modal-header,
-      .modal-body,
-      .modal-footer {
-        padding: 15px;
-      }
-      
-      .modal-footer {
-        flex-direction: column;
-        gap: 10px;
-      }
-      
-      .btn-primary,
-      .btn-secondary {
-        width: 100%;
-        padding: 12px;
-      }
-    }
-    
-    @media (max-width: 480px) {
-      .enhanced-reports-container {
-        padding: 5px;
-      }
-      
-      .live-stats {
-        grid-template-columns: 1fr;
-        gap: 8px;
+        margin-bottom: 20px;
       }
       
       .stat-card {
         padding: 12px;
+        text-align: center;
+      }
+      
+      .stat-icon {
+        font-size: 1.5em;
+        margin-bottom: 5px;
       }
       
       .stat-value {
         font-size: 1.3em;
+        margin-bottom: 3px;
       }
       
       .stat-label {
         font-size: 0.8em;
       }
       
+      .reports-content {
+        gap: 20px;
+      }
+      
       .advanced-generator,
       .reports-history-enhanced,
       .report-templates {
-        padding: 10px;
+        padding: 12px;
+        margin-bottom: 15px;
+      }
+      
+      .advanced-generator h3,
+      .reports-history-enhanced h3,
+      .report-templates h3 {
+        font-size: 1.1em;
+        margin-bottom: 15px;
+      }
+      
+      .report-types-grid {
+        grid-template-columns: 1fr;
+        gap: 8px;
+        margin: 15px 0;
       }
       
       .report-type-card {
         padding: 12px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
       }
       
       .type-icon {
         font-size: 1.5em;
+        margin-bottom: 0;
+        min-width: 40px;
+      }
+      
+      .type-info {
+        flex: 1;
       }
       
       .type-name {
         font-size: 0.9em;
+        margin-bottom: 3px;
       }
       
       .type-description {
         font-size: 0.8em;
+        margin-bottom: 5px;
+        line-height: 1.3;
+      }
+      
+      .type-format {
+        font-size: 0.7em;
+        padding: 2px 6px;
+      }
+      
+      .advanced-filters {
+        margin: 15px 0;
+        padding: 12px;
+      }
+      
+      .advanced-filters h4 {
+        font-size: 1em;
+        margin-bottom: 10px;
+      }
+      
+      .filters-grid {
+        grid-template-columns: 1fr;
+        gap: 12px;
+        margin: 15px 0;
+      }
+      
+      .filter-group label {
+        font-size: 0.9em;
+        margin-bottom: 5px;
+      }
+      
+      .filter-group input,
+      .filter-group select {
+        padding: 8px;
+        font-size: 14px;
+        border-radius: 4px;
+      }
+      
+      .date-range {
+        flex-direction: column;
+        gap: 8px;
+      }
+      
+      .date-range span {
+        text-align: center;
+        font-size: 0.8em;
+        color: #666;
+      }
+      
+      .additional-options {
+        margin-top: 12px;
+      }
+      
+      .checkbox-option {
+        margin-bottom: 8px;
+        font-size: 0.85em;
+        align-items: flex-start;
+        gap: 8px;
+      }
+      
+      .checkbox-option input {
+        margin-top: 2px;
+        margin-right: 0;
+      }
+      
+      .generation-section {
+        margin-top: 20px;
       }
       
       .generate-btn {
-        padding: 10px 15px;
-        font-size: 13px;
+        width: 100%;
+        padding: 12px 15px;
+        font-size: 14px;
+        justify-content: center;
+      }
+      
+      .generation-info {
+        margin-top: 15px;
+        max-width: 100%;
+      }
+      
+      .generation-info p {
+        font-size: 0.9em;
+        text-align: center;
+      }
+      
+      .history-header {
+        flex-direction: column;
+        gap: 12px;
+        align-items: flex-start;
+        margin-bottom: 15px;
+      }
+      
+      .history-header h3 {
+        margin: 0;
+      }
+      
+      .history-actions {
+        width: 100%;
+        display: flex;
+        gap: 8px;
+      }
+      
+      .history-actions .action-btn {
+        flex: 1;
+        padding: 8px 12px;
+        font-size: 0.8em;
+        text-align: center;
+      }
+      
+      .reports-grid {
+        grid-template-columns: 1fr;
+        gap: 12px;
       }
       
       .report-card {
         padding: 12px;
       }
       
+      .report-header {
+        flex-direction: row;
+        align-items: flex-start;
+        gap: 10px;
+        margin-bottom: 10px;
+      }
+      
+      .report-icon {
+        font-size: 1.3em;
+        margin-right: 0;
+        min-width: 30px;
+      }
+      
+      .report-info {
+        flex: 1;
+      }
+      
+      .report-info h4 {
+        font-size: 0.9em;
+        margin-bottom: 5px;
+      }
+      
+      .report-meta {
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 5px;
+        align-items: center;
+      }
+      
+      .format-badge {
+        font-size: 0.7em;
+        padding: 1px 6px;
+      }
+      
+      .report-details {
+        margin-bottom: 10px;
+      }
+      
+      .detail-item {
+        font-size: 0.8em;
+        margin-bottom: 3px;
+      }
+      
+      .report-actions {
+        display: flex;
+        flex-direction: row;
+        gap: 6px;
+        width: 100%;
+      }
+      
+      .report-actions .action-btn {
+        flex: 1;
+        padding: 8px 6px;
+        font-size: 0.7em;
+        text-align: center;
+      }
+      
+      .templates-grid {
+        grid-template-columns: 1fr;
+        gap: 10px;
+        margin-top: 15px;
+      }
+      
       .template-card {
         padding: 12px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        text-align: left;
       }
       
       .template-icon {
         font-size: 2em;
+        margin-bottom: 0;
+        min-width: 50px;
+      }
+      
+      .template-info {
+        flex: 1;
       }
       
       .template-info h4 {
         font-size: 0.9em;
+        margin-bottom: 5px;
       }
       
       .template-info p {
         font-size: 0.8em;
+        line-height: 1.3;
+      }
+      
+      .empty-state {
+        padding: 30px 15px;
+      }
+      
+      .empty-icon {
+        font-size: 3em;
+        margin-bottom: 15px;
+      }
+      
+      .empty-state h3 {
+        font-size: 1.1em;
+        margin-bottom: 8px;
+      }
+      
+      .empty-state p {
+        font-size: 0.9em;
+        line-height: 1.4;
+      }
+      
+      .modal-overlay {
+        padding: 10px;
+      }
+      
+      .preview-modal {
+        max-width: calc(100vw - 20px);
+        max-height: calc(100vh - 20px);
+        margin: 0;
+      }
+      
+      .modal-header {
+        padding: 12px;
+      }
+      
+      .modal-header h3 {
+        font-size: 1.1em;
+      }
+      
+      .modal-body {
+        padding: 12px;
+      }
+      
+      .preview-content {
+        max-height: 50vh;
+        padding: 12px;
+        font-size: 0.9em;
+      }
+      
+      .modal-footer {
+        padding: 12px;
+        flex-direction: row;
+        gap: 8px;
+      }
+      
+      .btn-primary,
+      .btn-secondary {
+        flex: 1;
+        padding: 10px 12px;
+        font-size: 0.9em;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      .enhanced-reports-container {
+        padding: 5px;
+        margin: 0;
+      }
+      
+      .reports-header {
+        margin-bottom: 15px;
+        padding: 0;
+      }
+      
+      .reports-header h2 {
+        font-size: 1.2em;
+        margin-bottom: 5px;
+      }
+      
+      .reports-header p {
+        font-size: 0.8em;
+        line-height: 1.3;
+      }
+      
+      .live-stats {
+        grid-template-columns: 1fr;
+        gap: 6px;
+        margin-bottom: 15px;
+      }
+      
+      .stat-card {
+        padding: 10px;
+      }
+      
+      .stat-icon {
+        font-size: 1.3em;
+        margin-bottom: 3px;
+      }
+      
+      .stat-value {
+        font-size: 1.1em;
+        margin-bottom: 2px;
+      }
+      
+      .stat-label {
+        font-size: 0.7em;
+      }
+      
+      .reports-content {
+        gap: 15px;
+      }
+      
+      .advanced-generator,
+      .reports-history-enhanced,
+      .report-templates {
+        padding: 8px;
+        margin-bottom: 10px;
+      }
+      
+      .advanced-generator h3,
+      .reports-history-enhanced h3,
+      .report-templates h3 {
+        font-size: 1em;
+        margin-bottom: 10px;
+      }
+      
+      .report-types-grid {
+        gap: 6px;
+        margin: 10px 0;
+      }
+      
+      .report-type-card {
+        padding: 8px;
+        flex-direction: column;
+        text-align: center;
+        gap: 6px;
+      }
+      
+      .type-icon {
+        font-size: 1.3em;
+        min-width: auto;
+      }
+      
+      .type-info {
+        text-align: center;
+      }
+      
+      .type-name {
+        font-size: 0.8em;
+        margin-bottom: 2px;
+      }
+      
+      .type-description {
+        font-size: 0.7em;
+        margin-bottom: 3px;
+        line-height: 1.2;
+      }
+      
+      .type-format {
+        font-size: 0.6em;
+        padding: 1px 4px;
+      }
+      
+      .advanced-filters {
+        margin: 10px 0;
+        padding: 8px;
+      }
+      
+      .advanced-filters h4 {
+        font-size: 0.9em;
+        margin-bottom: 8px;
+      }
+      
+      .filters-grid {
+        gap: 8px;
+        margin: 10px 0;
+      }
+      
+      .filter-group label {
+        font-size: 0.8em;
+        margin-bottom: 3px;
+      }
+      
+      .filter-group input,
+      .filter-group select {
+        padding: 6px;
+        font-size: 12px;
+      }
+      
+      .date-range {
+        gap: 5px;
+      }
+      
+      .date-range span {
+        font-size: 0.7em;
+      }
+      
+      .additional-options {
+        margin-top: 8px;
+      }
+      
+      .checkbox-option {
+        margin-bottom: 6px;
+        font-size: 0.75em;
+        gap: 6px;
+      }
+      
+      .generation-section {
+        margin-top: 15px;
+      }
+      
+      .generate-btn {
+        padding: 10px 12px;
+        font-size: 12px;
+      }
+      
+      .generation-info p {
+        font-size: 0.8em;
+      }
+      
+      .history-header {
+        gap: 8px;
+        margin-bottom: 10px;
+      }
+      
+      .history-actions {
+        gap: 6px;
+      }
+      
+      .history-actions .action-btn {
+        padding: 6px 8px;
+        font-size: 0.7em;
+      }
+      
+      .reports-grid {
+        gap: 8px;
+      }
+      
+      .report-card {
+        padding: 8px;
+      }
+      
+      .report-header {
+        gap: 8px;
+        margin-bottom: 8px;
+      }
+      
+      .report-icon {
+        font-size: 1.1em;
+        min-width: 25px;
+      }
+      
+      .report-info h4 {
+        font-size: 0.8em;
+        margin-bottom: 3px;
+      }
+      
+      .report-meta {
+        gap: 3px;
+      }
+      
+      .format-badge {
+        font-size: 0.6em;
+        padding: 1px 4px;
+      }
+      
+      .report-details {
+        margin-bottom: 8px;
+      }
+      
+      .detail-item {
+        font-size: 0.7em;
+        margin-bottom: 2px;
+      }
+      
+      .report-actions {
+        gap: 4px;
+      }
+      
+      .report-actions .action-btn {
+        padding: 6px 4px;
+        font-size: 0.6em;
+      }
+      
+      .templates-grid {
+        gap: 6px;
+        margin-top: 10px;
+      }
+      
+      .template-card {
+        padding: 8px;
+        gap: 8px;
+      }
+      
+      .template-icon {
+        font-size: 1.5em;
+        min-width: 40px;
+      }
+      
+      .template-info h4 {
+        font-size: 0.8em;
+        margin-bottom: 3px;
+      }
+      
+      .template-info p {
+        font-size: 0.7em;
+        line-height: 1.2;
+      }
+      
+      .empty-state {
+        padding: 20px 10px;
+      }
+      
+      .empty-icon {
+        font-size: 2.5em;
+        margin-bottom: 10px;
+      }
+      
+      .empty-state h3 {
+        font-size: 1em;
+        margin-bottom: 5px;
+      }
+      
+      .empty-state p {
+        font-size: 0.8em;
+      }
+      
+      .modal-overlay {
+        padding: 5px;
+      }
+      
+      .preview-modal {
+        max-width: calc(100vw - 10px);
+        max-height: calc(100vh - 10px);
+      }
+      
+      .modal-header {
+        padding: 8px;
+      }
+      
+      .modal-header h3 {
+        font-size: 1em;
+      }
+      
+      .modal-close {
+        font-size: 20px;
+      }
+      
+      .modal-body {
+        padding: 8px;
+      }
+      
+      .preview-content {
+        max-height: 40vh;
+        padding: 8px;
+        font-size: 0.8em;
+      }
+      
+      .modal-footer {
+        padding: 8px;
+        gap: 6px;
+      }
+      
+      .btn-primary,
+      .btn-secondary {
+        padding: 8px 10px;
+        font-size: 0.8em;
+      }
+    }
+    
+    /* Orientação landscape para mobile */
+    @media (max-width: 768px) and (orientation: landscape) {
+      .live-stats {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 8px;
+      }
+      
+      .report-types-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      
+      .templates-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      
+      .reports-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+    
+    /* Melhorias para touch */
+    @media (pointer: coarse) {
+      .action-btn,
+      .generate-btn,
+      .report-type-card,
+      .template-card {
+        min-height: 44px;
+        touch-action: manipulation;
+      }
+      
+      .checkbox-option {
+        min-height: 40px;
+        padding: 5px 0;
+      }
+      
+      .filter-group input,
+      .filter-group select {
+        min-height: 40px;
       }
     }
   `]

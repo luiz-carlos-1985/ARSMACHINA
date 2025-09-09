@@ -55,17 +55,20 @@ export class SettingsComponent implements OnInit {
   hasChanges = false;
   isSaving = false;
 
-  availableLanguages = [
-    { code: 'pt', name: 'Português', flag: '🇧🇷' },
-    { code: 'en', name: 'English', flag: '🇺🇸' },
-    { code: 'es', name: 'Español', flag: '🇪🇸' }
-  ];
+  get availableLanguages() {
+    return this.translationService.getAvailableLanguages().map(lang => ({
+      ...lang,
+      flag: lang.code === 'pt' ? '🇧🇷' : '🇺🇸'
+    }));
+  }
   
-  availableThemes = [
-    { value: 'light', name: 'Claro', icon: '☀️' },
-    { value: 'dark', name: 'Escuro', icon: '🌙' },
-    { value: 'auto', name: 'Automático', icon: '🌍' }
-  ];
+  get availableThemes() {
+    return [
+      { value: 'light', name: this.getTranslation('theme.light') || 'Claro', icon: '☀️' },
+      { value: 'dark', name: this.getTranslation('theme.dark') || 'Escuro', icon: '🌙' },
+      { value: 'auto', name: this.getTranslation('theme.auto') || 'Automático', icon: '🌍' }
+    ];
+  }
 
   constructor(
     private translationService: TranslationService,
@@ -77,6 +80,13 @@ export class SettingsComponent implements OnInit {
     this.loadSettings();
     // Sync with theme service
     this.settings.theme = this.themeService.getCurrentTheme();
+    // Sync with translation service
+    this.settings.language = this.translationService.getCurrentLanguage();
+    
+    // Subscribe to language changes
+    this.translationService.currentLanguage$.subscribe(lang => {
+      console.log('Settings: Language changed to:', lang);
+    });
   }
 
   loadSettings() {
@@ -96,13 +106,16 @@ export class SettingsComponent implements OnInit {
       localStorage.setItem('userSettings', JSON.stringify(this.settings));
       this.hasChanges = false;
       
-      // Aplicar mudanças de idioma
+      // Aplicar todas as configurações
       if (this.settings.language) {
         this.translationService.setLanguage(this.settings.language);
       }
       
-      // Aplicar tema
       this.applyTheme();
+      this.applyNotificationSettings();
+      this.applyDashboardSettings();
+      this.applySecuritySettings();
+      this.applyPrivacySettings();
       
       // Adicionar atividade no dashboard
       this.addDashboardActivity('Configurações atualizadas');
@@ -194,6 +207,120 @@ export class SettingsComponent implements OnInit {
     this.hasChanges = true;
   }
   
+  onLanguageChange() {
+    this.hasChanges = true;
+    this.translationService.setLanguage(this.settings.language);
+    localStorage.setItem('userSettings', JSON.stringify(this.settings));
+    this.addDashboardActivity(`Idioma alterado para ${this.settings.language === 'pt' ? 'Português' : 'English'}`);
+  }
+  
+  onThemeChange() {
+    this.hasChanges = true;
+    this.applyTheme();
+    localStorage.setItem('userSettings', JSON.stringify(this.settings));
+  }
+  
+  onNotificationChange() {
+    this.hasChanges = true;
+    this.applyNotificationSettings();
+    localStorage.setItem('userSettings', JSON.stringify(this.settings));
+  }
+  
+  onDashboardChange() {
+    this.hasChanges = true;
+    this.applyDashboardSettings();
+    localStorage.setItem('userSettings', JSON.stringify(this.settings));
+  }
+  
+  onPrivacyChange() {
+    this.hasChanges = true;
+    this.applyPrivacySettings();
+    localStorage.setItem('userSettings', JSON.stringify(this.settings));
+  }
+  
+  onSecurityChange() {
+    this.hasChanges = true;
+    this.applySecuritySettings();
+    localStorage.setItem('userSettings', JSON.stringify(this.settings));
+  }
+  
+  private applyNotificationSettings() {
+    if ('Notification' in window && this.settings.notifications.desktop) {
+      if (Notification.permission !== 'granted') {
+        Notification.requestPermission();
+      }
+    }
+    
+    // Aplicar configurações de som
+    if (this.settings.notifications.sound) {
+      document.body.classList.add('notifications-sound-enabled');
+    } else {
+      document.body.classList.remove('notifications-sound-enabled');
+    }
+  }
+  
+  private applyDashboardSettings() {
+    // Aplicar animações
+    if (this.settings.dashboard.showAnimations) {
+      document.body.classList.add('animations-enabled');
+    } else {
+      document.body.classList.remove('animations-enabled');
+    }
+    
+    // Aplicar modo compacto
+    if (this.settings.dashboard.compactMode) {
+      document.body.classList.add('compact-mode');
+    } else {
+      document.body.classList.remove('compact-mode');
+    }
+    
+    // Configurar auto-refresh se estiver no dashboard
+    this.setupAutoRefresh();
+  }
+  
+  private setupAutoRefresh() {
+    if (this.settings.dashboard.autoRefresh) {
+      const interval = this.settings.dashboard.refreshInterval * 1000;
+      localStorage.setItem('dashboardAutoRefresh', JSON.stringify({
+        enabled: true,
+        interval: interval
+      }));
+    } else {
+      localStorage.removeItem('dashboardAutoRefresh');
+    }
+  }
+  
+  private applySecuritySettings() {
+    // Configurar timeout da sessão
+    if (this.settings.security.sessionTimeout) {
+      const timeout = this.settings.security.sessionTimeout * 60 * 1000;
+      localStorage.setItem('sessionTimeout', timeout.toString());
+      
+      // Configurar timer de logout automático
+      setTimeout(() => {
+        if (confirm('Sua sessão expirou. Deseja continuar?')) {
+          this.applySecuritySettings(); // Reiniciar timer
+        } else {
+          this.authService.signOut();
+        }
+      }, timeout);
+    }
+  }
+  
+  private applyPrivacySettings() {
+    // Aplicar configurações de privacidade
+    const privacyClass = this.settings.privacy.profileVisible ? 'profile-public' : 'profile-private';
+    document.body.classList.remove('profile-public', 'profile-private');
+    document.body.classList.add(privacyClass);
+    
+    // Configurar coleta de dados
+    if (!this.settings.privacy.shareData) {
+      localStorage.setItem('dataCollectionDisabled', 'true');
+    } else {
+      localStorage.removeItem('dataCollectionDisabled');
+    }
+  }
+  
   previewTheme(theme: string) {
     if (theme === 'auto') {
       const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
@@ -218,16 +345,40 @@ export class SettingsComponent implements OnInit {
   }
 
   exportSettings() {
-    const dataStr = JSON.stringify(this.settings, null, 2);
+    const friendlyData = {
+      "Informações do Backup": {
+        "Data de Exportação": new Date().toLocaleDateString('pt-BR'),
+        "Hora de Exportação": new Date().toLocaleTimeString('pt-BR'),
+        "Versão": "1.0",
+        "Aplicação": "Ars Machina Consultancy"
+      },
+      "Configurações Gerais": {
+        "Idioma": this.settings.language === 'pt' ? 'Português' : 'English',
+        "Tema": this.getThemeName(this.settings.theme)
+      },
+      "Notificações": {
+        "Email": this.settings.notifications.email ? 'Ativado' : 'Desativado',
+        "Push": this.settings.notifications.push ? 'Ativado' : 'Desativado',
+        "Desktop": this.settings.notifications.desktop ? 'Ativado' : 'Desativado',
+        "Sons": this.settings.notifications.sound ? 'Ativado' : 'Desativado',
+        "Projetos": this.settings.notifications.projects ? 'Ativado' : 'Desativado',
+        "Tarefas": this.settings.notifications.tasks ? 'Ativado' : 'Desativado'
+      },
+      "_configuracoes_tecnicas": this.settings
+    };
+    
+    const dataStr = JSON.stringify(friendlyData, null, 2);
     const blob = new Blob([dataStr], { type: 'application/json' });
     const url = window.URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = 'configuracoes.json';
+    a.download = `configuracoes-${new Date().toISOString().split('T')[0]}.json`;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
     window.URL.revokeObjectURL(url);
+    
+    alert('Configurações exportadas com sucesso!');
   }
 
   importSettings(event: any) {
@@ -236,12 +387,21 @@ export class SettingsComponent implements OnInit {
       const reader = new FileReader();
       reader.onload = (e: any) => {
         try {
-          const importedSettings = JSON.parse(e.target.result);
-          this.settings = { ...this.settings, ...importedSettings };
+          const importedData = JSON.parse(e.target.result);
+          
+          // Verificar se é um arquivo exportado pelo sistema
+          if (importedData._configuracoes_tecnicas) {
+            this.settings = { ...this.settings, ...importedData._configuracoes_tecnicas };
+          } else {
+            // Arquivo de configurações diretas
+            this.settings = { ...this.settings, ...importedData };
+          }
+          
           this.hasChanges = true;
           alert('Configurações importadas com sucesso!');
+          this.addDashboardActivity('Configurações importadas de arquivo');
         } catch (error) {
-          alert('Erro ao importar configurações. Verifique o arquivo.');
+          alert('Erro ao importar configurações. Verifique se o arquivo é válido.');
         }
       };
       reader.readAsText(file);
@@ -343,6 +503,30 @@ export class SettingsComponent implements OnInit {
   }
 
   getTranslation(key: string): string {
-    return this.translationService.translate(key);
+    const translation = this.translationService.translate(key);
+    // Debug: log if translation is missing
+    if (translation === key) {
+      console.warn(`Translation missing for key: ${key}`);
+    }
+    return translation;
+  }
+
+  getThemeName(theme: string): string {
+    const themes: { [key: string]: string } = {
+      'light': 'Claro',
+      'dark': 'Escuro',
+      'auto': 'Automático'
+    };
+    return themes[theme] || theme;
+  }
+
+  getViewName(view: string): string {
+    const views: { [key: string]: string } = {
+      'overview': 'Visão Geral',
+      'projects': 'Projetos',
+      'tasks': 'Tarefas',
+      'analytics': 'Analytics'
+    };
+    return views[view] || view;
   }
 }

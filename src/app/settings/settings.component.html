@@ -1,12 +1,40 @@
 <div class="settings-container">
   <div class="settings-header">
-    <h2>⚙️ Configurações</h2>
-    <div class="header-actions">
-      <button class="btn-secondary" (click)="exportSettings()">📤 Exportar</button>
-      <button class="btn-secondary" (click)="fileInput.click()">📥 Importar</button>
-      <button class="btn-info" (click)="exportAllData()">📋 Backup Completo</button>
-      <input #fileInput type="file" accept=".json" (change)="importSettings($event)" style="display: none;">
-      <input #backupInput type="file" accept=".json" (change)="importAllData($event)" style="display: none;">
+    <div class="header-content">
+      <div class="header-left">
+        <div class="header-icon">⚙️</div>
+        <div class="header-info">
+          <h2>{{ getTranslation('settings.title') }}</h2>
+          <p>{{ getTranslation('settings.subtitle') }}</p>
+        </div>
+      </div>
+      <div class="header-actions">
+        <div class="action-group">
+          <button class="action-btn export" (click)="exportSettings()" title="Exportar configurações">
+            <div class="btn-content">
+              <span class="btn-icon">📤</span>
+              <span class="btn-text">{{ getTranslation('settings.export') }}</span>
+            </div>
+          </button>
+          
+          <button class="action-btn import" (click)="fileInput.click()" title="Importar configurações">
+            <div class="btn-content">
+              <span class="btn-icon">📥</span>
+              <span class="btn-text">{{ getTranslation('settings.import') }}</span>
+            </div>
+          </button>
+          
+          <button class="action-btn backup" (click)="exportAllData()" title="Backup completo">
+            <div class="btn-content">
+              <span class="btn-icon">📋</span>
+              <span class="btn-text">{{ getTranslation('settings.backup') }}</span>
+            </div>
+          </button>
+        </div>
+        
+        <input #fileInput type="file" accept=".json" (change)="importSettings($event)" style="display: none;">
+        <input #backupInput type="file" accept=".json" (change)="importAllData($event)" style="display: none;">
+      </div>
     </div>
   </div>
 
@@ -15,32 +43,32 @@
       <button class="tab-btn" 
               [class.active]="activeTab === 'general'"
               (click)="setActiveTab('general')">
-        🌐 Geral
+        🌐 {{ getTranslation('settings.general') }}
       </button>
       <button class="tab-btn" 
               [class.active]="activeTab === 'notifications'"
               (click)="setActiveTab('notifications')">
-        🔔 Notificações
+        🔔 {{ getTranslation('settings.notifications') }}
       </button>
       <button class="tab-btn" 
               [class.active]="activeTab === 'privacy'"
               (click)="setActiveTab('privacy')">
-        🔒 Privacidade
+        🔒 {{ getTranslation('settings.privacy') }}
       </button>
       <button class="tab-btn" 
               [class.active]="activeTab === 'dashboard'"
               (click)="setActiveTab('dashboard')">
-        📊 Dashboard
+        📊 {{ getTranslation('settings.dashboard') }}
       </button>
       <button class="tab-btn" 
               [class.active]="activeTab === 'security'"
               (click)="setActiveTab('security')">
-        🛡️ Segurança
+        🛡️ {{ getTranslation('settings.security') }}
       </button>
       <button class="tab-btn" 
               [class.active]="activeTab === 'advanced'"
               (click)="setActiveTab('advanced')">
-        ⚙️ Avançado
+        ⚙️ {{ getTranslation('settings.advanced') }}
       </button>
     </div>
 
@@ -48,10 +76,10 @@
       <!-- Geral -->
       <div *ngIf="activeTab === 'general'" class="tab-content">
         <div class="setting-group">
-          <h3>Idioma e Região</h3>
+          <h3>{{ getTranslation('settings.language') }}</h3>
           <div class="setting-item">
-            <label>Idioma do Sistema</label>
-            <select [(ngModel)]="settings.language" (change)="onSettingChange()">
+            <label>{{ getTranslation('settings.systemLanguage') }}</label>
+            <select [(ngModel)]="settings.language" (change)="onLanguageChange()" title="Selecionar idioma do sistema">
               <option *ngFor="let lang of availableLanguages" [value]="lang.code">
                 {{ lang.flag }} {{ lang.name }}
               </option>
@@ -60,10 +88,10 @@
         </div>
 
         <div class="setting-group">
-          <h3>Aparência</h3>
+          <h3>{{ getTranslation('settings.appearance') }}</h3>
           <div class="setting-item">
-            <label>Tema</label>
-            <select [(ngModel)]="settings.theme" (change)="onSettingChange(); previewTheme(settings.theme)">
+            <label>{{ getTranslation('settings.theme') }}</label>
+            <select [(ngModel)]="settings.theme" (change)="onThemeChange()" title="Selecionar tema da interface">
               <option *ngFor="let theme of availableThemes" [value]="theme.value">
                 {{ theme.icon }} {{ theme.name }}
               </option>
@@ -72,16 +100,16 @@
         </div>
 
         <div class="setting-group">
-          <h3>Sistema</h3>
+          <h3>{{ getTranslation('settings.system') }}</h3>
           <div class="setting-item">
-            <label>Uso de Armazenamento</label>
+            <label>{{ getTranslation('settings.storageUsage') }}</label>
             <div class="storage-info">
               <span class="storage-size">{{ getStorageUsage() }}</span>
               <button class="btn-warning" (click)="clearCache()">
-                🗑️ Limpar Cache
+                🗑️ {{ getTranslation('settings.clearCache') }}
               </button>
             </div>
-            <small>Remove todos os dados armazenados localmente</small>
+            <small>{{ getTranslation('settings.clearCacheDesc') }}</small>
           </div>
         </div>
       </div>
@@ -89,50 +117,54 @@
       <!-- Notificações -->
       <div *ngIf="activeTab === 'notifications'" class="tab-content">
         <div class="setting-group">
-          <h3>Tipos de Notificação</h3>
+          <h3>{{ getTranslation('settings.notificationTypes') }}</h3>
           <div class="setting-item checkbox-item">
             <label class="checkbox-label">
-              <input type="checkbox" [(ngModel)]="settings.notifications.email" (change)="onSettingChange()">
+              <input type="checkbox" [(ngModel)]="settings.notifications.email" (change)="onNotificationChange()">
               <span class="checkmark"></span>
-              📧 Notificações por Email
+              📧 {{ getTranslation('settings.emailNotifications') }}
             </label>
           </div>
           <div class="setting-item checkbox-item">
             <label class="checkbox-label">
-              <input type="checkbox" [(ngModel)]="settings.notifications.push" (change)="onSettingChange()">
+              <input type="checkbox" [(ngModel)]="settings.notifications.push" (change)="onNotificationChange()">
               <span class="checkmark"></span>
-              📱 Notificações Push
+              📱 {{ getTranslation('settings.pushNotifications') }}
             </label>
           </div>
           <div class="setting-item checkbox-item">
             <label class="checkbox-label">
-              <input type="checkbox" [(ngModel)]="settings.notifications.desktop" (change)="onSettingChange()">
+              <input type="checkbox" [(ngModel)]="settings.notifications.desktop" (change)="onNotificationChange()">
               <span class="checkmark"></span>
-              💻 Notificações Desktop
+              💻 {{ getTranslation('settings.desktopNotifications') }}
             </label>
           </div>
           <div class="setting-item checkbox-item">
             <label class="checkbox-label">
-              <input type="checkbox" [(ngModel)]="settings.notifications.sound" (change)="onSettingChange()">
+              <input type="checkbox" [(ngModel)]="settings.notifications.sound" (change)="onNotificationChange()">
               <span class="checkmark"></span>
-              🔊 Sons de Notificação
+              🔊 {{ getTranslation('settings.soundNotifications') }}
             </label>
+          </div>
+          <div class="setting-item checkbox-item">
             <label class="checkbox-label">
-              <input type="checkbox" [(ngModel)]="settings.notifications.projects" (change)="onSettingChange()">
+              <input type="checkbox" [(ngModel)]="settings.notifications.projects" (change)="onNotificationChange()">
               <span class="checkmark"></span>
-              📁 Notificações de Projetos
+              📁 {{ getTranslation('settings.projectNotifications') }}
             </label>
+          </div>
+          <div class="setting-item checkbox-item">
             <label class="checkbox-label">
-              <input type="checkbox" [(ngModel)]="settings.notifications.tasks" (change)="onSettingChange()">
+              <input type="checkbox" [(ngModel)]="settings.notifications.tasks" (change)="onNotificationChange()">
               <span class="checkmark"></span>
-              ✅ Notificações de Tarefas
+              ✅ {{ getTranslation('settings.taskNotifications') }}
             </label>
           </div>
           <div class="setting-item">
             <button class="btn-info" (click)="testNotifications()">
-              🔔 Testar Notificações
+              🔔 {{ getTranslation('settings.testNotifications') }}
             </button>
-            <small>Enviar uma notificação de teste</small>
+            <small>{{ getTranslation('settings.testNotificationsDesc') }}</small>
           </div>
         </div>
       </div>
@@ -140,31 +172,35 @@
       <!-- Privacidade -->
       <div *ngIf="activeTab === 'privacy'" class="tab-content">
         <div class="setting-group">
-          <h3>Visibilidade do Perfil</h3>
+          <h3>{{ getTranslation('settings.profileVisibility') }}</h3>
           <div class="setting-item checkbox-item">
             <label class="checkbox-label">
-              <input type="checkbox" [(ngModel)]="settings.privacy.profileVisible" (change)="onSettingChange()">
+              <input type="checkbox" [(ngModel)]="settings.privacy.profileVisible" (change)="onPrivacyChange()">
               <span class="checkmark"></span>
-              👤 Perfil Público
+              👤 {{ getTranslation('settings.publicProfile') }}
             </label>
           </div>
           <div class="setting-item checkbox-item">
             <label class="checkbox-label">
-              <input type="checkbox" [(ngModel)]="settings.privacy.activityVisible" (change)="onSettingChange()">
+              <input type="checkbox" [(ngModel)]="settings.privacy.activityVisible" (change)="onPrivacyChange()">
               <span class="checkmark"></span>
-              📈 Atividades Visíveis
+              📈 {{ getTranslation('settings.visibleActivities') }}
+            </label>
+          </div>
+          <div class="setting-item checkbox-item">
+          </div>
+          <div class="setting-item checkbox-item">
+            <label class="checkbox-label">
+              <input type="checkbox" [(ngModel)]="settings.privacy.emailVisible" (change)="onPrivacyChange()">
+              <span class="checkmark"></span>
+              📧 {{ getTranslation('settings.visibleEmail') }}
             </label>
           </div>
           <div class="setting-item checkbox-item">
             <label class="checkbox-label">
-              <input type="checkbox" [(ngModel)]="settings.privacy.emailVisible" (change)="onSettingChange()">
+              <input type="checkbox" [(ngModel)]="settings.privacy.shareData" (change)="onPrivacyChange()">
               <span class="checkmark"></span>
-              📧 Email Visível
-            </label>
-            <label class="checkbox-label">
-              <input type="checkbox" [(ngModel)]="settings.privacy.shareData" (change)="onSettingChange()">
-              <span class="checkmark"></span>
-              📄 Compartilhar Dados Anônimos
+              📄 {{ getTranslation('settings.shareAnonymousData') }}
             </label>
           </div>
         </div>
@@ -173,44 +209,46 @@
       <!-- Dashboard -->
       <div *ngIf="activeTab === 'dashboard'" class="tab-content">
         <div class="setting-group">
-          <h3>Atualização Automática</h3>
+          <h3>{{ getTranslation('settings.autoRefresh') }}</h3>
           <div class="setting-item checkbox-item">
             <label class="checkbox-label">
-              <input type="checkbox" [(ngModel)]="settings.dashboard.autoRefresh" (change)="onSettingChange()">
+              <input type="checkbox" [(ngModel)]="settings.dashboard.autoRefresh" (change)="onDashboardChange()">
               <span class="checkmark"></span>
-              🔄 Atualização Automática
+              🔄 {{ getTranslation('settings.autoRefresh') }}
             </label>
           </div>
           <div class="setting-item">
-            <label>Intervalo de Atualização (segundos)</label>
+            <label>{{ getTranslation('settings.refreshInterval') }}</label>
             <input type="number" [(ngModel)]="settings.dashboard.refreshInterval" 
-                   min="10" max="300" (change)="onSettingChange()">
+                   min="10" max="300" (change)="onDashboardChange()" 
+                   title="Intervalo de atualização em segundos" 
+                   placeholder="30">
           </div>
         </div>
 
         <div class="setting-group">
-          <h3>Interface</h3>
+          <h3>{{ getTranslation('settings.interface') }}</h3>
           <div class="setting-item checkbox-item">
             <label class="checkbox-label">
-              <input type="checkbox" [(ngModel)]="settings.dashboard.showAnimations" (change)="onSettingChange()">
+              <input type="checkbox" [(ngModel)]="settings.dashboard.showAnimations" (change)="onDashboardChange()">
               <span class="checkmark"></span>
-              ✨ Mostrar Animações
+              ✨ {{ getTranslation('settings.showAnimations') }}
             </label>
           </div>
           <div class="setting-item checkbox-item">
             <label class="checkbox-label">
-              <input type="checkbox" [(ngModel)]="settings.dashboard.compactMode" (change)="onSettingChange()">
+              <input type="checkbox" [(ngModel)]="settings.dashboard.compactMode" (change)="onDashboardChange()">
               <span class="checkmark"></span>
-              📱 Modo Compacto
+              📱 {{ getTranslation('settings.compactMode') }}
             </label>
           </div>
           <div class="setting-item">
-            <label>Visualização Padrão</label>
-            <select [(ngModel)]="settings.dashboard.defaultView" (change)="onSettingChange()">
-              <option value="overview">Visão Geral</option>
-              <option value="projects">Projetos</option>
-              <option value="tasks">Tarefas</option>
-              <option value="analytics">Analytics</option>
+            <label>{{ getTranslation('settings.defaultView') }}</label>
+            <select [(ngModel)]="settings.dashboard.defaultView" (change)="onDashboardChange()" title="Selecionar visualização padrão do dashboard">
+              <option value="overview">{{ getTranslation('settings.overview') }}</option>
+              <option value="projects">{{ getTranslation('settings.projects') }}</option>
+              <option value="tasks">{{ getTranslation('settings.tasks') }}</option>
+              <option value="analytics">{{ getTranslation('settings.analytics') }}</option>
             </select>
           </div>
         </div>
@@ -219,30 +257,34 @@
       <!-- Segurança -->
       <div *ngIf="activeTab === 'security'" class="tab-content">
         <div class="setting-group">
-          <h3>Autenticação</h3>
+          <h3>{{ getTranslation('settings.authentication') }}</h3>
           <div class="setting-item checkbox-item">
             <label class="checkbox-label">
-              <input type="checkbox" [(ngModel)]="settings.security.twoFactor" (change)="onSettingChange()">
+              <input type="checkbox" [(ngModel)]="settings.security.twoFactor" (change)="onSecurityChange()">
               <span class="checkmark"></span>
-              🔐 Autenticação de Dois Fatores
+              🔐 {{ getTranslation('settings.twoFactor') }}
             </label>
           </div>
           <div class="setting-item">
-            <label>Timeout da Sessão (minutos)</label>
+            <label>{{ getTranslation('settings.sessionTimeout') }}</label>
             <input type="number" [(ngModel)]="settings.security.sessionTimeout" 
-                   min="15" max="480" (change)="onSettingChange()">
+                   min="15" max="480" (change)="onSecurityChange()" 
+                   title="Timeout da sessão em minutos" 
+                   placeholder="60">
           </div>
           <div class="setting-item checkbox-item">
             <label class="checkbox-label">
-              <input type="checkbox" [(ngModel)]="settings.security.loginAlerts" (change)="onSettingChange()">
+              <input type="checkbox" [(ngModel)]="settings.security.loginAlerts" (change)="onSecurityChange()">
               <span class="checkmark"></span>
-              🚨 Alertas de Login
+              🚨 {{ getTranslation('settings.loginAlerts') }}
             </label>
           </div>
           <div class="setting-item">
-            <label>Expiração de Senha (dias)</label>
+            <label>{{ getTranslation('settings.passwordExpiry') }}</label>
             <input type="number" [(ngModel)]="settings.security.passwordExpiry" 
-                   min="30" max="365" (change)="onSettingChange()">
+                   min="30" max="365" (change)="onSecurityChange()" 
+                   title="Expiração de senha em dias" 
+                   placeholder="90">
           </div>
         </div>
       </div>
@@ -250,43 +292,43 @@
       <!-- Avançado -->
       <div *ngIf="activeTab === 'advanced'" class="tab-content">
         <div class="setting-group">
-          <h3>Recursos Experimentais</h3>
+          <h3>{{ getTranslation('settings.experimentalFeatures') }}</h3>
           <div class="setting-item checkbox-item">
             <label class="checkbox-label">
               <input type="checkbox" [(ngModel)]="settings.advanced.debugMode" (change)="onSettingChange()">
               <span class="checkmark"></span>
-              🐛 Modo Debug
+              🐛 {{ getTranslation('settings.debugMode') }}
             </label>
           </div>
           <div class="setting-item checkbox-item">
             <label class="checkbox-label">
               <input type="checkbox" [(ngModel)]="settings.advanced.betaFeatures" (change)="onSettingChange()">
               <span class="checkmark"></span>
-              🎆 Recursos Beta
+              🎆 {{ getTranslation('settings.betaFeatures') }}
             </label>
           </div>
           <div class="setting-item checkbox-item">
             <label class="checkbox-label">
               <input type="checkbox" [(ngModel)]="settings.advanced.dataCollection" (change)="onSettingChange()">
               <span class="checkmark"></span>
-              📈 Coleta de Dados de Uso
+              📈 {{ getTranslation('settings.dataCollection') }}
             </label>
           </div>
         </div>
         
         <div class="setting-group">
-          <h3>Backup e Restauração</h3>
+          <h3>{{ getTranslation('settings.backupRestore') }}</h3>
           <div class="setting-item">
             <button class="btn-primary" (click)="exportAllData()">
-              📋 Exportar Backup Completo
+              📋 {{ getTranslation('settings.exportBackup') }}
             </button>
-            <small>Inclui todas as configurações, perfil e dados</small>
+            <small>{{ getTranslation('settings.exportBackupDesc') }}</small>
           </div>
           <div class="setting-item">
             <button class="btn-secondary" (click)="backupInput.click()">
-              📁 Importar Backup
+              📁 {{ getTranslation('settings.importBackup') }}
             </button>
-            <small>Restaurar dados de um backup anterior</small>
+            <small>{{ getTranslation('settings.importBackupDesc') }}</small>
           </div>
         </div>
       </div>
@@ -295,11 +337,11 @@
 
   <div class="settings-footer">
     <button class="btn-secondary" (click)="resetSettings()">
-      🔄 Restaurar Padrões
+      🔄 {{ getTranslation('settings.restoreDefaults') }}
     </button>
     <button class="btn-primary" (click)="saveSettings()" [disabled]="!hasChanges || isSaving">
       <span *ngIf="isSaving" class="spinner"></span>
-      {{ isSaving ? 'Salvando...' : '💾 Salvar Alterações' }}
+      {{ isSaving ? getTranslation('settings.saving') : '💾 ' + getTranslation('settings.saveChanges') }}
     </button>
   </div>
 </div>

@@ -45,28 +45,28 @@
         <div class="action-icon">➕</div>
         <div class="action-text">
           <div class="action-title">{{ getTranslation('dashboard.newProject') }}</div>
-          <div class="action-subtitle">Criar um novo projeto</div>
+          <div class="action-subtitle">{{ getTranslation('dashboard.createNewProject') }}</div>
         </div>
       </div>
       <div class="action-button secondary" (click)="addNewTask()">
         <div class="action-icon">📝</div>
         <div class="action-text">
           <div class="action-title">{{ getTranslation('dashboard.newTask') }}</div>
-          <div class="action-subtitle">Adicionar nova tarefa</div>
+          <div class="action-subtitle">{{ getTranslation('dashboard.addNewTask') }}</div>
         </div>
       </div>
       <div class="action-button info" (click)="scheduleMeeting()">
         <div class="action-icon">📅</div>
         <div class="action-text">
           <div class="action-title">{{ getTranslation('dashboard.scheduleMeeting') }}</div>
-          <div class="action-subtitle">Agendar reunião</div>
+          <div class="action-subtitle">{{ getTranslation('dashboard.scheduleNewMeeting') }}</div>
         </div>
       </div>
       <div class="action-button success" (click)="generateReport()">
         <div class="action-icon">📊</div>
         <div class="action-text">
           <div class="action-title">{{ getTranslation('dashboard.generateReport') }}</div>
-          <div class="action-subtitle">Gerar relatório</div>
+          <div class="action-subtitle">{{ getTranslation('dashboard.generateNewReport') }}</div>
         </div>
       </div>
     </div>
@@ -78,9 +78,9 @@
       <!-- Client Management -->
       <div class="client-management">
         <div class="section-header">
-          <h2>🏢 Gestão de Clientes</h2>
+          <h2>🏢 {{ getTranslation('dashboard.clientManagement') }}</h2>
           <button class="manage-clients-btn" (click)="manageClients()">
-            Gerenciar Clientes
+            {{ getTranslation('dashboard.manageClients') }}
           </button>
         </div>
         <div class="clients-grid">
@@ -104,7 +104,7 @@
               </div>
               <div class="detail-item">
                 <span>📅</span>
-                <span>Contrato até: {{ client.contractEnd }}</span>
+                <span>{{ getTranslation('dashboard.contractUntil') }}: {{ client.contractEnd }}</span>
               </div>
             </div>
           </div>
@@ -114,7 +114,7 @@
       <!-- Financial Overview -->
       <div class="financial-overview">
         <div class="section-header">
-          <h2>💰 Visão Financeira</h2>
+          <h2>💰 {{ getTranslation('dashboard.financialOverview') }}</h2>
           <div class="section-actions">
             <button class="icon-btn" (click)="refreshFinancials()" title="Atualizar">🔄</button>
             <button class="icon-btn" (click)="exportFinancials()" title="Exportar">📤</button>
@@ -124,7 +124,7 @@
           <div class="financial-card revenue">
             <div class="financial-icon">💵</div>
             <div class="financial-info">
-              <h3>Receita Mensal</h3>
+              <h3>{{ getTranslation('dashboard.monthlyRevenue') }}</h3>
               <div class="financial-value">R$ {{ monthlyRevenue | number:'1.0-0' }}</div>
               <div class="financial-change positive">+18% vs mês anterior</div>
             </div>
@@ -132,7 +132,7 @@
           <div class="financial-card expenses">
             <div class="financial-icon">📊</div>
             <div class="financial-info">
-              <h3>Despesas</h3>
+              <h3>{{ getTranslation('dashboard.expenses') }}</h3>
               <div class="financial-value">R$ {{ monthlyExpenses | number:'1.0-0' }}</div>
               <div class="financial-change negative">+5% vs mês anterior</div>
             </div>
@@ -140,7 +140,7 @@
           <div class="financial-card profit">
             <div class="financial-icon">📈</div>
             <div class="financial-info">
-              <h3>Lucro Líquido</h3>
+              <h3>{{ getTranslation('dashboard.netProfit') }}</h3>
               <div class="financial-value">R$ {{ netProfit | number:'1.0-0' }}</div>
               <div class="financial-change positive">+25% vs mês anterior</div>
             </div>
@@ -148,9 +148,9 @@
           <div class="financial-card pending">
             <div class="financial-icon">⏳</div>
             <div class="financial-info">
-              <h3>A Receber</h3>
+              <h3>{{ getTranslation('dashboard.toReceive') }}</h3>
               <div class="financial-value">R$ {{ pendingReceivables | number:'1.0-0' }}</div>
-              <div class="financial-change neutral">{{ pendingInvoices }} faturas</div>
+              <div class="financial-change neutral">{{ pendingInvoices }} {{ getTranslation('dashboard.invoices') }}</div>
             </div>
           </div>
         </div>
@@ -159,9 +159,9 @@
       <!-- Team Performance -->
       <div class="team-performance">
         <div class="section-header">
-          <h2>👥 Performance da Equipe</h2>
+          <h2>👥 {{ getTranslation('dashboard.teamPerformanceTitle') }}</h2>
           <button class="manage-team-btn" (click)="manageTeam()">
-            Ver Equipe
+            {{ getTranslation('dashboard.viewTeam') }}
           </button>
         </div>
         <div class="team-grid">
@@ -172,11 +172,11 @@
               <div class="member-role">{{ member.role }}</div>
               <div class="member-stats">
                 <div class="stat">
-                  <span class="stat-label">Projetos</span>
+                  <span class="stat-label">{{ getTranslation('dashboard.projects') }}</span>
                   <span class="stat-value">{{ member.activeProjects }}</span>
                 </div>
                 <div class="stat">
-                  <span class="stat-label">Eficiência</span>
+                  <span class="stat-label">{{ getTranslation('dashboard.efficiency') }}</span>
                   <span class="stat-value">{{ member.efficiency }}%</span>
                 </div>
               </div>
@@ -389,26 +389,26 @@
 
     <!-- Support -->
     <div class="support-panel">
-      <h3>Suporte</h3>
+      <h3>{{ getTranslation('dashboard.support') }}</h3>
       <div class="support-options">
         <button class="support-btn chat" (click)="openChatSupport()">
           <div class="support-icon">💬</div>
           <div class="support-info">
-            <div class="support-title">Chat ao Vivo</div>
-            <div class="support-subtitle">Resposta imediata</div>
+            <div class="support-title">{{ getTranslation('dashboard.liveChat') }}</div>
+            <div class="support-subtitle">{{ getTranslation('dashboard.immediateResponse') }}</div>
           </div>
         </button>
         <button class="support-btn email" (click)="sendSupportEmail()">
           <div class="support-icon">📧</div>
           <div class="support-info">
-            <div class="support-title">Email</div>
-            <div class="support-subtitle">Resposta em 24h</div>
+            <div class="support-title">{{ getTranslation('dashboard.email') }}</div>
+            <div class="support-subtitle">{{ getTranslation('dashboard.response24h') }}</div>
           </div>
         </button>
         <button class="support-btn phone" (click)="callSupport()">
           <div class="support-icon">📞</div>
           <div class="support-info">
-            <div class="support-title">Telefone e WhatsApp</div>
+            <div class="support-title">{{ getTranslation('dashboard.phoneWhatsapp') }}</div>
             <div class="support-subtitle">+55 98 999649-9215</div>
           </div>
         </button>
@@ -422,7 +422,7 @@
   <div class="component-container">
     <div class="component-header">
       <button class="component-close" (click)="closeAllComponents()" title="Voltar ao Dashboard" aria-label="Voltar ao Dashboard">
-        ← Voltar ao Dashboard
+        ← {{ getTranslation('dashboard.backToDashboard') }}
       </button>
     </div>
     
@@ -437,23 +437,23 @@
 <div class="modal-overlay" *ngIf="showReportModal" (click)="closeReportModal()">
   <div class="report-modal" (click)="$event.stopPropagation()">
     <div class="report-header">
-      <h2>📊 Gerar Relatório</h2>
-      <p>Escolha o tipo de relatório que deseja gerar</p>
+      <h2>📊 {{ getTranslation('dashboard.generateReport') }}</h2>
+      <p>{{ getTranslation('dashboard.chooseReportType') }}</p>
       <button class="modal-close" (click)="closeReportModal()" title="Fechar modal" aria-label="Fechar modal de relatórios">×</button>
     </div>
     
     <div class="report-stats">
       <div class="stat-item">
         <div class="stat-number">{{ activeProjects.length }}</div>
-        <div class="stat-label">Projetos</div>
+        <div class="stat-label">{{ getTranslation('dashboard.projects') }}</div>
       </div>
       <div class="stat-item">
         <div class="stat-number">{{ tasks.length }}</div>
-        <div class="stat-label">Tarefas</div>
+        <div class="stat-label">{{ getTranslation('dashboard.tasks') }}</div>
       </div>
       <div class="stat-item">
         <div class="stat-number">{{ productivityScore }}%</div>
-        <div class="stat-label">Produtividade</div>
+        <div class="stat-label">{{ getTranslation('dashboard.productivity') }}</div>
       </div>
     </div>
     
@@ -461,8 +461,8 @@
       <div class="report-card" (click)="generateSelectedReport('projects')">
         <div class="report-icon">📁</div>
         <div class="report-info">
-          <h3>Relatório de Projetos</h3>
-          <p>Lista completa de todos os projetos com status, progresso e prazos detalhados</p>
+          <h3>{{ getTranslation('dashboard.projectReport') }}</h3>
+          <p>{{ getTranslation('dashboard.projectReportDesc') }}</p>
           <div class="report-meta">
             <span class="format">CSV</span>
             <span class="count">{{ activeProjects.length }} projetos</span>
@@ -474,8 +474,8 @@
       <div class="report-card" (click)="generateSelectedReport('tasks')">
         <div class="report-icon">✅</div>
         <div class="report-info">
-          <h3>Relatório de Tarefas</h3>
-          <p>Todas as tarefas com prioridades, status e associações a projetos específicos</p>
+          <h3>{{ getTranslation('dashboard.taskReport') }}</h3>
+          <p>{{ getTranslation('dashboard.taskReportDesc') }}</p>
           <div class="report-meta">
             <span class="format">CSV</span>
             <span class="count">{{ tasks.length }} tarefas</span>
@@ -487,8 +487,8 @@
       <div class="report-card" (click)="generateSelectedReport('analytics')">
         <div class="report-icon">📈</div>
         <div class="report-info">
-          <h3>Relatório de Analytics</h3>
-          <p>Métricas avançadas de produtividade, performance da equipe e satisfação</p>
+          <h3>{{ getTranslation('dashboard.analyticsReport') }}</h3>
+          <p>{{ getTranslation('dashboard.analyticsReportDesc') }}</p>
           <div class="report-meta">
             <span class="format">HTML</span>
             <span class="count">4 métricas</span>
@@ -500,22 +500,22 @@
       <div class="report-card featured" (click)="generateSelectedReport('complete')">
         <div class="report-icon">📋</div>
         <div class="report-info">
-          <h3>Relatório Executivo Completo</h3>
-          <p>Dashboard executivo com todos os dados, gráficos interativos e insights estratégicos</p>
+          <h3>{{ getTranslation('dashboard.executiveReport') }}</h3>
+          <p>{{ getTranslation('dashboard.executiveReportDesc') }}</p>
           <div class="report-meta">
             <span class="format premium">HTML Premium</span>
-            <span class="count">Tudo incluído</span>
+            <span class="count">{{ getTranslation('dashboard.allIncluded') }}</span>
           </div>
         </div>
         <div class="report-arrow">→</div>
-        <div class="featured-badge">⭐ Recomendado</div>
+        <div class="featured-badge">⭐ {{ getTranslation('dashboard.recommended') }}</div>
       </div>
     </div>
     
     <div class="report-footer">
       <div class="report-info-text">
         <span>⚡</span>
-        <p>Relatórios gerados instantaneamente e baixados automaticamente</p>
+        <p>{{ getTranslation('dashboard.reportsGenerated') }}</p>
       </div>
     </div>
   </div>
@@ -525,41 +525,41 @@
 <div class="modal-overlay" *ngIf="showProjectModal" (click)="closeProjectModal()">
   <div class="modal-content" (click)="$event.stopPropagation()">
     <div class="modal-header">
-      <h3>{{ isEditingProject ? 'Editar Projeto' : 'Novo Projeto' }}</h3>
+      <h3>{{ isEditingProject ? getTranslation('dashboard.editProject') : getTranslation('dashboard.newProject') }}</h3>
       <button class="modal-close" (click)="closeProjectModal()" title="Fechar modal" aria-label="Fechar modal de projeto">×</button>
     </div>
     <div class="modal-body">
       <div class="form-group">
-        <label for="project-name">Nome do Projeto</label>
+        <label for="project-name">{{ getTranslation('dashboard.projectName') }}</label>
         <input id="project-name" type="text" [(ngModel)]="currentProject.name" placeholder="Digite o nome do projeto" aria-label="Nome do projeto">
       </div>
       <div class="form-group">
-        <label for="project-description">Descrição</label>
+        <label for="project-description">{{ getTranslation('dashboard.description') }}</label>
         <textarea id="project-description" [(ngModel)]="currentProject.description" placeholder="Descreva o projeto" aria-label="Descrição do projeto"></textarea>
       </div>
       <div class="form-row">
         <div class="form-group">
-          <label for="project-status">Status</label>
+          <label for="project-status">{{ getTranslation('dashboard.status') }}</label>
           <select id="project-status" [(ngModel)]="currentProject.status" aria-label="Status do projeto">
-            <option value="planning">Planejamento</option>
-            <option value="in-progress">Em Andamento</option>
-            <option value="review">Em Revisão</option>
-            <option value="completed">Concluído</option>
+            <option value="planning">{{ getTranslation('dashboard.planning') }}</option>
+            <option value="in-progress">{{ getTranslation('dashboard.inProgress') }}</option>
+            <option value="review">{{ getTranslation('dashboard.review') }}</option>
+            <option value="completed">{{ getTranslation('dashboard.completed') }}</option>
           </select>
         </div>
         <div class="form-group">
-          <label for="project-team-size">Tamanho da Equipe</label>
+          <label for="project-team-size">{{ getTranslation('dashboard.teamSize') }}</label>
           <input id="project-team-size" type="number" [(ngModel)]="currentProject.teamSize" min="1" aria-label="Tamanho da equipe">
         </div>
       </div>
       <div class="form-group">
-        <label for="project-deadline">Data de Entrega</label>
+        <label for="project-deadline">{{ getTranslation('dashboard.deadline') }}</label>
         <input id="project-deadline" type="date" [(ngModel)]="currentProject.deadline" aria-label="Data de entrega">
       </div>
     </div>
     <div class="modal-footer">
-      <button class="btn-secondary" (click)="closeProjectModal()">Cancelar</button>
-      <button class="btn-primary" (click)="saveProject()">{{ isEditingProject ? 'Atualizar' : 'Criar' }}</button>
+      <button class="btn-secondary" (click)="closeProjectModal()">{{ getTranslation('dashboard.cancel') }}</button>
+      <button class="btn-primary" (click)="saveProject()">{{ isEditingProject ? getTranslation('dashboard.update') : getTranslation('dashboard.create') }}</button>
     </div>
   </div>
 </div>
@@ -568,43 +568,43 @@
 <div class="modal-overlay" *ngIf="showTaskModal" (click)="closeTaskModal()">
   <div class="modal-content" (click)="$event.stopPropagation()">
     <div class="modal-header">
-      <h3>{{ isEditingTask ? 'Editar Tarefa' : 'Nova Tarefa' }}</h3>
+      <h3>{{ isEditingTask ? getTranslation('dashboard.editTask') : getTranslation('dashboard.newTask') }}</h3>
       <button class="modal-close" (click)="closeTaskModal()" title="Fechar modal" aria-label="Fechar modal de tarefa">×</button>
     </div>
     <div class="modal-body">
       <div class="form-group">
-        <label for="task-title">Título da Tarefa</label>
+        <label for="task-title">{{ getTranslation('dashboard.taskTitle') }}</label>
         <input id="task-title" type="text" [(ngModel)]="currentTask.title" placeholder="Digite o título da tarefa" aria-label="Título da tarefa">
       </div>
       <div class="form-group">
-        <label for="task-description">Descrição</label>
+        <label for="task-description">{{ getTranslation('dashboard.description') }}</label>
         <textarea id="task-description" [(ngModel)]="currentTask.description" placeholder="Descreva a tarefa" aria-label="Descrição da tarefa"></textarea>
       </div>
       <div class="form-row">
         <div class="form-group">
-          <label for="task-project">Projeto</label>
+          <label for="task-project">{{ getTranslation('dashboard.project') }}</label>
           <select id="task-project" [(ngModel)]="currentTask.projectId" aria-label="Projeto associado">
-            <option value="">Nenhum projeto</option>
+            <option value="">{{ getTranslation('dashboard.noProject') }}</option>
             <option *ngFor="let project of activeProjects" [value]="project.id">{{ project.name }}</option>
           </select>
         </div>
         <div class="form-group">
-          <label for="task-priority">Prioridade</label>
+          <label for="task-priority">{{ getTranslation('dashboard.priority') }}</label>
           <select id="task-priority" [(ngModel)]="currentTask.priority" aria-label="Prioridade da tarefa">
-            <option value="low">Baixa</option>
-            <option value="medium">Média</option>
-            <option value="high">Alta</option>
+            <option value="low">{{ getTranslation('dashboard.low') }}</option>
+            <option value="medium">{{ getTranslation('dashboard.medium') }}</option>
+            <option value="high">{{ getTranslation('dashboard.high') }}</option>
           </select>
         </div>
       </div>
       <div class="form-group">
-        <label for="task-due-date">Data de Vencimento</label>
+        <label for="task-due-date">{{ getTranslation('dashboard.dueDate') }}</label>
         <input id="task-due-date" type="date" [(ngModel)]="currentTask.dueDate" aria-label="Data de vencimento">
       </div>
     </div>
     <div class="modal-footer">
-      <button class="btn-secondary" (click)="closeTaskModal()">Cancelar</button>
-      <button class="btn-primary" (click)="saveTask()">{{ isEditingTask ? 'Atualizar' : 'Criar' }}</button>
+      <button class="btn-secondary" (click)="closeTaskModal()">{{ getTranslation('dashboard.cancel') }}</button>
+      <button class="btn-primary" (click)="saveTask()">{{ isEditingTask ? getTranslation('dashboard.update') : getTranslation('dashboard.create') }}</button>
     </div>
   </div>
 </div>
@@ -613,36 +613,36 @@
 <div class="modal-overlay" *ngIf="showMeetingModal" (click)="closeMeetingModal()">
   <div class="modal-content" (click)="$event.stopPropagation()">
     <div class="modal-header">
-      <h3>Agendar Reunião</h3>
+      <h3>{{ getTranslation('dashboard.scheduleMeeting') }}</h3>
       <button class="modal-close" (click)="closeMeetingModal()" title="Fechar modal" aria-label="Fechar modal de reunião">×</button>
     </div>
     <div class="modal-body">
       <div class="form-group">
-        <label for="meeting-title">Título da Reunião</label>
+        <label for="meeting-title">{{ getTranslation('dashboard.meetingTitle') }}</label>
         <input id="meeting-title" type="text" [(ngModel)]="currentMeeting.title" placeholder="Digite o título da reunião" aria-label="Título da reunião">
       </div>
       <div class="form-row">
         <div class="form-group">
-          <label for="meeting-date">Data</label>
+          <label for="meeting-date">{{ getTranslation('dashboard.date') }}</label>
           <input id="meeting-date" type="date" [(ngModel)]="currentMeeting.date" aria-label="Data da reunião">
         </div>
         <div class="form-group">
-          <label for="meeting-time">Horário</label>
+          <label for="meeting-time">{{ getTranslation('dashboard.time') }}</label>
           <input id="meeting-time" type="time" [(ngModel)]="currentMeeting.time" aria-label="Horário da reunião">
         </div>
       </div>
       <div class="form-group">
-        <label for="meeting-participants">Participantes</label>
-        <input id="meeting-participants" type="text" [(ngModel)]="currentMeeting.participants" placeholder="Separados por vírgula" aria-label="Participantes da reunião">
+        <label for="meeting-participants">{{ getTranslation('dashboard.participants') }}</label>
+        <input id="meeting-participants" type="text" [(ngModel)]="currentMeeting.participants" [placeholder]="getTranslation('dashboard.separatedByComma')" aria-label="Participantes da reunião">
       </div>
       <div class="form-group">
-        <label for="meeting-description">Descrição</label>
+        <label for="meeting-description">{{ getTranslation('dashboard.description') }}</label>
         <textarea id="meeting-description" [(ngModel)]="currentMeeting.description" placeholder="Descreva a reunião" aria-label="Descrição da reunião"></textarea>
       </div>
     </div>
     <div class="modal-footer">
-      <button class="btn-secondary" (click)="closeMeetingModal()">Cancelar</button>
-      <button class="btn-primary" (click)="saveMeeting()">Agendar</button>
+      <button class="btn-secondary" (click)="closeMeetingModal()">{{ getTranslation('dashboard.cancel') }}</button>
+      <button class="btn-primary" (click)="saveMeeting()">{{ getTranslation('dashboard.schedule') }}</button>
     </div>
   </div>
 </div>

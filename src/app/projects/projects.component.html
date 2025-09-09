@@ -4,7 +4,7 @@
     <div class="header-content">
       <button class="back-btn" (click)="goBack()">
         <span class="back-icon">←</span>
-        Voltar ao Dashboard
+Voltar ao Dashboard
       </button>
       <div class="header-info">
         <h1>📊 Todos os Projetos</h1>
@@ -13,7 +13,7 @@
       <div class="header-actions">
         <button class="export-btn" (click)="exportProjects()">
           <span class="btn-icon">📤</span>
-          Exportar
+Exportar
         </button>
       </div>
     </div>
@@ -29,6 +29,8 @@
           placeholder="Buscar projetos..." 
           [(ngModel)]="searchTerm" 
           (input)="onSearchChange()"
+          title="Buscar projetos"
+          aria-label="Buscar projetos"
         >
       </div>
       
@@ -44,17 +46,17 @@
       </div>
 
       <div class="filter-group">
-        <label>Ordenar por:</label>
+        <label>{{ getTranslation('projects.sortBy') }}:</label>
         <select [(ngModel)]="sortBy" (change)="onSortChange()" title="Ordenar projetos por critério">
-          <option value="name">Nome</option>
-          <option value="deadline">Prazo</option>
-          <option value="progress">Progresso</option>
-          <option value="priority">Prioridade</option>
-          <option value="budget">Orçamento</option>
+          <option value="name">{{ getTranslation('projects.name') }}</option>
+          <option value="deadline">{{ getTranslation('projects.deadline') }}</option>
+          <option value="progress">{{ getTranslation('projects.progress') }}</option>
+          <option value="priority">{{ getTranslation('projects.priority') }}</option>
+          <option value="budget">{{ getTranslation('projects.budget') }}</option>
         </select>
       </div>
 
-      <button class="sort-order-btn" (click)="toggleSortOrder()" [title]="sortOrder === 'asc' ? 'Crescente' : 'Decrescente'">
+      <button class="sort-order-btn" (click)="toggleSortOrder()" [title]="sortOrder === 'asc' ? getTranslation('projects.ascending') : getTranslation('projects.descending')">
         <span class="sort-icon">{{ sortOrder === 'asc' ? '↑' : '↓' }}</span>
       </button>
     </div>
@@ -66,28 +68,28 @@
       <div class="stat-icon">📁</div>
       <div class="stat-info">
         <div class="stat-number">{{ filteredProjects.length }}</div>
-        <div class="stat-label">Projetos Encontrados</div>
+        <div class="stat-label">{{ getTranslation('projects.found') }}</div>
       </div>
     </div>
     <div class="stat-card">
       <div class="stat-icon">⚡</div>
       <div class="stat-info">
         <div class="stat-number">{{ inProgressCount }}</div>
-        <div class="stat-label">Em Andamento</div>
+        <div class="stat-label">{{ getTranslation('projects.inProgress') }}</div>
       </div>
     </div>
     <div class="stat-card">
       <div class="stat-icon">✅</div>
       <div class="stat-info">
         <div class="stat-number">{{ completedCount }}</div>
-        <div class="stat-label">Concluídos</div>
+        <div class="stat-label">{{ getTranslation('projects.completed') }}</div>
       </div>
     </div>
     <div class="stat-card">
       <div class="stat-icon">💰</div>
       <div class="stat-info">
         <div class="stat-number">R$ {{ totalBudgetFormatted }}K</div>
-        <div class="stat-label">Orçamento Total</div>
+        <div class="stat-label">{{ getTranslation('projects.totalBudget') }}</div>
       </div>
     </div>
   </div>
@@ -104,7 +106,7 @@
               {{ project.statusText }}
             </span>
             <span class="priority-badge" [ngClass]="getPriorityClass(project.priority)">
-              {{ project.priority === 'high' ? 'Alta' : project.priority === 'medium' ? 'Média' : 'Baixa' }}
+              {{ project.priority === 'high' ? getTranslation('projects.high') : project.priority === 'medium' ? getTranslation('projects.medium') : getTranslation('projects.low') }}
             </span>
           </div>
         </div>
@@ -128,30 +130,30 @@
         <div class="project-details">
           <div class="detail-item">
             <span class="detail-icon">👤</span>
-            <span class="detail-label">Cliente:</span>
+            <span class="detail-label">{{ getTranslation('projects.client') }}:</span>
             <span class="detail-value">{{ project.client }}</span>
           </div>
           <div class="detail-item">
             <span class="detail-icon">👥</span>
-            <span class="detail-label">Equipe:</span>
-            <span class="detail-value">{{ project.teamSize }} membros</span>
+            <span class="detail-label">{{ getTranslation('projects.team') }}:</span>
+            <span class="detail-value">{{ project.teamSize }} {{ getTranslation('projects.members') }}</span>
           </div>
           <div class="detail-item">
             <span class="detail-icon">📅</span>
-            <span class="detail-label">Prazo:</span>
+            <span class="detail-label">{{ getTranslation('projects.deadline') }}:</span>
             <span class="detail-value" [ngClass]="'deadline-' + getDeadlineStatus(project.deadline)">
               {{ project.deadline }}
               <span class="days-remaining" *ngIf="getDaysUntilDeadline(project.deadline) >= 0">
-                ({{ getDaysUntilDeadline(project.deadline) }} dias)
+                ({{ getDaysUntilDeadline(project.deadline) }} {{ getTranslation('projects.days') }})
               </span>
               <span class="overdue" *ngIf="getDaysUntilDeadline(project.deadline) < 0">
-                ({{ Math.abs(getDaysUntilDeadline(project.deadline)) }} dias atrasado)
+                ({{ Math.abs(getDaysUntilDeadline(project.deadline)) }} {{ getTranslation('projects.daysLate') }})
               </span>
             </span>
           </div>
           <div class="detail-item">
             <span class="detail-icon">💰</span>
-            <span class="detail-label">Orçamento:</span>
+            <span class="detail-label">{{ getTranslation('projects.budget') }}:</span>
             <span class="detail-value">R$ {{ project.budget.toLocaleString('pt-BR') }}</span>
           </div>
         </div>
@@ -160,7 +162,7 @@
       <!-- Progress Bar -->
       <div class="project-progress">
         <div class="progress-header">
-          <span class="progress-label">Progresso</span>
+          <span class="progress-label">{{ getTranslation('projects.progress') }}</span>
           <span class="progress-value">{{ project.progress }}%</span>
         </div>
         <div class="progress-bar">
@@ -173,10 +175,10 @@
   <!-- Empty State -->
   <div class="empty-state" *ngIf="filteredProjects.length === 0">
     <div class="empty-icon">📂</div>
-    <h3>Nenhum projeto encontrado</h3>
-    <p>Tente ajustar os filtros ou termos de busca</p>
+    <h3>{{ getTranslation('projects.noProjectsFound') }}</h3>
+    <p>{{ getTranslation('projects.adjustFilters') }}</p>
     <button class="clear-filters-btn" (click)="clearFilters()">
-      Limpar Filtros
+      {{ getTranslation('projects.clearFilters') }}
     </button>
   </div>
 </div>
