@@ -17,6 +17,8 @@ export const routes: Routes = [
   { path: 'verify-code', loadComponent: () => import('./verify-code/verify-code.component').then(m => m.VerifyCodeComponent) },
   { path: 'dashboard', loadComponent: () => import('./dashboard/dashboard.component').then(m => m.DashboardComponent) },
   { path: 'projects', loadComponent: () => import('./projects/projects.component').then(m => m.ProjectsComponent) },
+
+
   { path: 'profile', loadComponent: () => import('./profile/profile.component').then(m => m.ProfileComponent) },
   { path: 'settings', loadComponent: () => import('./settings/settings.component').then(m => m.SettingsComponent) },
   { path: 'reset-password', loadComponent: () => import('./reset-password/reset-password.component').then(m => m.ResetPasswordComponent) },
