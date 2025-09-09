@@ -47,7 +47,7 @@
               id="password"
               formControlName="password"
               placeholder="Digite sua senha atual"
-              [class.invalid]="deleteForm.get('password')?.invalid && deleteForm.get('password')?.touched"
+              [class]="getPasswordFieldClass()"
             />
             <button type="button" class="toggle-password" (click)="togglePasswordVisibility()">
               {{ showPassword ? '👁️' : '🙈' }}
@@ -65,8 +65,11 @@
           class="btn-primary" 
           (click)="verifyPassword()"
           [disabled]="isLoading || !deleteForm.get('password')?.value">
-          <span *ngIf="!isLoading">Verificar Senha</span>
-          <span *ngIf="isLoading">⏳ Verificando...</span>
+          <span *ngIf="!isLoading">🔐 Verificar Senha</span>
+          <span *ngIf="isLoading">
+            <span class="loading-spinner"></span>
+            Verificando...
+          </span>
         </button>
       </div>
     </div>
@@ -102,8 +105,7 @@
             id="confirmText"
             formControlName="confirmText"
             placeholder="EXCLUIR CONTA"
-            [class.valid]="deleteForm.get('confirmText')?.value === 'EXCLUIR CONTA'"
-            [class.invalid]="deleteForm.get('confirmText')?.invalid && deleteForm.get('confirmText')?.touched"
+            [class]="getConfirmTextFieldClass()"
           />
           <div *ngIf="deleteForm.get('confirmText')?.errors?.['invalidConfirmText'] && deleteForm.get('confirmText')?.touched" class="error">
             Digite exatamente "EXCLUIR CONTA"
@@ -138,7 +140,10 @@
           (click)="deleteAccount()"
           [disabled]="isLoading || !isStep3FormValid()">
           <span *ngIf="!isLoading">🗑️ EXCLUIR CONTA PERMANENTEMENTE</span>
-          <span *ngIf="isLoading">⏳ Excluindo...</span>
+          <span *ngIf="isLoading">
+            <span class="loading-spinner"></span>
+            Excluindo...
+          </span>
         </button>
       </div>
     </div>

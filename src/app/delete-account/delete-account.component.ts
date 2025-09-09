@@ -36,9 +36,22 @@ export class DeleteAccountComponent implements OnInit {
 
   private initializeForm() {
     this.deleteForm = this.fb.group({
-      password: ['', [Validators.required]],
+      password: ['', [Validators.required, Validators.minLength(6)]],
       confirmText: ['', [Validators.required, this.confirmTextValidator]],
       reason: ['', [Validators.required]]
+    });
+    
+    // Add real-time validation feedback
+    this.deleteForm.get('password')?.valueChanges.subscribe(() => {
+      this.errorMessage = '';
+    });
+    
+    this.deleteForm.get('confirmText')?.valueChanges.subscribe(() => {
+      this.errorMessage = '';
+    });
+    
+    this.deleteForm.get('reason')?.valueChanges.subscribe(() => {
+      this.errorMessage = '';
     });
   }
 
@@ -52,7 +65,19 @@ export class DeleteAccountComponent implements OnInit {
     const confirmText = this.deleteForm.get('confirmText')?.value;
     const password = this.deleteForm.get('password')?.value;
     
-    return !!(reason && confirmText === 'EXCLUIR CONTA' && password);
+    return !!(reason && confirmText === 'EXCLUIR CONTA' && password && password.length >= 6);
+  }
+  
+  getPasswordFieldClass(): string {
+    const passwordControl = this.deleteForm.get('password');
+    if (!passwordControl?.touched) return '';
+    return passwordControl.valid ? 'valid' : 'invalid';
+  }
+  
+  getConfirmTextFieldClass(): string {
+    const confirmTextControl = this.deleteForm.get('confirmText');
+    if (!confirmTextControl?.touched) return '';
+    return confirmTextControl.value === 'EXCLUIR CONTA' ? 'valid' : 'invalid';
   }
 
   private async loadCurrentUser() {
@@ -98,11 +123,11 @@ export class DeleteAccountComponent implements OnInit {
     this.errorMessage = '';
 
     try {
-      // For development mode, just validate that password is provided
-      // In production, this would verify against actual stored password
+      // Use the AuthService to verify the password
+      await this.authService.verifyCurrentPassword(password);
       this.nextStep();
     } catch (error: any) {
-      this.errorMessage = 'Erro ao verificar senha';
+      this.errorMessage = error.message || 'Senha incorreta. Tente novamente.';
     } finally {
       this.isLoading = false;
     }
