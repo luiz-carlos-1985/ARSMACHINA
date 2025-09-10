@@ -1,0 +1,94 @@
+/* Correção específica para stat cards no mobile */
+
+/* Força responsividade dos stat cards */
+.live-stats {
+  display: grid !important;
+  width: 100% !important;
+  gap: 15px !important;
+  margin-bottom: 20px !important;
+}
+
+.stat-card {
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+  align-items: center !important;
+  text-align: center !important;
+  box-sizing: border-box !important;
+  width: 100% !important;
+  min-height: 120px !important;
+}
+
+/* Mobile - 2 colunas */
+@media (max-width: 768px) {
+  .live-stats {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 10px !important;
+  }
+  
+  .stat-card {
+    padding: 15px 8px !important;
+    min-height: 110px !important;
+  }
+  
+  .stat-icon {
+    font-size: 1.4em !important;
+    margin-bottom: 8px !important;
+  }
+  
+  .stat-value {
+    font-size: 1.3em !important;
+    font-weight: bold !important;
+    margin-bottom: 4px !important;
+    line-height: 1.1 !important;
+  }
+  
+  .stat-label {
+    font-size: 0.75em !important;
+    line-height: 1.2 !important;
+  }
+}
+
+/* Mobile pequeno - 1 coluna */
+@media (max-width: 480px) {
+  .live-stats {
+    grid-template-columns: 1fr !important;
+    gap: 12px !important;
+  }
+  
+  .stat-card {
+    padding: 18px 12px !important;
+    min-height: 130px !important;
+  }
+  
+  .stat-icon {
+    font-size: 1.8em !important;
+    margin-bottom: 10px !important;
+  }
+  
+  .stat-value {
+    font-size: 1.6em !important;
+    margin-bottom: 6px !important;
+  }
+  
+  .stat-label {
+    font-size: 0.85em !important;
+    font-weight: 500 !important;
+  }
+}
+
+/* Telas muito pequenas */
+@media (max-width: 360px) {
+  .stat-card {
+    padding: 15px 10px !important;
+    min-height: 120px !important;
+  }
+  
+  .stat-value {
+    font-size: 1.4em !important;
+  }
+  
+  .stat-label {
+    font-size: 0.8em !important;
+  }
+}

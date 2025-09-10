@@ -8,7 +8,7 @@ import { TranslationService } from '../translation.service';
   standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './reports.component.html',
-  styleUrls: ['./reports.component.css']
+  styleUrls: ['./reports.component.css', './stat-cards-mobile.css']
 })
 export class ReportsComponent implements OnInit {
   reportTypes = [

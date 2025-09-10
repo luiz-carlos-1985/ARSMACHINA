@@ -4996,7 +4996,7 @@
   }
 
   .report-stats {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, 1fr);
     gap: 15px;
     padding: 20px 25px 0;
   }
@@ -5056,6 +5056,8 @@
   }
 
   .report-stats {
+    grid-template-columns: 1fr;
+    gap: 12px;
     padding: 15px 20px 0;
   }
 
@@ -5181,9 +5183,9 @@
 }
 
 .report-stats {
-  display: grid;
+  display: initial;
   grid-template-columns: repeat(3, 1fr);
-  gap: 20px;
+  gap: 30px;
   padding: 30px 40px 0;
   background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
 }

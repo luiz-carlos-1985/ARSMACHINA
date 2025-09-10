@@ -15,6 +15,7 @@ interface ReportData {
   selector: 'app-enhanced-reports',
   standalone: true,
   imports: [CommonModule, FormsModule],
+  styleUrls: ['./stat-cards-mobile.css'],
   template: `
     <div class="enhanced-reports-container">
       <div class="reports-header">
@@ -298,35 +299,51 @@ interface ReportData {
     }
 
     .live-stats {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 20px;
-      margin-bottom: 30px;
+      display: grid !important;
+      grid-template-columns: repeat(4, 1fr) !important;
+      gap: 25px !important;
+      margin-bottom: 30px !important;
+      width: 100% !important;
     }
 
     .stat-card {
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      color: white;
-      padding: 25px;
-      border-radius: 12px;
-      text-align: center;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+      color: white !important;
+      padding: 20px 10px !important;
+      border-radius: 12px !important;
+      text-align: center !important;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1) !important;
+      display: flex !important;
+      flex-direction: column !important;
+      justify-content: center !important;
+      align-items: center !important;
+      min-height: 120px !important;
+      width: 100% !important;
+      box-sizing: border-box !important;
     }
 
     .stat-icon {
       font-size: 2em;
       margin-bottom: 10px;
+      flex-shrink: 0;
     }
 
     .stat-value {
       font-size: 2em;
       font-weight: bold;
       margin-bottom: 5px;
+      line-height: 1.2;
+      word-break: break-word;
+      text-align: center;
+      width: 100%;
     }
 
     .stat-label {
       opacity: 0.9;
       font-size: 0.9em;
+      text-align: center;
+      line-height: 1.3;
+      width: 100%;
     }
 
     .advanced-generator {
@@ -785,25 +802,45 @@ interface ReportData {
 
     @media (max-width: 768px) {
       .enhanced-reports-container {
-        padding: 10px;
-        margin: 5px;
+        padding: 10px !important;
+        margin: 5px !important;
       }
       
       .reports-header h2 {
-        font-size: 1.5em;
+        font-size: 1.5em !important;
       }
       
       .live-stats {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 10px;
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 15px !important;
+        margin-bottom: 20px !important;
       }
       
       .stat-card {
-        padding: 15px;
+        padding: 12px 8px !important;
+        min-height: 100px !important;
+        display: flex !important;
+        flex-direction: column !important;
+        justify-content: center !important;
+        align-items: center !important;
+      }
+      
+      .stat-icon {
+        font-size: 1.3em !important;
+        margin-bottom: 6px !important;
       }
       
       .stat-value {
-        font-size: 1.5em;
+        font-size: 1.2em !important;
+        margin-bottom: 3px !important;
+        line-height: 1.1 !important;
+        word-break: break-word !important;
+      }
+      
+      .stat-label {
+        font-size: 0.7em !important;
+        text-align: center !important;
+        line-height: 1.1 !important;
       }
       
       .advanced-generator,
@@ -935,24 +972,46 @@ interface ReportData {
     
     @media (max-width: 480px) {
       .enhanced-reports-container {
-        padding: 5px;
+        padding: 8px !important;
+        margin: 2px !important;
       }
       
       .live-stats {
-        grid-template-columns: 1fr;
-        gap: 8px;
+        grid-template-columns: 1fr !important;
+        gap: 15px !important;
+        margin-bottom: 20px !important;
       }
       
       .stat-card {
-        padding: 12px;
+        padding: 15px 10px !important;
+        min-height: 110px !important;
+        display: flex !important;
+        flex-direction: column !important;
+        justify-content: center !important;
+        align-items: center !important;
+        text-align: center !important;
+        border-radius: 10px !important;
+      }
+      
+      .stat-icon {
+        font-size: 1.6em !important;
+        margin-bottom: 8px !important;
       }
       
       .stat-value {
-        font-size: 1.3em;
+        font-size: 1.4em !important;
+        font-weight: bold !important;
+        margin-bottom: 5px !important;
+        line-height: 1 !important;
+        word-break: break-word !important;
       }
       
       .stat-label {
-        font-size: 0.8em;
+        font-size: 0.75em !important;
+        opacity: 0.9 !important;
+        text-align: center !important;
+        line-height: 1.2 !important;
+        font-weight: 500 !important;
       }
       
       .advanced-generator,
@@ -999,6 +1058,49 @@ interface ReportData {
       }
       
       .template-info p {
+        font-size: 0.8em;
+      }
+    }
+    
+    /* Telas muito pequenas (320px) */
+    @media (max-width: 320px) {
+      .enhanced-reports-container {
+        padding: 5px;
+        margin: 0;
+      }
+      
+      .live-stats {
+        grid-template-columns: 1fr;
+        gap: 10px;
+        margin-bottom: 15px;
+      }
+      
+      .stat-card {
+        padding: 15px 10px;
+        min-height: 120px;
+        border-radius: 10px;
+      }
+      
+      .stat-icon {
+        font-size: 1.8em;
+        margin-bottom: 8px;
+      }
+      
+      .stat-value {
+        font-size: 1.5em;
+        margin-bottom: 6px;
+      }
+      
+      .stat-label {
+        font-size: 0.8em;
+        line-height: 1.2;
+      }
+      
+      .reports-header h2 {
+        font-size: 1.3em;
+      }
+      
+      .reports-header p {
         font-size: 0.8em;
       }
     }
