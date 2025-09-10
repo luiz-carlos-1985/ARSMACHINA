@@ -7,7 +7,7 @@
         Voltar ao Dashboard
       </button>
       <div class="header-info">
-        <h1>🔔 Todas as Notificações</h1>
+        <h1>Todas as Notificações</h1>
         <p>Gerencie e acompanhe todas as suas notificações</p>
       </div>
       <div class="header-actions">
@@ -34,7 +34,7 @@
       
       <div class="filter-group">
         <label>Tipo:</label>
-        <select [(ngModel)]="typeFilter" (change)="onTypeFilterChange()">
+        <select [(ngModel)]="typeFilter" (change)="onTypeFilterChange()" title="Filtrar por tipo de notificação">
           <option value="all">Todos</option>
           <option value="info">Informação</option>
           <option value="warning">Aviso</option>
@@ -45,7 +45,7 @@
 
       <div class="filter-group">
         <label>Status:</label>
-        <select [(ngModel)]="statusFilter" (change)="onStatusFilterChange()">
+        <select [(ngModel)]="statusFilter" (change)="onStatusFilterChange()" title="Filtrar por status de leitura">
           <option value="all">Todas</option>
           <option value="unread">Não Lidas</option>
           <option value="read">Lidas</option>

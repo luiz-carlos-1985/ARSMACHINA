@@ -1,13 +1,177 @@
 <div class="delete-account-container">
-  <h2>{{ getTranslation('deleteAccount.title') }}</h2>
-  <p>{{ getTranslation('deleteAccount.warning') }}</p>
-  
-  <div class="delete-actions">
-    <button class="cancel-btn" (click)="cancel()">
-      {{ getTranslation('common.cancel') }}
-    </button>
-    <button class="delete-btn" (click)="deleteAccount()">
-      {{ getTranslation('deleteAccount.confirm') }}
-    </button>
+  <div class="delete-account-card">
+    
+    <!-- Step 1: Initial Warning -->
+    <div class="step-content" *ngIf="step === 1">
+      <div class="warning-header">
+        <h2>⚠️ Excluir Conta</h2>
+        <p class="warning-text">Esta ação é irreversível e permanente</p>
+      </div>
+      
+      <div class="warning-list">
+        <h3>🚨 O que será perdido:</h3>
+        <ul>
+          <li>• Todos os seus dados pessoais</li>
+          <li>• Histórico de atividades</li>
+          <li>• Configurações personalizadas</li>
+          <li>• Acesso a todos os serviços</li>
+        </ul>
+      </div>
+      
+      <div class="user-info">
+        <p>Conta a ser excluída: <strong>{{ currentUserEmail }}</strong></p>
+      </div>
+      
+      <div class="step-actions">
+        <button class="btn-secondary" (click)="cancel()">
+          Cancelar
+        </button>
+        <button class="btn-danger" (click)="nextStep()">
+          Continuar
+        </button>
+      </div>
+    </div>
+
+    <!-- Step 2: Password Verification -->
+    <div class="step-content" *ngIf="step === 2">
+      <div class="auth-header">
+        <h2>🔐 Verificação de Segurança</h2>
+        <p>Digite sua senha atual para continuar</p>
+      </div>
+      
+      <form [formGroup]="deleteForm" (ngSubmit)="verifyPassword()">
+        <div class="form-group">
+          <label for="password">Senha Atual *</label>
+          <div class="input-container">
+            <input 
+              id="password"
+              [type]="showPassword ? 'text' : 'password'"
+              formControlName="password"
+              placeholder="Digite sua senha atual"
+              [class]="getPasswordFieldClass()"
+              autocomplete="current-password"
+            >
+            <button 
+              type="button" 
+              class="toggle-password" 
+              (click)="togglePasswordVisibility()"
+              title="Mostrar/Ocultar senha"
+            >
+              {{ showPassword ? '🙈' : '👁️' }}
+            </button>
+          </div>
+          <div class="error" *ngIf="deleteForm.get('password')?.touched && deleteForm.get('password')?.errors?.['required']">
+            Senha é obrigatória
+          </div>
+          <div class="error" *ngIf="deleteForm.get('password')?.touched && deleteForm.get('password')?.errors?.['minlength']">
+            Senha deve ter pelo menos 6 caracteres
+          </div>
+        </div>
+        
+        <div class="step-actions">
+          <button type="button" class="btn-secondary" (click)="previousStep()">
+            Voltar
+          </button>
+          <button 
+            type="submit" 
+            class="btn-primary" 
+            [disabled]="isLoading || !deleteForm.get('password')?.valid"
+          >
+            <span class="loading-spinner" *ngIf="isLoading"></span>
+            {{ isLoading ? 'Verificando...' : 'Verificar Senha' }}
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Step 3: Final Confirmation -->
+    <div class="step-content" *ngIf="step === 3">
+      <div class="final-warning">
+        <h2>🔥 Confirmação Final</h2>
+        <div class="danger-text">
+          ÚLTIMA CHANCE! Esta ação NÃO pode ser desfeita.
+        </div>
+      </div>
+      
+      <form [formGroup]="deleteForm" (ngSubmit)="deleteAccount()">
+        <div class="form-group">
+          <label for="reason">Motivo da Exclusão *</label>
+          <select id="reason" formControlName="reason">
+            <option value="">Selecione um motivo</option>
+            <option value="privacy">Preocupações com privacidade</option>
+            <option value="not-useful">Não é mais útil</option>
+            <option value="too-complex">Muito complexo</option>
+            <option value="found-alternative">Encontrei uma alternativa</option>
+            <option value="other">Outro motivo</option>
+          </select>
+          <div class="error" *ngIf="deleteForm.get('reason')?.touched && deleteForm.get('reason')?.errors?.['required']">
+            Por favor, selecione um motivo
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label for="confirmText">Digite "EXCLUIR CONTA" para confirmar *</label>
+          <input 
+            id="confirmText"
+            type="text"
+            formControlName="confirmText"
+            placeholder="EXCLUIR CONTA"
+            [class]="getConfirmTextFieldClass()"
+            autocomplete="off"
+          >
+          <div class="error" *ngIf="deleteForm.get('confirmText')?.touched && deleteForm.get('confirmText')?.errors?.['invalidConfirmText']">
+            Digite exatamente "EXCLUIR CONTA"
+          </div>
+        </div>
+        
+        <div class="form-status" *ngIf="deleteForm.get('reason')?.value || deleteForm.get('confirmText')?.value">
+          <div class="status-warning">⚠️ Verificação de Segurança</div>
+          <ul class="status-checklist">
+            <li [class.completed]="deleteForm.get('reason')?.valid">
+              {{ deleteForm.get('reason')?.valid ? '✅' : '❌' }} Motivo selecionado
+            </li>
+            <li [class.completed]="deleteForm.get('confirmText')?.value === 'EXCLUIR CONTA'">
+              {{ deleteForm.get('confirmText')?.value === 'EXCLUIR CONTA' ? '✅' : '❌' }} Texto de confirmação
+            </li>
+            <li [class.completed]="deleteForm.get('password')?.valid">
+              {{ deleteForm.get('password')?.valid ? '✅' : '❌' }} Senha verificada
+            </li>
+          </ul>
+        </div>
+        
+        <div class="step-actions">
+          <button type="button" class="btn-secondary" (click)="previousStep()">
+            Voltar
+          </button>
+          <button 
+            type="submit" 
+            class="btn-danger-final" 
+            [disabled]="isLoading || !isStep3FormValid()"
+          >
+            <span class="loading-spinner" *ngIf="isLoading"></span>
+            {{ isLoading ? 'Excluindo...' : 'EXCLUIR CONTA PERMANENTEMENTE' }}
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Progress Indicator -->
+    <div class="progress-indicator">
+      <div class="step-indicator" [class.active]="step === 1" [class.completed]="step > 1">1</div>
+      <div class="step-line" [class.completed]="step > 1"></div>
+      <div class="step-indicator" [class.active]="step === 2" [class.completed]="step > 2">2</div>
+      <div class="step-line" [class.completed]="step > 2"></div>
+      <div class="step-indicator" [class.active]="step === 3">3</div>
+    </div>
+
+    <!-- Error Message -->
+    <div class="error-message" *ngIf="errorMessage">
+      {{ errorMessage }}
+    </div>
+
+    <!-- Success Message -->
+    <div class="success-message" *ngIf="successMessage">
+      {{ successMessage }}
+    </div>
   </div>
 </div>

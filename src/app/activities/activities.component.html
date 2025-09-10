@@ -7,7 +7,7 @@
         Voltar ao Dashboard
       </button>
       <div class="header-info">
-        <h1>📋 Todas as Atividades</h1>
+        <h1>Todas as Atividades</h1>
         <p>Acompanhe todas as atividades recentes do sistema</p>
       </div>
     </div>
@@ -28,7 +28,7 @@
       
       <div class="filter-group">
         <label>Tipo:</label>
-        <select [(ngModel)]="typeFilter" (change)="onTypeFilterChange()">
+        <select [(ngModel)]="typeFilter" (change)="onTypeFilterChange()" title="Filtrar por tipo de atividade">
           <option value="all">Todas</option>
           <option value="project">Projetos</option>
           <option value="task">Tarefas</option>
