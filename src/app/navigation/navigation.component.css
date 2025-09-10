@@ -33,10 +33,7 @@
   .nav-container {
     padding: 0.75rem 1rem;
   }
-  
-  .brand-text {
-    font-size: 1.1rem;
-  }
+
   
   .nav-logo {
     width: 32px;
@@ -49,11 +46,6 @@
     padding: 0.5rem 0.8rem;
     border-radius: 15px;
     margin: 0 1rem 0 0;
-  }
-  
-  .brand-text {
-    font-size: 0.95rem;
-    letter-spacing: 0.3px;
   }
   
   .nav-logo {
@@ -189,29 +181,10 @@
   -webkit-text-fill-color: transparent;
   background-clip: text;
   font-weight: 800;
-  font-size: 0.7rem;
-  letter-spacing: 0.5px;
-  text-shadow: 0 2px 8px rgba(0,0,0,0.2);
-  position: inherit;
-  animation: brandGlow 3s ease-in-out infinite;
-}
-
-.brand-text::before {
-  content: 'Ars Machina Consultancy';
-  position: absolute;
-  
-  top: 0;
-  left: 0;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  opacity: 0;
-  transition: opacity 0.3s ease;
-}
-
-.nav-brand a:hover .brand-text::before {
-  opacity: 1;
+  font-size: 0.6rem;
+  letter-spacing: 0.3px;
+  text-shadow: 1 2px 8px rgba(0,0,0,0.2);
+  position: relative;
 }
 
 @keyframes brandGlow {
