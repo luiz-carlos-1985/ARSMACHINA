@@ -697,7 +697,7 @@
           <button *ngIf="clientSearchTerm" class="clear-search" (click)="clearClientSearch()" title="Limpar busca">×</button>
             <span class="search-icon" *ngIf="!clientSearchTerm">🔍</span>
           </div>
-          <select [(ngModel)]="clientStatusFilter" class="status-filter">
+          <select title="status-filter" [(ngModel)]="clientStatusFilter" class="status-filter">
             <option value="all">Todos os Status</option>
             <option value="active">Ativos</option>
             <option value="pending">Pendentes</option>

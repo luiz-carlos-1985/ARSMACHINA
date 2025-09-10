@@ -45,16 +45,132 @@
 
 .hero-subtitle {
   font-size: 1.2rem;
-  color: #666;
+  color: #667;
   margin-bottom: 30px;
   line-height: 1.6;
 }
 
 .hero-stats {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 30px;
-  margin-top: 30px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 25px;
+  margin-top: 35px;
+}
+
+@media (min-width: 1400px) {
+  .hero-stats {
+    gap: 35px;
+    justify-content: center;
+  }
+  
+  .stat-card {
+    min-width: 200px;
+  }
+}
+
+@media (max-width: 1200px) {
+  .hero-stats {
+    justify-content: center;
+    gap: 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  .hero-stats {
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+  }
+  
+  .stat-card {
+    width: 100%;
+    max-width: 300px;
+  }
+}
+
+@media (max-width: 1400px) {
+  .hero-text h1 {
+    font-size: 2.5rem;
+  }
+  
+  .hero-subtitle {
+    font-size: 1.1rem;
+  }
+}
+
+@media (max-width: 1200px) {
+  .hero-stats {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+  
+  .stat-card {
+    padding: 20px;
+  }
+  
+  .stat-number {
+    font-size: 2rem;
+  }
+}
+
+@media (max-width: 900px) {
+  .hero-stats {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+  }
+}
+
+@media (max-width: 600px) {
+  .hero-stats {
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+  
+  .hero-text h1 {
+    font-size: 2rem;
+  }
+  
+  .hero-subtitle {
+    font-size: 1rem;
+  }
+}
+
+/* Responsividade específica para hero-stats */
+@media (min-width: 1600px) {
+  .hero-stats {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 40px;
+  }
+  
+  .stat-card {
+    padding: 30px;
+  }
+}
+
+@media (max-width: 1024px) {
+  .hero-stats {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+  }
+  
+  .stat-card {
+    padding: 15px;
+  }
+  
+  .stat-icon {
+    width: 45px;
+    height: 45px;
+    font-size: 20px;
+  }
+  
+  .stat-number {
+    font-size: 1.8rem;
+  }
+  
+  .stat-label {
+    font-size: 0.8rem;
+  }
 }
 
 .stat-card {
@@ -95,7 +211,7 @@
 
 .stat-label {
   font-size: 0.9rem;
-  color: #666;
+  color: #667;
   text-transform: uppercase;
   letter-spacing: 1px;
 }
@@ -104,6 +220,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
+
 }
 
 .hero-chart {
