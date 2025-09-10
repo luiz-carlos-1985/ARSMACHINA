@@ -64,7 +64,7 @@
 .final-warning h2 {
   text-align: center;
   margin-bottom: 1rem;
-  color: var(--text-primary, #333);
+  color: #1a1a1a;
   font-weight: 700;
   font-size: 1.8rem;
 }
@@ -72,30 +72,31 @@
 .theme-dark .warning-header h2,
 .theme-dark .auth-header h2,
 .theme-dark .final-warning h2 {
-  color: var(--text-primary, #ffffff);
+  color: #ffffff;
 }
 
 .warning-text,
 .auth-header p {
   text-align: center;
-  color: var(--text-secondary, #666);
+  color: #4a4a4a;
   margin-bottom: 2rem;
+  font-weight: 500;
 }
 
 .theme-dark .warning-text,
 .theme-dark .auth-header p {
-  color: var(--text-secondary, #cccccc);
+  color: #e0e0e0;
 }
 
 .danger-text {
   text-align: center;
-  color: #dc3545;
-  font-weight: 600;
+  color: #b91c1c;
+  font-weight: 700;
   margin-bottom: 2rem;
   padding: 1rem;
-  background: rgba(220, 53, 69, 0.1);
+  background: rgba(220, 53, 69, 0.15);
   border-radius: 8px;
-  border: 1px solid rgba(220, 53, 69, 0.3);
+  border: 1px solid rgba(220, 53, 69, 0.4);
 }
 
 .warning-list {
@@ -113,8 +114,9 @@
 
 .warning-list h3 {
   margin: 0 0 1rem 0;
-  color: #dc3545;
+  color: #b91c1c;
   font-size: 1.1rem;
+  font-weight: 700;
 }
 
 .warning-list ul {
@@ -125,12 +127,12 @@
 
 .warning-list li {
   padding: 0.5rem 0;
-  color: var(--text-primary, #333);
-  font-weight: 500;
+  color: #1a1a1a;
+  font-weight: 600;
 }
 
 .theme-dark .warning-list li {
-  color: var(--text-primary, #ffffff);
+  color: #ffffff;
 }
 
 .user-info {
@@ -147,15 +149,17 @@
 
 .user-info p {
   margin: 0;
-  color: var(--text-secondary, #666);
+  color: #4a4a4a;
+  font-weight: 500;
 }
 
 .theme-dark .user-info p {
-  color: var(--text-secondary, #cccccc);
+  color: #e0e0e0;
 }
 
 .user-info strong {
-  color: #667eea;
+  color: #4338ca;
+  font-weight: 700;
 }
 
 .form-group {
@@ -165,12 +169,12 @@
 .form-group label {
   display: block;
   margin-bottom: 0.5rem;
-  color: var(--text-primary, #333);
-  font-weight: 600;
+  color: #1a1a1a;
+  font-weight: 700;
 }
 
 .theme-dark .form-group label {
-  color: var(--text-primary, #ffffff);
+  color: #ffffff;
 }
 
 .input-container {
@@ -183,18 +187,19 @@
 .form-group select {
   width: 100%;
   padding: 1rem;
-  border: 2px solid #e1e5e9;
+  border: 2px solid #d1d5db;
   border-radius: 12px;
   font-size: 1rem;
   transition: all 0.3s ease;
   background: #ffffff;
-  color: #2c3e50;
+  color: #1a1a1a;
   box-sizing: border-box;
   font-family: inherit;
+  font-weight: 500;
 }
 
 .form-group input::placeholder {
-  color: #95a5a6;
+  color: #6b7280;
   opacity: 1;
 }
 
@@ -433,35 +438,38 @@
 }
 
 .error-message {
-  background: rgba(220, 53, 69, 0.1);
-  color: #dc3545;
+  background: rgba(220, 53, 69, 0.15);
+  color: #b91c1c;
   padding: 1rem;
   border-radius: 12px;
   margin-top: 1rem;
   text-align: center;
-  border: 1px solid rgba(220, 53, 69, 0.3);
+  border: 1px solid rgba(220, 53, 69, 0.4);
   animation: slideInUp 0.3s ease-out;
+  font-weight: 600;
 }
 
 .success-message {
-  background: rgba(40, 167, 69, 0.1);
-  color: #28a745;
+  background: rgba(40, 167, 69, 0.15);
+  color: #059669;
   padding: 1rem;
   border-radius: 12px;
   margin-top: 1rem;
   text-align: center;
-  border: 1px solid rgba(40, 167, 69, 0.3);
+  border: 1px solid rgba(40, 167, 69, 0.4);
   animation: slideInUp 0.3s ease-out;
+  font-weight: 600;
 }
 
 .error {
-  color: #e74c3c;
+  color: #b91c1c;
   font-size: 0.875rem;
   margin-top: 0.5rem;
   display: flex;
   align-items: center;
   gap: 0.5rem;
   animation: slideInUp 0.3s ease-out;
+  font-weight: 600;
 }
 
 .error::before {
@@ -472,15 +480,15 @@
 .form-status {
   margin: 1.5rem 0;
   padding: 1rem;
-  background: rgba(255, 193, 7, 0.1);
-  border: 1px solid rgba(255, 193, 7, 0.3);
+  background: rgba(255, 193, 7, 0.15);
+  border: 1px solid rgba(255, 193, 7, 0.4);
   border-radius: 8px;
 }
 
 .status-warning {
   margin: 0 0 1rem 0;
-  color: #856404;
-  font-weight: 600;
+  color: #92400e;
+  font-weight: 700;
   text-align: center;
 }
 
@@ -492,14 +500,15 @@
 
 .status-checklist li {
   padding: 0.5rem 0;
-  color: #dc3545;
+  color: #b91c1c;
   font-size: 0.9rem;
   transition: color 0.3s ease;
+  font-weight: 600;
 }
 
 .status-checklist li.completed {
-  color: #27ae60;
-  font-weight: 500;
+  color: #059669;
+  font-weight: 700;
 }
 
 .loading-spinner {
