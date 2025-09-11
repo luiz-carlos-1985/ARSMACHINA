@@ -210,31 +210,51 @@
 .desktop-menu a {
   color: white;
   text-decoration: none;
-  padding: 0.6rem 1rem;
-  border-radius: 12px;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  padding: 0.8rem 1.4rem;
+  border-radius: 20px;
+  transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   position: relative;
-  font-weight: 600;
-  letter-spacing: 0.4px;
+  font-weight: 700;
+  letter-spacing: 0.8px;
   font-size: 0.9rem;
   white-space: nowrap;
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.08) 50%, rgba(255, 255, 255, 0.12) 100%);
+  border: 2px solid rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15), inset 0 2px 0 rgba(255, 255, 255, 0.3), 0 0 0 1px rgba(255, 255, 255, 0.1);
+  overflow: hidden;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.desktop-menu a::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.6s ease;
+}
+
+.desktop-menu a:hover::before {
+  left: 100%;
 }
 
 .desktop-menu a:hover {
-  background: rgba(255, 255, 255, 0.2);
-  border-color: rgba(255, 255, 255, 0.3);
-  transform: translateY(-2px) scale(1.02);
-  box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.35) 0%, rgba(255, 255, 255, 0.2) 50%, rgba(255, 255, 255, 0.3) 100%);
+  border-color: rgba(255, 255, 255, 0.6);
+  transform: translateY(-4px) scale(1.08) rotateX(5deg);
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.25), inset 0 3px 0 rgba(255, 255, 255, 0.4), 0 0 20px rgba(255, 255, 255, 0.3);
+  filter: brightness(1.1);
 }
 
 .desktop-menu a.active {
-  background: rgba(255, 255, 255, 0.25);
-  border-color: rgba(255, 255, 255, 0.4);
-  box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0.2) 100%);
+  border-color: rgba(255, 255, 255, 0.5);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.4);
+  transform: translateY(-2px);
 }
 
 .logout-btn {
@@ -266,6 +286,7 @@
 /* Navbar compacta quando logado */
 .desktop-menu.logged-in {
   gap: 0.15rem;
+  flex-wrap: wrap;
 }
 
 .desktop-menu.logged-in a {
@@ -314,26 +335,67 @@
   }
 }
 
+@media (max-height: 600px) and (orientation: landscape) {
+  .nav-container {
+    padding: 0.5rem 1rem;
+  }
+  
+  .desktop-menu.logged-in {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    gap: 0.2rem;
+    max-width: calc(100vw - 300px);
+  }
+  
+  .desktop-menu.logged-in a {
+    padding: 0.25rem 0.4rem;
+    font-size: 0.75rem;
+    min-width: 28px;
+    height: 32px;
+  }
+  
+  .desktop-lang {
+    margin-left: 0.2rem;
+  }
+  
+  .language-btn {
+    padding: 0.25rem 0.5rem;
+    min-width: 70px;
+    font-size: 0.75rem;
+    height: 32px;
+  }
+  
+  .desktop-logout {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.75rem;
+    margin-left: 0.2rem;
+    height: 32px;
+  }
+}
+
 .language-btn {
-  background: linear-gradient(135deg, rgba(76, 175, 80, 0.15) 0%, rgba(56, 142, 60, 0.15) 100%);
+  background: linear-gradient(135deg, rgba(76, 175, 80, 0.25) 0%, rgba(56, 142, 60, 0.25) 50%, rgba(139, 195, 74, 0.2) 100%);
   color: white;
-  border: 1px solid rgba(76, 175, 80, 0.3);
-  padding: 0.6rem 1rem;
-  border-radius: 12px;
+  border: 2px solid rgba(76, 175, 80, 0.5);
+  padding: 0.8rem 1.4rem;
+  border-radius: 20px;
   cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  min-width: 100px;
+  gap: 0.7rem;
+  min-width: 120px;
   justify-content: space-between;
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.1);
-  font-weight: 600;
-  letter-spacing: 0.4px;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  box-shadow: 0 6px 20px rgba(76, 175, 80, 0.2), inset 0 2px 0 rgba(255, 255, 255, 0.3), 0 0 0 1px rgba(76, 175, 80, 0.3);
+  font-weight: 700;
+  letter-spacing: 0.8px;
   font-size: 0.9rem;
-  min-height: 40px;
+  min-height: 48px;
+  position: relative;
+  overflow: hidden;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
 }
 
 .language-btn:hover {
@@ -447,23 +509,43 @@
 
 /* ===== LOGOUT BUTTON (DESKTOP) ===== */
 .desktop-logout {
-  background: linear-gradient(135deg, #ff6b6b 0%, #ff5252 100%);
+  background: linear-gradient(135deg, #ff6b6b 0%, #ff5252 50%, #f44336 100%);
   color: white;
-  border: none;
-  padding: 0.75rem 1.25rem;
-  border-radius: 12px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  padding: 0.8rem 1.6rem;
+  border-radius: 20px;
   cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   margin-left: 1rem;
-  font-weight: 500;
-  letter-spacing: 0.5px;
-  box-shadow: 0 2px 8px rgba(255, 107, 107, 0.3);
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  box-shadow: 0 6px 20px rgba(255, 107, 107, 0.4), inset 0 2px 0 rgba(255, 255, 255, 0.3), 0 0 0 1px rgba(255, 107, 107, 0.2);
+  position: relative;
+  overflow: hidden;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.desktop-logout::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.6s ease;
+}
+
+.desktop-logout:hover::before {
+  left: 100%;
 }
 
 .desktop-logout:hover {
-  background: linear-gradient(135deg, #ff5252 0%, #f44336 100%);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(255, 107, 107, 0.4);
+  background: linear-gradient(135deg, #ff5252 0%, #f44336 50%, #d32f2f 100%);
+  transform: translateY(-4px) scale(1.08) rotateX(5deg);
+  box-shadow: 0 12px 35px rgba(255, 107, 107, 0.5), inset 0 3px 0 rgba(255, 255, 255, 0.4), 0 0 25px rgba(255, 107, 107, 0.4);
+  border-color: rgba(255, 255, 255, 0.5);
+  filter: brightness(1.1) saturate(1.2);
 }
 
 /* ===== HAMBURGER MENU ===== */

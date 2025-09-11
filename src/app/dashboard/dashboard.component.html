@@ -651,196 +651,198 @@
 <div class="modal-overlay" *ngIf="showClientModal" (click)="closeClientModal()">
   <div class="client-modal" (click)="$event.stopPropagation()">
     <div class="modal-header">
-      <div class="header-content">
-        <h3>🏢 Gerenciar Clientes</h3>
-        <p>Gerencie sua carteira de clientes e contratos</p>
-      </div>
-      <button class="modal-close" (click)="closeClientModal()" title="Fechar modal" aria-label="Fechar modal de clientes">×</button>
+      <h3>🏢 Gerenciar Clientes</h3>
+      <button class="modal-close" (click)="closeClientModal()" title="Fechar modal">×</button>
     </div>
     
-    <div class="client-dashboard">
-      <div class="client-stats-grid">
-        <div class="stat-card total">
-          <div class="stat-icon">📊</div>
-          <div class="stat-info">
-            <div class="stat-number">{{ activeClients.length }}</div>
-            <div class="stat-label">Total de Clientes</div>
+    <!-- Tabs Navigation -->
+    <div class="tabs-nav">
+      <button class="tab-btn" [class.active]="activeTab === 'overview'" (click)="activeTab = 'overview'">
+        <span class="tab-icon">📊</span>
+        <span class="tab-text">Visão Geral</span>
+      </button>
+      <button class="tab-btn" [class.active]="activeTab === 'clients'" (click)="activeTab = 'clients'">
+        <span class="tab-icon">👥</span>
+        <span class="tab-text">Clientes</span>
+      </button>
+      <button class="tab-btn" [class.active]="activeTab === 'form'" (click)="activeTab = 'form'">
+        <span class="tab-icon">➕</span>
+        <span class="tab-text">Novo Cliente</span>
+      </button>
+    </div>
+    
+    <div class="tab-content">
+      <!-- Overview Tab -->
+      <div class="tab-panel" *ngIf="activeTab === 'overview'">
+        <div class="overview-header">
+          <h3>📊 Resumo dos Clientes</h3>
+          <p>Visão geral dos seus clientes e contratos</p>
+        </div>
+        
+        <div class="stats-grid">
+          <div class="stat-card total">
+            <div class="stat-icon">👥</div>
+            <div class="stat-info">
+              <div class="stat-number">{{ activeClients.length }}</div>
+              <div class="stat-label">Total de Clientes</div>
+            </div>
+          </div>
+          <div class="stat-card revenue">
+            <div class="stat-icon">💰</div>
+            <div class="stat-info">
+              <div class="stat-number">R$ {{ getTotalContractValue() | number:'1.0-0' }}</div>
+              <div class="stat-label">Valor Total</div>
+            </div>
+          </div>
+          <div class="stat-card active">
+            <div class="stat-icon">✅</div>
+            <div class="stat-info">
+              <div class="stat-number">{{ getActiveClientsCount() }}</div>
+              <div class="stat-label">Clientes Ativos</div>
+            </div>
+          </div>
+          <div class="stat-card average">
+            <div class="stat-icon">📈</div>
+            <div class="stat-info">
+              <div class="stat-number">R$ {{ getAverageContractValue() | number:'1.0-0' }}</div>
+              <div class="stat-label">Valor Médio</div>
+            </div>
           </div>
         </div>
-        <div class="stat-card revenue">
-          <div class="stat-icon">💰</div>
-          <div class="stat-info">
-            <div class="stat-number">R$ {{ getTotalContractValue() | number:'1.0-0' }}</div>
-            <div class="stat-label">Valor Total</div>
+        
+        <div class="overview-insights">
+          <div class="insight-card">
+            <div class="insight-icon">📊</div>
+            <div class="insight-content">
+              <h4>Performance</h4>
+              <p>{{ ((getActiveClientsCount() / activeClients.length) * 100) | number:'1.0-0' }}% dos clientes estão ativos</p>
+            </div>
+          </div>
+          <div class="insight-card">
+            <div class="insight-icon">💡</div>
+            <div class="insight-content">
+              <h4>Oportunidade</h4>
+              <p>{{ activeClients.length - getActiveClientsCount() }} clientes podem ser reativados</p>
+            </div>
           </div>
         </div>
-        <div class="stat-card active">
-          <div class="stat-icon">✅</div>
-          <div class="stat-info">
-            <div class="stat-number">{{ getActiveClientsCount() }}</div>
-            <div class="stat-label">Clientes Ativos</div>
-          </div>
-        </div>
-        <div class="stat-card average">
-          <div class="stat-icon">📈</div>
-          <div class="stat-info">
-            <div class="stat-number">R$ {{ getAverageContractValue() | number:'1.0-0' }}</div>
-            <div class="stat-label">Valor Médio</div>
-          </div>
+        
+        <div class="quick-actions">
+          <button class="quick-btn primary" (click)="activeTab = 'form'">
+            <span>➕</span> Novo Cliente
+          </button>
+          <button class="quick-btn secondary" (click)="activeTab = 'clients'">
+            <span>👥</span> Ver Todos
+          </button>
         </div>
       </div>
       
-      <div class="client-controls">
-        <div class="search-filter">
+      <!-- Clients Tab -->
+      <div class="tab-panel" *ngIf="activeTab === 'clients'">
+        <div class="search-controls">
           <div class="search-box">
-            <input type="text" [(ngModel)]="clientSearchTerm" placeholder="Buscar por nome, email, telefone..." class="search-input">
-          <button *ngIf="clientSearchTerm" class="clear-search" (click)="clearClientSearch()" title="Limpar busca">×</button>
-            <span class="search-icon" *ngIf="!clientSearchTerm">🔍</span>
+            <input type="text" [(ngModel)]="clientSearchTerm" placeholder="Buscar clientes...">
+            <span class="search-icon">🔍</span>
           </div>
-          <select title="status-filter" [(ngModel)]="clientStatusFilter" class="status-filter">
-            <option value="all">Todos os Status</option>
+          <select [(ngModel)]="clientStatusFilter" title="Filtrar por status">
+            <option value="all">Todos</option>
             <option value="active">Ativos</option>
             <option value="pending">Pendentes</option>
             <option value="inactive">Inativos</option>
-            <option value="suspended">Suspensos</option>
           </select>
         </div>
-        <button class="btn-primary add-client" (click)="createNewClient()">
-          <span>➕</span> Novo Cliente
-        </button>
-      </div>
-    </div>
-    
-    <div class="clients-container">
-      <div class="clients-grid" *ngIf="!showClientForm">
-        <div *ngIf="getFilteredClients().length === 0 && clientSearchTerm" class="no-results">
-          <p>Nenhum cliente encontrado para "{{ clientSearchTerm }}"</p>
-          <button (click)="clearClientSearch()">Limpar busca</button>
-        </div>
-        <div class="client-card" *ngFor="let client of getFilteredClients(); trackBy: trackByClientId" [class.expired]="isContractExpired(client)">
-          <div class="client-header">
+        
+        <div class="clients-list">
+          <div class="client-item" *ngFor="let client of getFilteredClients()" [class.expired]="isContractExpired(client)">
             <div class="client-avatar" [style.background]="getClientAvatarColor(client.name)">
               {{ client.name.charAt(0).toUpperCase() }}
             </div>
             <div class="client-info">
               <h4>{{ client.name }}</h4>
-              <div class="client-contact">
-                <span class="email">📧 {{ client.email }}</span>
-                <span class="phone">📞 {{ client.phone }}</span>
-              </div>
-            </div>
-            <div class="client-menu">
-              <button class="menu-btn" (click)="toggleClientMenu(client.id)">⋮</button>
-              <div class="menu-dropdown" *ngIf="activeClientMenu === client.id">
-                <button (click)="editClient(client); closeClientMenu()">✏️ Editar</button>
-                <button (click)="viewClientDetails(client); closeClientMenu()">👁️ Ver Detalhes</button>
-                <button (click)="duplicateClient(client); closeClientMenu()">📋 Duplicar</button>
-                <button (click)="deleteClient(client); closeClientMenu()" class="danger">🗑️ Excluir</button>
-              </div>
-            </div>
-          </div>
-          
-          <div class="client-body">
-            <div class="contract-info">
-              <div class="contract-value">
-                <span class="label">Valor do Contrato</span>
+              <p>{{ client.email }}</p>
+              <div class="client-meta">
+                <span class="status-badge" [ngClass]="client.status">{{ client.statusText }}</span>
                 <span class="value">R$ {{ client.contractValue | number:'1.0-0' }}</span>
               </div>
-              <div class="contract-end">
-                <span class="label">Vencimento</span>
-                <span class="date" [class.expired]="isContractExpired(client)">{{ client.contractEnd | date:'dd/MM/yyyy' }}</span>
-              </div>
             </div>
-            
-            <div class="client-status-bar">
-              <span class="status-badge" [ngClass]="client.status">{{ client.statusText }}</span>
-              <span class="days-remaining" *ngIf="!isContractExpired(client)">
-                {{ getDaysUntilExpiry(client) }} dias restantes
-              </span>
-              <span class="expired-label" *ngIf="isContractExpired(client)">
-                Contrato vencido
-              </span>
+            <div class="client-actions">
+              <button class="action-btn edit" (click)="editClient(client); activeTab = 'form'" title="Editar">
+                ✏️
+              </button>
+              <button class="action-btn delete" (click)="deleteClient(client)" title="Excluir">
+                🗑️
+              </button>
             </div>
           </div>
+        </div>
+        
+        <div class="empty-state" *ngIf="getFilteredClients().length === 0">
+          <div class="empty-icon">👥</div>
+          <p>Nenhum cliente encontrado</p>
+          <button class="btn-primary" (click)="activeTab = 'form'">Adicionar Cliente</button>
         </div>
       </div>
       
-      <!-- Client Form -->
-      <div class="client-form-container" *ngIf="showClientForm">
-        <div class="form-header">
-          <h4>{{ isEditingClient ? '✏️ Editar Cliente' : '➕ Novo Cliente' }}</h4>
-          <button class="close-form" (click)="closeClientForm()">×</button>
-        </div>
-        
+      <!-- Form Tab -->
+      <div class="tab-panel" *ngIf="activeTab === 'form'">
         <form class="client-form">
           <div class="form-section">
-            <h5>Informações Básicas</h5>
+            <h4>{{ isEditingClient ? 'Editar Cliente' : 'Novo Cliente' }}</h4>
+            
+            <div class="form-group">
+              <label>Nome Completo *</label>
+              <input type="text" [(ngModel)]="currentClient.name" name="name" placeholder="Nome do cliente" required>
+            </div>
+            
             <div class="form-row">
               <div class="form-group">
-                <label for="client-name">Nome Completo *</label>
-                <input id="client-name" type="text" [(ngModel)]="currentClient.name" name="name" placeholder="Nome do cliente" required>
+                <label>Email *</label>
+                <input type="email" [(ngModel)]="currentClient.email" name="email" placeholder="email@exemplo.com" required>
               </div>
               <div class="form-group">
-                <label for="client-company">Empresa</label>
-                <input id="client-company" type="text" [(ngModel)]="currentClient.company" name="company" placeholder="Nome da empresa">
+                <label>Telefone</label>
+                <input type="tel" [(ngModel)]="currentClient.phone" name="phone" placeholder="(11) 99999-9999">
               </div>
             </div>
             
             <div class="form-row">
               <div class="form-group">
-                <label for="client-email">Email *</label>
-                <input id="client-email" type="email" [(ngModel)]="currentClient.email" name="email" placeholder="email@exemplo.com" required>
-              </div>
-              <div class="form-group">
-                <label for="client-phone">Telefone</label>
-                <input id="client-phone" type="tel" [(ngModel)]="currentClient.phone" name="phone" placeholder="(11) 99999-9999">
-              </div>
-            </div>
-          </div>
-          
-          <div class="form-section">
-            <h5>Contrato</h5>
-            <div class="form-row">
-              <div class="form-group">
-                <label for="client-value">Valor do Contrato *</label>
-                <div class="input-with-prefix">
-                  <span class="prefix">R$</span>
-                  <input id="client-value" type="number" [(ngModel)]="currentClient.contractValue" name="contractValue" placeholder="0,00" min="0" step="0.01" required>
+                <label>Valor do Contrato *</label>
+                <div class="input-prefix">
+                  <span>R$</span>
+                  <input type="number" [(ngModel)]="currentClient.contractValue" name="contractValue" placeholder="0,00" required>
                 </div>
               </div>
               <div class="form-group">
-                <label for="client-start">Início do Contrato</label>
-                <input id="client-start" type="date" [(ngModel)]="currentClient.contractStart" name="contractStart">
+                <label>Status</label>
+                <select [(ngModel)]="currentClient.status" name="status">
+                  <option value="active">Ativo</option>
+                  <option value="pending">Pendente</option>
+                  <option value="inactive">Inativo</option>
+                </select>
               </div>
             </div>
             
             <div class="form-row">
               <div class="form-group">
-                <label for="client-end">Fim do Contrato</label>
-                <input id="client-end" type="date" [(ngModel)]="currentClient.contractEnd" name="contractEnd">
+                <label>Início do Contrato</label>
+                <input type="date" [(ngModel)]="currentClient.contractStart" name="contractStart">
               </div>
               <div class="form-group">
-                <label for="client-status">Status</label>
-                <select id="client-status" [(ngModel)]="currentClient.status" name="status">
-                  <option value="active">Ativo</option>
-                  <option value="pending">Pendente</option>
-                  <option value="inactive">Inativo</option>
-                  <option value="suspended">Suspenso</option>
-                </select>
+                <label>Fim do Contrato</label>
+                <input type="date" [(ngModel)]="currentClient.contractEnd" name="contractEnd">
               </div>
             </div>
-          </div>
-          
-          <div class="form-section">
-            <h5>Observações</h5>
-            <div class="form-group full-width">
+            
+            <div class="form-group">
+              <label>Observações</label>
               <textarea [(ngModel)]="currentClient.notes" name="notes" placeholder="Observações sobre o cliente..." rows="3"></textarea>
             </div>
           </div>
           
           <div class="form-actions">
-            <button type="button" class="btn-secondary" (click)="closeClientForm()">Cancelar</button>
-            <button type="button" class="btn-primary" (click)="saveClient()">{{ isEditingClient ? 'Atualizar Cliente' : 'Salvar Cliente' }}</button>
+            <button type="button" class="btn-secondary" (click)="resetForm(); activeTab = 'clients'">Cancelar</button>
+            <button type="button" class="btn-primary" (click)="saveClient()">{{ isEditingClient ? 'Atualizar' : 'Salvar' }}</button>
           </div>
         </form>
       </div>

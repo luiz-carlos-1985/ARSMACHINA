@@ -66,13 +66,13 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   activeClients = [
     {
       id: 1,
-      name: 'TechCorp Solutions',
-      email: 'contato@techcorp.com',
-      phone: '+55 11 9999-8888',
-      company: 'TechCorp Solutions',
+      name: 'Ars Machina IT Consultancy',
+      email: 'contato@arsmachinaconsultancy.com',
+      phone: '+55 98 99964-9215',
+      company: 'Ars Machina IT Solutions',
       status: 'active',
       statusText: 'Ativo',
-      contractValue: 85000,
+      contractValue: 5000000,
       contractStart: '2024-01-01',
       contractEnd: '2024-12-31',
       notes: ''
@@ -169,6 +169,9 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   projectFilter = 'all';
   taskFilter = 'all';
   searchTerm = '';
+  
+  // Tab management
+  activeTab = 'overview';
   
   // Meeting data
   currentMeeting: any = {
@@ -919,6 +922,22 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     this.showClientForm = false;
     this.isEditingClient = false;
     this.activeClientMenu = null;
+  }
+
+  resetForm() {
+    this.currentClient = {
+      id: null,
+      name: '',
+      email: '',
+      phone: '',
+      company: '',
+      status: 'active',
+      contractValue: 0,
+      contractStart: '',
+      contractEnd: '',
+      notes: ''
+    };
+    this.isEditingClient = false;
   }
 
   // Método para resetar filtros
