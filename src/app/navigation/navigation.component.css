@@ -285,90 +285,231 @@
 
 /* Navbar compacta quando logado */
 .desktop-menu.logged-in {
-  gap: 0.15rem;
+  gap: 0.3rem;
   flex-wrap: wrap;
 }
 
 .desktop-menu.logged-in a {
-  padding: 0.4rem 0.6rem;
-  font-size: 0.85rem;
+  padding: 0.5rem 0.8rem;
+  font-size: 0.8rem;
+  border-radius: 12px;
+  letter-spacing: 0.3px;
 }
 
 .desktop-menu.logged-in .desktop-lang {
-  margin-left: 0.25rem;
+  margin-left: 0.3rem;
 }
 
-/* Responsividade específica para usuário logado */
-@media (max-width: 950px) {
+.desktop-menu.logged-in .language-btn {
+  padding: 0.5rem 0.8rem;
+  font-size: 0.8rem;
+  min-width: 90px;
+  border-radius: 12px;
+}
+
+.desktop-menu.logged-in .desktop-logout {
+  padding: 0.5rem 0.8rem;
+  font-size: 0.8rem;
+  border-radius: 12px;
+}
+
+@media (max-width: 1200px) {
+  .desktop-menu {
+    gap: 0.2rem;
+  }
+  
+  .desktop-menu a {
+    padding: 0.6rem 1rem;
+    font-size: 0.85rem;
+  }
+  
+  .language-btn {
+    padding: 0.6rem 1rem;
+    min-width: 100px;
+    font-size: 0.85rem;
+  }
+  
+  .desktop-logout {
+    padding: 0.6rem 1rem;
+    font-size: 0.85rem;
+  }
+}
+
+@media (max-width: 1100px) and (min-width: 769px) {
+  .desktop-menu.logged-in {
+    gap: 0.25rem;
+  }
+  
+  .desktop-menu.logged-in a {
+    padding: 0.45rem 0.7rem;
+    font-size: 0.8rem;
+    min-width: auto;
+  }
+  
+  .desktop-menu.logged-in .language-btn {
+    padding: 0.45rem 0.7rem;
+    min-width: 85px;
+    font-size: 0.8rem;
+  }
+  
+  .desktop-menu.logged-in .desktop-logout {
+    padding: 0.45rem 0.7rem;
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 950px) and (min-width: 769px) {
   .desktop-menu.logged-in a .nav-text {
     display: none;
   }
   
   .desktop-menu.logged-in a {
-    padding: 0.4rem;
-    min-width: 36px;
+    padding: 0.5rem;
+    min-width: 44px;
     text-align: center;
     position: relative;
+    font-size: 1rem;
   }
   
   .desktop-menu.logged-in a::after {
     content: attr(title);
     position: absolute;
-    bottom: -30px;
+    bottom: -35px;
     left: 50%;
     transform: translateX(-50%);
-    background: rgba(0, 0, 0, 0.8);
+    background: rgba(0, 0, 0, 0.9);
     color: white;
-    padding: 4px 8px;
-    border-radius: 4px;
-    font-size: 12px;
+    padding: 6px 10px;
+    border-radius: 6px;
+    font-size: 11px;
     white-space: nowrap;
     opacity: 0;
     visibility: hidden;
     transition: all 0.3s ease;
     z-index: 1000;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
   }
   
   .desktop-menu.logged-in a:hover::after {
     opacity: 1;
     visibility: visible;
   }
+  
+  .desktop-menu.logged-in .language-btn {
+    padding: 0.5rem 0.7rem;
+    min-width: 80px;
+    font-size: 0.8rem;
+  }
+  
+  .desktop-menu.logged-in .desktop-logout {
+    padding: 0.5rem 0.7rem;
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 1000px) {
+  .nav-container {
+    padding: 0.75rem 1rem;
+  }
+  
+  .desktop-menu {
+    display: none !important;
+  }
+  
+  .hamburger {
+    display: flex !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .nav-container {
+    padding: 0.5rem 0.75rem;
+  }
+  
+  .nav-logo {
+    width: 35px;
+    height: 35px;
+  }
+  
+  .brand-text {
+    font-size: 0.55rem;
+  }
 }
 
 @media (max-height: 600px) and (orientation: landscape) {
   .nav-container {
-    padding: 0.5rem 1rem;
+    padding: 0.3rem 0.8rem;
+    min-height: 50px;
   }
   
   .desktop-menu.logged-in {
     flex-wrap: nowrap;
     overflow-x: auto;
-    gap: 0.2rem;
-    max-width: calc(100vw - 300px);
+    gap: 0.15rem;
+    max-width: calc(100vw - 250px);
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  
+  .desktop-menu.logged-in::-webkit-scrollbar {
+    display: none;
   }
   
   .desktop-menu.logged-in a {
-    padding: 0.25rem 0.4rem;
-    font-size: 0.75rem;
-    min-width: 28px;
-    height: 32px;
+    padding: 0.2rem 0.4rem;
+    font-size: 0.7rem;
+    min-width: 30px;
+    height: 36px;
+    border-radius: 8px;
+    flex-shrink: 0;
   }
   
   .desktop-lang {
-    margin-left: 0.2rem;
+    margin-left: 0.1rem;
   }
   
-  .language-btn {
-    padding: 0.25rem 0.5rem;
-    min-width: 70px;
-    font-size: 0.75rem;
+  .desktop-menu.logged-in .language-btn {
+    padding: 0.2rem 0.4rem;
+    min-width: 60px;
+    font-size: 0.7rem;
+    height: 36px;
+    border-radius: 8px;
+  }
+  
+  .desktop-menu.logged-in .desktop-logout {
+    padding: 0.2rem 0.4rem;
+    font-size: 0.7rem;
+    margin-left: 0.1rem;
+    height: 36px;
+    border-radius: 8px;
+  }
+  
+  .nav-logo {
+    width: 32px;
     height: 32px;
   }
   
-  .desktop-logout {
+  .brand-text {
+    font-size: 0.5rem;
+  }
+}
+
+@media (max-height: 500px) and (orientation: landscape) {
+  .nav-container {
     padding: 0.25rem 0.5rem;
-    font-size: 0.75rem;
-    margin-left: 0.2rem;
+    min-height: 45px;
+  }
+  
+  .desktop-menu.logged-in a {
+    padding: 0.15rem 0.3rem;
+    font-size: 0.65rem;
+    height: 32px;
+  }
+  
+  .desktop-menu.logged-in .language-btn,
+  .desktop-menu.logged-in .desktop-logout {
+    padding: 0.15rem 0.3rem;
+    font-size: 0.65rem;
     height: 32px;
   }
 }
@@ -396,6 +537,7 @@
   position: relative;
   overflow: hidden;
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+  flex-shrink: 0;
 }
 
 .language-btn:hover {
@@ -575,6 +717,14 @@
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
+}
+
+@media (max-width: 1000px) {
+  .hamburger {
+    display: flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+  }
 }
 
 .hamburger:hover {
