@@ -809,13 +809,12 @@
               <div class="form-group">
                 <label>Valor do Contrato *</label>
                 <div class="input-prefix">
-                  <span>R$</span>
-                  <input type="number" [(ngModel)]="currentClient.contractValue" name="contractValue" placeholder="0,00" required>
+                  <input type="input" [(ngModel)]="currentClient.contractValue" name="contractValue" placeholder="0,00" required>
                 </div>
               </div>
               <div class="form-group">
                 <label>Status</label>
-                <select [(ngModel)]="currentClient.status" name="status">
+                <select title="status" [(ngModel)]="currentClient.status" name="status">
                   <option value="active">Ativo</option>
                   <option value="pending">Pendente</option>
                   <option value="inactive">Inativo</option>
@@ -826,11 +825,11 @@
             <div class="form-row">
               <div class="form-group">
                 <label>Início do Contrato</label>
-                <input type="date" [(ngModel)]="currentClient.contractStart" name="contractStart">
+                <input title="date" type="date" [(ngModel)]="currentClient.contractStart" name="contractStart">
               </div>
               <div class="form-group">
                 <label>Fim do Contrato</label>
-                <input type="date" [(ngModel)]="currentClient.contractEnd" name="contractEnd">
+                <input title="contract" type="date" [(ngModel)]="currentClient.contractEnd" name="contractEnd">
               </div>
             </div>
             
