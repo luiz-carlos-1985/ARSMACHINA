@@ -319,6 +319,7 @@
   animation: slideInModal 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
   overflow: hidden;
   border: 1px solid rgba(255, 255, 255, 0.2);
+  padding-top: 43px;
 }
 
 .modal-header {
