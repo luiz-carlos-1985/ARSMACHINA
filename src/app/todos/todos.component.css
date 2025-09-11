@@ -25,27 +25,13 @@ section:target { padding-top: 140px; }
 .cta-button::after { content: '→'; font-size: 1.2rem; transition: transform 0.3s ease; }
 .cta-button:hover::after { transform: translateX(5px); }
 
-/* About Section */
-.about { padding: 100px 0; background: var(--bg-secondary, #f8f9fa); }
-.about h2 { text-align: center; margin-bottom: 1.5rem; font-size: 2.8rem; color: var(--text-primary, #333); font-weight: 800; position: relative; }
-.about h2::after { content: ''; position: absolute; bottom: -15px;  left: 50%; transform: translateX(-50%); width: 80px; height: 4px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 2px; }
-.about p { text-align: center; max-width: 900px; margin: 0 auto 3rem; font-size: 1.3rem; color: var(--text-secondary, #666); line-height: 1.8; font-weight: 400; }
-.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 2rem; margin-top: 4rem; max-width: 800px; margin-left: auto; margin-right: auto; }
-.stat { text-align: center; margin: 1rem; }
-.stat h3 { font-size: 3.5rem; color: #667eea; margin-bottom: 0.5rem; font-weight: 800; text-shadow: 0 2px 4px rgba(102, 126, 234, 0.2); position: relative; }
-
-.stat h3::after { content: '+'; font-size: 2rem; color: #28a745; margin-left: 5px; animation: pulse 2s ease-in-out infinite; }
-
-@keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.7; } }
-.stat p { color: var(--text-secondary, #666); font-weight: 600; font-size: 1.1rem; text-transform: uppercase; letter-spacing: 1px; }
-
 /* Services Section */
 .services { padding: 100px 0; background: var(--bg-secondary, #f8f9fa); }
 
 .hero-description { font-size: 1.1rem; margin: 0 auto 2rem; max-width: 500px; animation: fadeInUp 1.5s ease-out 0.6s both; }
 
 /* About Section */
-.about { padding: 80px 0; background: #f8f9fa; position: relative; overflow: hidden; }
+.about { padding: 10px 0; background: #f8f9fa; position: relative; overflow: hidden; }
 .about::before { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: linear-gradient(135deg, rgba(102, 126, 234, 0.03) 0%, rgba(118, 75, 162, 0.03) 100%); z-index: 0; }
 .about h2 { text-align: center; margin-bottom: 2rem; font-size: 2.5rem; color: #333; position: relative; z-index: 1; animation: fadeInDown 1s ease-out; }
 .about p { text-align: center; font-size: 1.2rem; max-width: 800px; margin: 0 auto 3rem; color: #666; position: relative; z-index: 1; animation: fadeInUp 1s ease-out 0.3s both; line-height: 1.8; }
