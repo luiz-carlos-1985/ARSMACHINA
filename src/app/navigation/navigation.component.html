@@ -491,7 +491,7 @@
     <!-- Enhanced Hamburger Menu -->
     <button class="hamburger" 
             [class.active]="isMenuOpen"
-            [class.hidden]="isMenuOpen"
+            *ngIf="!isMenuOpen"
             (click)="toggleMenu()"
             type="button" 
             aria-label="Toggle navigation menu"

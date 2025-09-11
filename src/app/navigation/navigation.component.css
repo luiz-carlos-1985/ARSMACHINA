@@ -737,10 +737,8 @@
   transform: scale(0.95);
 }
 
-.hamburger.hidden {
-  opacity: 0;
-  visibility: hidden;
-  pointer-events: none;
+.hamburger.active {
+  display: none;
 }
 
 .hamburger span {
