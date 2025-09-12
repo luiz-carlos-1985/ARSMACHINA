@@ -4,7 +4,7 @@
     <div class="header-actions">
       <button class="btn-secondary" (click)="exportSettings()">📤 Exportar</button>
       <button class="btn-secondary" (click)="fileInput.click()">📥 Importar</button>
-      <button class="btn-info" (click)="exportAllData()">📋 Backup Completo</button>
+      <button class="btn-secondary" (click)="exportAllData()">📋 Backup Completo</button>
       <input #fileInput type="file" accept=".json" (change)="importSettings($event)" style="display: none;">
       <input #backupInput type="file" accept=".json" (change)="importAllData($event)" style="display: none;">
     </div>
@@ -12,36 +12,49 @@
 
   <div class="settings-content">
     <div class="settings-tabs">
-      <button class="tab-btn" 
-              [class.active]="activeTab === 'general'"
-              (click)="setActiveTab('general')">
-        🌐 Geral
-      </button>
-      <button class="tab-btn" 
-              [class.active]="activeTab === 'notifications'"
-              (click)="setActiveTab('notifications')">
-        🔔 Notificações
-      </button>
-      <button class="tab-btn" 
-              [class.active]="activeTab === 'privacy'"
-              (click)="setActiveTab('privacy')">
-        🔒 Privacidade
-      </button>
-      <button class="tab-btn" 
-              [class.active]="activeTab === 'dashboard'"
-              (click)="setActiveTab('dashboard')">
-        📊 Dashboard
-      </button>
-      <button class="tab-btn" 
-              [class.active]="activeTab === 'security'"
-              (click)="setActiveTab('security')">
-        🛡️ Segurança
-      </button>
-      <button class="tab-btn" 
-              [class.active]="activeTab === 'advanced'"
-              (click)="setActiveTab('advanced')">
-        ⚙️ Avançado
-      </button>
+      <div class="mobile-tab-selector">
+        <select title="drop" [(ngModel)]="activeTab" (change)="setActiveTab(activeTab)" class="tab-dropdown">
+          <option value="general">🌐 Geral</option>
+          <option value="notifications">🔔 Notificações</option>
+          <option value="privacy">🔒 Privacidade</option>
+          <option value="dashboard">📊 Dashboard</option>
+          <option value="security">🛡️ Segurança</option>
+          <option value="advanced">⚙️ Avançado</option>
+        </select>
+      </div>
+      
+      <div class="desktop-tabs">
+        <button class="tab-btn" 
+                [class.active]="activeTab === 'general'"
+                (click)="setActiveTab('general')">
+          🌐 Geral
+        </button>
+        <button class="tab-btn" 
+                [class.active]="activeTab === 'notifications'"
+                (click)="setActiveTab('notifications')">
+          🔔 Notificações
+        </button>
+        <button class="tab-btn" 
+                [class.active]="activeTab === 'privacy'"
+                (click)="setActiveTab('privacy')">
+          🔒 Privacidade
+        </button>
+        <button class="tab-btn" 
+                [class.active]="activeTab === 'dashboard'"
+                (click)="setActiveTab('dashboard')">
+          📊 Dashboard
+        </button>
+        <button class="tab-btn" 
+                [class.active]="activeTab === 'security'"
+                (click)="setActiveTab('security')">
+          🛡️ Segurança
+        </button>
+        <button class="tab-btn" 
+                [class.active]="activeTab === 'advanced'"
+                (click)="setActiveTab('advanced')">
+          ⚙️ Avançado
+        </button>
+      </div>
     </div>
 
     <div class="settings-panel">
@@ -117,15 +130,19 @@
               <span class="checkmark"></span>
               🔊 Sons de Notificação
             </label>
-            <label class="checkbox-label">
-              <input type="checkbox" [(ngModel)]="settings.notifications.projects" (change)="onSettingChange()">
-              <span class="checkmark"></span>
-              📁 Notificações de Projetos
-            </label>
+          </div>
+          <div class="setting-item checkbox-item">
             <label class="checkbox-label">
               <input type="checkbox" [(ngModel)]="settings.notifications.tasks" (change)="onSettingChange()">
               <span class="checkmark"></span>
               ✅ Notificações de Tarefas
+            </label>
+          </div>
+          <div class="setting-item checkbox-item">
+            <label class="checkbox-label">
+              <input type="checkbox" [(ngModel)]="settings.notifications.projects" (change)="onSettingChange()">
+              <span class="checkmark"></span>
+              📁 Notificações de Projetos
             </label>
           </div>
           <div class="setting-item">
