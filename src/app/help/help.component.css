@@ -1,28 +1,30 @@
 .help-container {
-  max-width: 900px;
+  max-width: fit-content;
   margin: 0 auto;
   padding: 20px;
-  background: white;
+  background: var(--background-color, white);
   border-radius: 12px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 20px var(--shadow-color, rgba(0, 0, 0, 0.1));
+  margin-top: 10px;
+  color: var(--text-color, #333);
 }
 
 .help-header {
   text-align: center;
   margin-bottom: 30px;
   padding-bottom: 20px;
-  border-bottom: 2px solid #f0f0f0;
+  border-bottom: 2px solid var(--border-color, #f0f0f0);
 }
 
 .help-header h2 {
   margin: 0 0 10px 0;
-  color: #333;
+  color: var(--text-primary, #333);
   font-size: 24px;
 }
 
 .help-header p {
   margin: 0;
-  color: #666;
+  color: var(--text-secondary, #666);
   font-size: 16px;
 }
 
@@ -39,10 +41,12 @@
 .search-input {
   width: 100%;
   padding: 12px 45px 12px 15px;
-  border: 2px solid #e0e0e0;
+  border: 2px solid var(--border-color, #e0e0e0);
   border-radius: 25px;
   font-size: 14px;
   transition: border-color 0.3s ease;
+  background: var(--input-background, white);
+  color: var(--text-color, #333);
 }
 
 .search-input:focus {
@@ -55,7 +59,7 @@
   right: 15px;
   top: 50%;
   transform: translateY(-50%);
-  color: #666;
+  color: var(--text-secondary, #666);
   font-size: 16px;
 }
 
@@ -75,8 +79,8 @@
 .tab-btn {
   padding: 12px 24px;
   border: none;
-  background: #f8f9fa;
-  color: #666;
+  background: var(--tab-background, #f8f9fa);
+  color: var(--text-secondary, #666);
   border-radius: 25px;
   cursor: pointer;
   transition: all 0.3s ease;
@@ -85,8 +89,8 @@
 }
 
 .tab-btn:hover {
-  background: #e9ecef;
-  color: #333;
+  background: var(--tab-hover, #e9ecef);
+  color: var(--text-primary, #333);
 }
 
 .tab-btn.active {
@@ -106,7 +110,7 @@
 }
 
 .guide-card, .tutorial-card {
-  background: #f8f9fa;
+  background: var(--card-background, #f8f9fa);
   padding: 25px;
   border-radius: 12px;
   border-left: 4px solid #667eea;
@@ -129,17 +133,18 @@
   font-size: 24px;
   width: 40px;
   text-align: center;
+  color: var(--text-primary, #333);
 }
 
 .card-header h3 {
   margin: 0;
-  color: #333;
+  color: var(--text-primary, #333);
   font-size: 16px;
   font-weight: 600;
 }
 
 .card-description {
-  color: #666;
+  color: var(--text-secondary, #666);
   line-height: 1.5;
   margin-bottom: 15px;
 }
@@ -181,7 +186,7 @@
 }
 
 .faq-item {
-  background: #f8f9fa;
+  background: var(--card-background, #f8f9fa);
   border-radius: 10px;
   overflow: hidden;
   transition: all 0.3s ease;
@@ -201,7 +206,7 @@
 }
 
 .faq-question:hover {
-  background: #e9ecef;
+  background: var(--hover-background, #e9ecef);
 }
 
 .faq-icon {
@@ -212,11 +217,11 @@
 .question-text {
   flex: 1;
   font-weight: 500;
-  color: #333;
+  color: var(--text-primary, #333);
 }
 
 .expand-icon {
-  color: #666;
+  color: var(--text-secondary, #666);
   transition: transform 0.3s ease;
 }
 
@@ -227,7 +232,7 @@
 .empty-state {
   text-align: center;
   padding: 60px 20px;
-  color: #666;
+  color: var(--text-secondary, #666);
 }
 
 .empty-icon {
@@ -250,7 +255,7 @@
 .help-footer {
   margin-top: 40px;
   padding-top: 30px;
-  border-top: 2px solid #f0f0f0;
+  border-top: 2px solid var(--border-color, #f0f0f0);
 }
 
 .support-section {
@@ -259,13 +264,13 @@
 
 .support-section h3 {
   margin: 0 0 10px 0;
-  color: #333;
+  color: var(--text-primary, #333);
   font-size: 18px;
 }
 
 .support-section p {
   margin: 0 0 20px 0;
-  color: #666;
+  color: var(--text-secondary, #666);
 }
 
 .support-options {
@@ -372,5 +377,62 @@
   
   .expand-icon {
     display: none;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  .help-container {
+    --background-color: #1a202c;
+    --text-color: #e2e8f0;
+    --text-primary: #f7fafc;
+    --text-secondary: #a0aec0;
+    --shadow-color: rgba(0, 0, 0, 0.3);
+    --border-color: #2d3748;
+    --input-background: #2d3748;
+    --tab-background: #2d3748;
+    --tab-hover: #4a5568;
+    --card-background: #2d3748;
+    --hover-background: #4a5568;
+  }
+  
+  .search-input:focus {
+    border-color: #667eea;
+  }
+  
+  .search-icon {
+    color: #a0aec0;
+  }
+  
+  .faq-icon {
+    color: #667eea;
+  }
+  
+  .expand-icon {
+    color: #a0aec0;
+  }
+  
+  .empty-state {
+    color: #a0aec0;
+  }
+  
+  .help-container * {
+    color: #e2e8f0 !important;
+  }
+  
+  .help-container h1,
+  .help-container h2,
+  .help-container h3,
+  .help-container h4,
+  .help-container h5,
+  .help-container h6 {
+    color: #f7fafc !important;
+  }
+  
+  .help-container p {
+    color: #a0aec0 !important;
+  }
+  
+  .support-btn {
+    color: white !important;
   }
 }

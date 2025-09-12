@@ -25,12 +25,7 @@
               [class.active]="activeSection === 'faqs'"
               (click)="setActiveSection('faqs')">
         ❓ FAQ
-      </button>
-      <button class="tab-btn" 
-              [class.active]="activeSection === 'tutorials'"
-              (click)="setActiveSection('tutorials')">
-        🎥 Tutoriais
-      </button>
+      </button>      
     </div>
 
     <div class="help-section">
@@ -93,7 +88,7 @@
         <button class="support-btn primary" (click)="contactSupport()">
           📧 Contatar Suporte
         </button>
-        <a href="https://wa.me/5598999649215" target="_blank" class="support-btn secondary">
+        <a rel="noopener" href="https://wa.me/5598999649215" target="_blank" class="support-btn secondary">
           💬 WhatsApp
         </a>
       </div>

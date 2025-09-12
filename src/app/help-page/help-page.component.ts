@@ -84,7 +84,7 @@ import { RouterLink } from '@angular/router';
     }
     
     .help-section {
-      background: white;
+      background: var(--section-bg, white);
       padding: 30px;
       border-radius: 15px;
       box-shadow: 0 10px 30px rgba(0,0,0,0.1);
@@ -92,7 +92,7 @@ import { RouterLink } from '@angular/router';
     
     .help-section h2 {
       margin-bottom: 20px;
-      color: #333;
+      color: var(--text-primary, #333);
     }
     
     .faq-list {
@@ -103,7 +103,7 @@ import { RouterLink } from '@angular/router';
     
     .faq-item {
       padding: 20px;
-      background: #f8f9fa;
+      background: var(--faq-bg, #f8f9fa);
       border-radius: 10px;
       border-left: 4px solid #667eea;
     }
@@ -111,6 +111,11 @@ import { RouterLink } from '@angular/router';
     .faq-item h3 {
       margin-bottom: 10px;
       color: #667eea;
+    }
+    
+    .faq-item p {
+      color: var(--text-secondary, #666);
+      margin: 0;
     }
     
     .contact-options {
@@ -162,6 +167,15 @@ import { RouterLink } from '@angular/router';
     .login-btn:hover {
       transform: translateY(-2px);
       box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+    }
+    
+    @media (prefers-color-scheme: dark) {
+      .help-section {
+        --section-bg: #1a202c;
+        --text-primary: #f7fafc;
+        --text-secondary: #a0aec0;
+        --faq-bg: #2d3748;
+      }
     }
     
     @media (max-width: 768px) {
