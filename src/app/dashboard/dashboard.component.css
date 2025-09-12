@@ -6145,12 +6145,12 @@
   margin: 0 0 8px 0;
   font-size: 1.4rem;
   font-weight: 700;
-  color: #333;
+  color: #ffc107;
 }
 
 .overview-header p {
   margin: 0;
-  color: #666;
+  color: aquamarine;
   font-size: 0.95rem;
 }
 
