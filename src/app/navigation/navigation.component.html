@@ -141,11 +141,11 @@
     <!-- Mobile Menu -->
     <div class="mobile-nav-menu" 
          [class.active]="isMenuOpen"
-         [ngStyle]="getMenuStyle()"
-         (mousedown)="onMenuDragStart($event)"
-         (touchstart)="onMenuDragStart($event)">
+         [ngStyle]="getMenuStyle()">
       <!-- Mobile Menu Header -->
-      <div class="mobile-menu-header">
+      <div class="mobile-menu-header"
+           (mousedown)="onMenuDragStart($event)"
+           (touchstart)="onMenuDragStart($event)">
         <div class="mobile-brand">
           <img src="assets/ars-machina-logo.svg" alt="Ars Machina Logo" class="mobile-logo">
           <div class="mobile-brand-info">

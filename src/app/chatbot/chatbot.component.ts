@@ -51,7 +51,8 @@ export class ChatbotComponent implements OnInit, OnDestroy {
   // Dragging properties
   isDragging: boolean = false;
   dragOffset = { x: 0, y: 0 };
-  position = { x: window.innerWidth - 96, y: window.innerHeight - 96 }; // Default position (bottom-right)
+  position = { x: 24, y: 24 }; // Default position (will be set in ngOnInit)
+  hasDragged: boolean = false;
   
 
   currentGreeting: string = '';
@@ -582,39 +583,38 @@ export class ChatbotComponent implements OnInit, OnDestroy {
   // Drag functionality
   onDragStart(event: MouseEvent | TouchEvent) {
     if (this.isMinimized) {
-      this.isDragging = true;
       const clientX = 'touches' in event ? event.touches[0].clientX : event.clientX;
       const clientY = 'touches' in event ? event.touches[0].clientY : event.clientY;
       
       this.dragOffset.x = clientX - this.position.x;
       this.dragOffset.y = clientY - this.position.y;
+      this.hasDragged = false;
       
       document.addEventListener('mousemove', this.onDragMove.bind(this));
       document.addEventListener('mouseup', this.onDragEnd.bind(this));
       document.addEventListener('touchmove', this.onDragMove.bind(this));
       document.addEventListener('touchend', this.onDragEnd.bind(this));
-      
-      event.preventDefault();
     }
   }
 
   onDragMove(event: MouseEvent | TouchEvent) {
-    if (this.isDragging) {
-      const clientX = 'touches' in event ? event.touches[0].clientX : event.clientX;
-      const clientY = 'touches' in event ? event.touches[0].clientY : event.clientY;
-      
-      const newX = clientX - this.dragOffset.x;
-      const newY = clientY - this.dragOffset.y;
-      
-      // Constrain to viewport
-      const maxX = window.innerWidth - 72;
-      const maxY = window.innerHeight - 72;
-      
-      this.position.x = Math.max(0, Math.min(newX, maxX));
-      this.position.y = Math.max(0, Math.min(newY, maxY));
-      
-      event.preventDefault();
-    }
+    this.isDragging = true;
+    this.hasDragged = true;
+    const clientX = 'touches' in event ? event.touches[0].clientX : event.clientX;
+    const clientY = 'touches' in event ? event.touches[0].clientY : event.clientY;
+    
+    const newX = clientX - this.dragOffset.x;
+    const newY = clientY - this.dragOffset.y;
+    
+    // Constrain to viewport, avoiding navbar area (top 80px)
+    const maxX = window.innerWidth - 72;
+    const maxY = window.innerHeight - 72;
+    const minY = 80; // Navbar height + margin
+    
+    this.position.x = Math.max(0, Math.min(newX, maxX));
+    this.position.y = Math.max(minY, Math.min(newY, maxY));
+    
+    event.preventDefault();
   }
 
   onDragEnd(event: MouseEvent | TouchEvent) {
@@ -633,10 +633,21 @@ export class ChatbotComponent implements OnInit, OnDestroy {
       } else {
         this.position.x = window.innerWidth - 96; // Snap to right
       }
+      
+      // Reset hasDragged after a short delay to prevent click
+      if (this.hasDragged) {
+        setTimeout(() => {
+          this.hasDragged = false;
+        }, 50);
+      }
     }
   }
 
   getChatbotStyle() {
+    if (typeof window === 'undefined') {
+      return {};
+    }
+    
     return {
       'right': this.position.x > window.innerWidth / 2 ? `${window.innerWidth - this.position.x - 72}px` : 'auto',
       'left': this.position.x <= window.innerWidth / 2 ? `${this.position.x}px` : 'auto',
@@ -646,7 +657,9 @@ export class ChatbotComponent implements OnInit, OnDestroy {
   }
 
   setInitialPosition() {
-    this.position = { x: window.innerWidth - 96, y: window.innerHeight - 96 };
+    if (typeof window !== 'undefined') {
+      this.position = { x: window.innerWidth - 96, y: window.innerHeight - 96 };
+    }
   }
 
   addOrientationListener() {
@@ -664,6 +677,7 @@ export class ChatbotComponent implements OnInit, OnDestroy {
   adjustPositionOnResize() {
     const maxX = window.innerWidth - 72;
     const maxY = window.innerHeight - 72;
+    const minY = 80; // Navbar height + margin
     
     if (this.position.x > maxX) {
       this.position.x = maxX;
@@ -677,8 +691,14 @@ export class ChatbotComponent implements OnInit, OnDestroy {
       this.position.x = 24;
     }
     
-    if (this.position.y < 0) {
-      this.position.y = 24;
+    if (this.position.y < minY) {
+      this.position.y = minY;
+    }
+  }
+
+  onChatClick(event: Event) {
+    if (!this.isDragging) {
+      this.toggleChat();
     }
   }
 }
