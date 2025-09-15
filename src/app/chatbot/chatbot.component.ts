@@ -53,6 +53,7 @@ export class ChatbotComponent implements OnInit, OnDestroy {
   dragOffset = { x: 0, y: 0 };
   position = { x: 24, y: 24 }; // Default position (will be set in ngOnInit)
   hasDragged: boolean = false;
+  dragStartPos = { x: 0, y: 0 };
   
 
   currentGreeting: string = '';
@@ -581,52 +582,67 @@ export class ChatbotComponent implements OnInit, OnDestroy {
   }
 
   // Drag functionality
+  private boundDragMove = this.onDragMove.bind(this);
+  private boundDragEnd = this.onDragEnd.bind(this);
+
   onDragStart(event: MouseEvent | TouchEvent) {
     if (this.isMinimized) {
       const clientX = 'touches' in event ? event.touches[0].clientX : event.clientX;
       const clientY = 'touches' in event ? event.touches[0].clientY : event.clientY;
       
+      this.dragStartPos.x = clientX;
+      this.dragStartPos.y = clientY;
       this.dragOffset.x = clientX - this.position.x;
       this.dragOffset.y = clientY - this.position.y;
       this.hasDragged = false;
+      this.isDragging = false;
       
-      document.addEventListener('mousemove', this.onDragMove.bind(this));
-      document.addEventListener('mouseup', this.onDragEnd.bind(this));
-      document.addEventListener('touchmove', this.onDragMove.bind(this));
-      document.addEventListener('touchend', this.onDragEnd.bind(this));
+      document.addEventListener('mousemove', this.boundDragMove);
+      document.addEventListener('mouseup', this.boundDragEnd);
+      document.addEventListener('touchmove', this.boundDragMove);
+      document.addEventListener('touchend', this.boundDragEnd);
+      
+      event.preventDefault();
     }
   }
 
   onDragMove(event: MouseEvent | TouchEvent) {
-    this.isDragging = true;
-    this.hasDragged = true;
     const clientX = 'touches' in event ? event.touches[0].clientX : event.clientX;
     const clientY = 'touches' in event ? event.touches[0].clientY : event.clientY;
     
-    const newX = clientX - this.dragOffset.x;
-    const newY = clientY - this.dragOffset.y;
+    // Check if moved more than 10px to consider as drag
+    const deltaX = Math.abs(clientX - this.dragStartPos.x);
+    const deltaY = Math.abs(clientY - this.dragStartPos.y);
     
-    // Constrain to viewport, avoiding navbar area (top 80px)
-    const maxX = window.innerWidth - 72;
-    const maxY = window.innerHeight - 72;
-    const minY = 80; // Navbar height + margin
-    
-    this.position.x = Math.max(0, Math.min(newX, maxX));
-    this.position.y = Math.max(minY, Math.min(newY, maxY));
-    
-    event.preventDefault();
+    if (deltaX > 10 || deltaY > 10) {
+      this.isDragging = true;
+      this.hasDragged = true;
+      
+      const newX = clientX - this.dragOffset.x;
+      const newY = clientY - this.dragOffset.y;
+      
+      // Constrain to viewport, avoiding navbar area (top 80px)
+      const maxX = window.innerWidth - 72;
+      const maxY = window.innerHeight - 72;
+      const minY = 80; // Navbar height + margin
+      
+      this.position.x = Math.max(0, Math.min(newX, maxX));
+      this.position.y = Math.max(minY, Math.min(newY, maxY));
+      
+      event.preventDefault();
+    }
   }
 
   onDragEnd(event: MouseEvent | TouchEvent) {
-    if (this.isDragging) {
-      this.isDragging = false;
-      
-      document.removeEventListener('mousemove', this.onDragMove.bind(this));
-      document.removeEventListener('mouseup', this.onDragEnd.bind(this));
-      document.removeEventListener('touchmove', this.onDragMove.bind(this));
-      document.removeEventListener('touchend', this.onDragEnd.bind(this));
-      
-      // Snap to edges
+    this.isDragging = false;
+    
+    document.removeEventListener('mousemove', this.boundDragMove);
+    document.removeEventListener('mouseup', this.boundDragEnd);
+    document.removeEventListener('touchmove', this.boundDragMove);
+    document.removeEventListener('touchend', this.boundDragEnd);
+    
+    // Snap to edges only if actually dragged
+    if (this.hasDragged) {
       const centerX = window.innerWidth / 2;
       if (this.position.x < centerX) {
         this.position.x = 24; // Snap to left
@@ -635,11 +651,9 @@ export class ChatbotComponent implements OnInit, OnDestroy {
       }
       
       // Reset hasDragged after a short delay to prevent click
-      if (this.hasDragged) {
-        setTimeout(() => {
-          this.hasDragged = false;
-        }, 50);
-      }
+      setTimeout(() => {
+        this.hasDragged = false;
+      }, 200);
     }
   }
 
@@ -697,8 +711,14 @@ export class ChatbotComponent implements OnInit, OnDestroy {
   }
 
   onChatClick(event: Event) {
-    if (!this.isDragging) {
+    if (!this.isDragging && !this.hasDragged) {
       this.toggleChat();
     }
+  }
+
+  onMouseDown(event: MouseEvent) {
+    // Allow drag on desktop with any mouse button
+    this.onDragStart(event);
+    event.preventDefault();
   }
 }
