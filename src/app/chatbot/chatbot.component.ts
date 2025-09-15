@@ -48,6 +48,11 @@ export class ChatbotComponent implements OnInit, OnDestroy {
   feedbackRating: number = 0;
   feedbackText: string = '';
   
+  // Dragging properties
+  isDragging: boolean = false;
+  dragOffset = { x: 0, y: 0 };
+  position = { x: window.innerWidth - 96, y: window.innerHeight - 96 }; // Default position (bottom-right)
+  
 
   currentGreeting: string = '';
   currentTypingText: string = '';
@@ -62,7 +67,9 @@ export class ChatbotComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.isMinimized = true;
     this.showInfoBalloon = true;
+    this.setInitialPosition();
     this.initializeSubscriptions();
+    this.addOrientationListener();
     setTimeout(() => this.showInfoBalloon = false, 5000);
   }
 
@@ -569,6 +576,109 @@ export class ChatbotComponent implements OnInit, OnDestroy {
     } else if (lowerMessage.includes('inteligência artificial') || lowerMessage.includes('ia') || lowerMessage.includes('automação')) {
       this.selectedService = 'Inteligência Artificial';
       this.showWhatsAppButton = true;
+    }
+  }
+
+  // Drag functionality
+  onDragStart(event: MouseEvent | TouchEvent) {
+    if (this.isMinimized) {
+      this.isDragging = true;
+      const clientX = 'touches' in event ? event.touches[0].clientX : event.clientX;
+      const clientY = 'touches' in event ? event.touches[0].clientY : event.clientY;
+      
+      this.dragOffset.x = clientX - this.position.x;
+      this.dragOffset.y = clientY - this.position.y;
+      
+      document.addEventListener('mousemove', this.onDragMove.bind(this));
+      document.addEventListener('mouseup', this.onDragEnd.bind(this));
+      document.addEventListener('touchmove', this.onDragMove.bind(this));
+      document.addEventListener('touchend', this.onDragEnd.bind(this));
+      
+      event.preventDefault();
+    }
+  }
+
+  onDragMove(event: MouseEvent | TouchEvent) {
+    if (this.isDragging) {
+      const clientX = 'touches' in event ? event.touches[0].clientX : event.clientX;
+      const clientY = 'touches' in event ? event.touches[0].clientY : event.clientY;
+      
+      const newX = clientX - this.dragOffset.x;
+      const newY = clientY - this.dragOffset.y;
+      
+      // Constrain to viewport
+      const maxX = window.innerWidth - 72;
+      const maxY = window.innerHeight - 72;
+      
+      this.position.x = Math.max(0, Math.min(newX, maxX));
+      this.position.y = Math.max(0, Math.min(newY, maxY));
+      
+      event.preventDefault();
+    }
+  }
+
+  onDragEnd(event: MouseEvent | TouchEvent) {
+    if (this.isDragging) {
+      this.isDragging = false;
+      
+      document.removeEventListener('mousemove', this.onDragMove.bind(this));
+      document.removeEventListener('mouseup', this.onDragEnd.bind(this));
+      document.removeEventListener('touchmove', this.onDragMove.bind(this));
+      document.removeEventListener('touchend', this.onDragEnd.bind(this));
+      
+      // Snap to edges
+      const centerX = window.innerWidth / 2;
+      if (this.position.x < centerX) {
+        this.position.x = 24; // Snap to left
+      } else {
+        this.position.x = window.innerWidth - 96; // Snap to right
+      }
+    }
+  }
+
+  getChatbotStyle() {
+    return {
+      'right': this.position.x > window.innerWidth / 2 ? `${window.innerWidth - this.position.x - 72}px` : 'auto',
+      'left': this.position.x <= window.innerWidth / 2 ? `${this.position.x}px` : 'auto',
+      'bottom': `${window.innerHeight - this.position.y - 72}px`,
+      'cursor': this.isDragging ? 'grabbing' : 'grab'
+    };
+  }
+
+  setInitialPosition() {
+    this.position = { x: window.innerWidth - 96, y: window.innerHeight - 96 };
+  }
+
+  addOrientationListener() {
+    window.addEventListener('resize', () => {
+      this.adjustPositionOnResize();
+    });
+    
+    window.addEventListener('orientationchange', () => {
+      setTimeout(() => {
+        this.adjustPositionOnResize();
+      }, 100);
+    });
+  }
+
+  adjustPositionOnResize() {
+    const maxX = window.innerWidth - 72;
+    const maxY = window.innerHeight - 72;
+    
+    if (this.position.x > maxX) {
+      this.position.x = maxX;
+    }
+    
+    if (this.position.y > maxY) {
+      this.position.y = maxY;
+    }
+    
+    if (this.position.x < 0) {
+      this.position.x = 24;
+    }
+    
+    if (this.position.y < 0) {
+      this.position.y = 24;
     }
   }
 }

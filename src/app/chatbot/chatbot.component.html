@@ -1,6 +1,11 @@
-<div class="chatbot-container" [class.minimized]="isMinimized">
+<div class="chatbot-container" [class.minimized]="isMinimized" [ngStyle]="getChatbotStyle()">
   <!-- Minimized State -->
-  <div *ngIf="isMinimized" class="chatbot-minimized" (click)="toggleChat()">
+  <div *ngIf="isMinimized" 
+       class="chatbot-minimized" 
+       [class.dragging]="isDragging"
+       (click)="!isDragging && toggleChat()"
+       (mousedown)="onDragStart($event)"
+       (touchstart)="onDragStart($event)">
     <div class="chat-icon-wrapper">
       <div class="chat-icon">🤖</div>
       <div class="pulse-ring"></div>

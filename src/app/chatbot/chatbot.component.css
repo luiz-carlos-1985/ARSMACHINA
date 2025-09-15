@@ -1,9 +1,12 @@
 .chatbot-container {
   position: fixed;
-  bottom: 24px;
-  right: 24px;
-  z-index: 999;
+  z-index: 99999;
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
 }
 
 /* Minimized State */
@@ -26,12 +29,27 @@
   overflow: visible;
 }
 
-.chatbot-minimized:hover {
+.chatbot-minimized:hover:not(.dragging) {
   transform: translateY(-6px) scale(1.08);
   box-shadow: 
     0 20px 60px rgba(102, 126, 234, 0.6),
     0 10px 30px rgba(102, 126, 234, 0.4);
   border-color: rgba(255, 255, 255, 0.3);
+}
+
+.chatbot-minimized.dragging {
+  cursor: grabbing !important;
+  transform: scale(1.1);
+  box-shadow: 
+    0 25px 70px rgba(102, 126, 234, 0.7),
+    0 15px 35px rgba(102, 126, 234, 0.5);
+  z-index: 100000;
+  transition: none;
+}
+
+.chatbot-minimized {
+  cursor: grab;
+  touch-action: none;
 }
 
 .chat-icon-wrapper {
