@@ -150,19 +150,6 @@
           </div>
         </div>
         <div class="mobile-header-actions">
-          <button *ngIf="isLoggedIn" 
-                  class="mobile-back-dashboard-btn" 
-                  routerLink="/dashboard"
-                  (click)="closeMenu()"
-                  title="Voltar ao Dashboard"
-                  type="button"
-                  aria-label="Back to Dashboard"
-                  tabindex="0">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-              <path d="M19 12H5M12 19L5 12L12 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-            <span>Dashboard</span>
-          </button>
           <button class="mobile-close-btn" 
                   (click)="closeMenu()" 
                   title="Fechar menu"
