@@ -1,76 +1,19 @@
 <div class="dashboard-wrapper">
   <!-- Hero Section -->
-  <div class="dashboard-hero">
-    <div class="hero-content">
-      <div class="hero-text">
-        <h1>Olá, <span class="user-highlight">{{ userName || 'Usuário' }}</span>!</h1>
-        <p class="hero-subtitle">{{ getTranslation('dashboard.welcome') }}</p>
-        <div class="hero-actions">
-<button class="hero-action-btn primary" (click)="createNewProject()">
-            <span class="btn-icon">➕</span>
-            {{ getTranslation('dashboard.newProject') }}
-          </button>
-          <button class="hero-action-btn secondary" (click)="generateReport()">
-            <span class="btn-icon">📊</span>
-            {{ getTranslation('dashboard.generateReport') }}
-          </button>
-        </div>
-      </div>
-      <div class="hero-visual">
-        <div class="hero-stats">
-          <div class="stat-card">
-            <div class="stat-icon">📊</div>
-            <div class="stat-number">{{ userStats.projects }}</div>
-            <div class="stat-label">{{ getTranslation('dashboard.projects') }}</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-icon">✅</div>
-            <div class="stat-number">{{ userStats.tasks }}</div>
-            <div class="stat-label">{{ getTranslation('dashboard.tasks') }}</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-icon">🎯</div>
-            <div class="stat-number">{{ userStats.completed }}</div>
-            <div class="stat-label">{{ getTranslation('dashboard.completed') }}</div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
+  <app-dashboard-hero 
+    [userName]="userName" 
+    [userStats]="userStats"
+    (createProject)="createNewProject()"
+    (generateReport)="generateReport()">
+  </app-dashboard-hero>
 
   <!-- Quick Actions Bar -->
-  <div class="quick-actions-bar">
-    <div class="actions-container">
-<div class="action-button primary" (click)="createNewProject()">
-        <div class="action-icon">➕</div>
-        <div class="action-text">
-          <div class="action-title">{{ getTranslation('dashboard.newProject') }}</div>
-          <div class="action-subtitle">Criar um novo projeto</div>
-        </div>
-      </div>
-      <div class="action-button secondary" (click)="addNewTask()">
-        <div class="action-icon">📝</div>
-        <div class="action-text">
-          <div class="action-title">{{ getTranslation('dashboard.newTask') }}</div>
-          <div class="action-subtitle">Adicionar nova tarefa</div>
-        </div>
-      </div>
-      <div class="action-button info" (click)="scheduleMeeting()">
-        <div class="action-icon">📅</div>
-        <div class="action-text">
-          <div class="action-title">{{ getTranslation('dashboard.scheduleMeeting') }}</div>
-          <div class="action-subtitle">Agendar reunião</div>
-        </div>
-      </div>
-      <div class="action-button success" (click)="generateReport()">
-        <div class="action-icon">📊</div>
-        <div class="action-text">
-          <div class="action-title">{{ getTranslation('dashboard.generateReport') }}</div>
-          <div class="action-subtitle">Gerar relatório</div>
-        </div>
-      </div>
-    </div>
-  </div>
+  <app-quick-actions
+    (createProject)="createNewProject()"
+    (addTask)="addNewTask()"
+    (scheduleMeeting)="scheduleMeeting()"
+    (generateReport)="generateReport()">
+  </app-quick-actions>
 
   <!-- Main Dashboard Content -->
   <div class="dashboard-content">
@@ -225,80 +168,11 @@
       </div>
 
       <!-- Analytics Overview -->
-      <div class="analytics-overview">
-        <div class="section-header">
-          <h2>{{ getTranslation('dashboard.analytics') }}</h2>
-          <div class="section-actions">
-            <button class="icon-btn" (click)="refreshAnalytics()" title="Atualizar">🔄</button>
-            <button class="icon-btn" (click)="exportAnalytics()" title="Exportar">📤</button>
-          </div>
-        </div>
-        <div class="analytics-grid">
-          <div class="metric-card productivity">
-            <div class="metric-header">
-              <div class="metric-icon">⚡</div>
-              <div class="metric-info">
-                <h3>{{ getTranslation('dashboard.productivity') }}</h3>
-              </div>
-            </div>
-            <div class="metric-value">{{ productivityScore }}%</div>
-            <div class="metric-progress">
-              <div class="progress-bar">
-                <div class="progress-fill" [style.width.%]="productivityScore"></div>
-              </div>
-            </div>
-            <div class="progress-change positive">+12% {{ getTranslation('dashboard.fromLastMonth') }}</div>
-          </div>
-          <div class="metric-card performance">
-            <div class="metric-header">
-              <div class="metric-icon">👥</div>
-              <div class="metric-info">
-                <h3>{{ getTranslation('dashboard.teamPerformance') }}</h3>
-              </div>
-            </div>
-            <div class="metric-value">{{ teamPerformance }}%</div>
-            <div class="metric-progress">
-              <div class="progress-bar">
-                <div class="progress-fill" [style.width.%]="teamPerformance"></div>
-              </div>
-            </div>
-            <div class="progress-change positive">+8% {{ getTranslation('dashboard.fromLastMonth') }}</div>
-          </div>
-          <div class="metric-card satisfaction">
-            <div class="metric-header">
-              <div class="metric-icon">😊</div>
-              <div class="metric-info">
-                <h3>{{ getTranslation('dashboard.clientSatisfaction') }}</h3>
-              </div>
-            </div>
-            <div class="metric-value">{{ clientSatisfaction }}%</div>
-            <div class="metric-progress">
-              <div class="progress-bar">
-                <div class="progress-fill" [style.width.%]="clientSatisfaction"></div>
-              </div>
-            </div>
-            <div class="progress-change positive">+15% {{ getTranslation('dashboard.fromLastMonth') }}</div>
-          </div>
-          <div class="metric-card revenue">
-            <div class="metric-header">
-              <div class="metric-icon">💰</div>
-              <div class="metric-info">
-                <h3>{{ getTranslation('dashboard.revenue') }}</h3>
-              </div>
-            </div>
-            <div class="metric-value">R$ {{ revenue | number:'1.0-0' }}</div>
-            <div class="revenue-trend">
-              <div class="trend-chart">
-                <div class="trend-line" [style.height.%]="85"></div>
-                <div class="trend-line" [style.height.%]="92"></div>
-                <div class="trend-line" [style.height.%]="78"></div>
-                <div class="trend-line" [style.height.%]="95"></div>
-              </div>
-              <div class="trend-change">+22% {{ getTranslation('dashboard.fromLastMonth') }}</div>
-            </div>
-          </div>
-        </div>
-      </div>
+      <app-analytics-overview
+        [analytics]="analytics"
+        (refresh)="refreshAnalytics()"
+        (export)="exportAnalytics()">
+      </app-analytics-overview>
 
       <!-- Projects Overview -->
       <div class="projects-overview">
@@ -410,7 +284,7 @@
           <div class="link-icon">👤</div>
           <span>{{ getTranslation('dashboard.profile') }}</span>
         </button>
-        <button class="quick-link" (click)="navigateTo('settings')">
+        <button class="quick-link" (click)="navigateToSettings()">
           <div class="link-icon">⚙️</div>
           <span>{{ getTranslation('dashboard.settings') }}</span>
         </button>
@@ -474,7 +348,7 @@
 <!-- Enhanced Report Modal -->
 <div class="modal-overlay" *ngIf="showReportModal" (click)="closeReportModal()">
   <div class="report-modal" (click)="$event.stopPropagation()">
-    <div class="report-header">
+    <div class="report-header secondary-style">
       <h2>📊 {{ getTranslation('dashboard.generateReport') }}</h2>
       <p>{{ getTranslation('dashboard.chooseReportType') }}</p>
       <button class="modal-close" (click)="closeReportModal()" title="Fechar modal" aria-label="Fechar modal de relatórios">×</button>
@@ -554,6 +428,13 @@
       <div class="report-info-text">
         <span>⚡</span>
         <p>{{ getTranslation('dashboard.reportsGenerated') }}</p>
+      </div>
+      <div class="report-switch-link">
+        <button class="switch-report-btn" (click)="switchToAdvancedReports()">
+          <span class="switch-icon">🚀</span>
+          <span class="switch-text">{{ getTranslation('dashboard.advancedReport') }}</span>
+          <span class="switch-arrow">→</span>
+        </button>
       </div>
     </div>
   </div>
@@ -891,9 +772,14 @@
 <div class="modal-overlay" *ngIf="showTeamModal" (click)="closeTeamModal()">
   <div class="team-modal" (click)="$event.stopPropagation()">
     <div class="team-header">
+      <div class="header-top">
+        <button class="back-to-dashboard-btn primary" (click)="closeTeamModal()" title="Voltar ao Dashboard">
+          <span class="back-icon">←</span>
+          Voltar ao Dashboard
+        </button>
+      </div>
       <h2>👥 Performance da Equipe</h2>
       <p>Visão detalhada dos membros da equipe e suas métricas</p>
-      <button class="modal-close" (click)="closeTeamModal()" title="Fechar modal" aria-label="Fechar modal da equipe">×</button>
     </div>
     
     <div class="team-stats">

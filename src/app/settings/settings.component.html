@@ -1,6 +1,12 @@
 <div class="settings-container">
   <div class="settings-header">
-    <h2>⚙️ Configurações</h2>
+    <div class="header-left">
+      <button class="back-btn" (click)="goBack()" title="Voltar à página anterior">
+        <span class="back-icon">←</span>
+        <span class="back-text">Voltar</span>
+      </button>
+      <h2>⚙️ Configurações</h2>
+    </div>
     <div class="header-actions">
       <button class="btn-secondary" (click)="exportSettings()">📤 Exportar</button>
       <button class="btn-secondary" (click)="fileInput.click()">📥 Importar</button>

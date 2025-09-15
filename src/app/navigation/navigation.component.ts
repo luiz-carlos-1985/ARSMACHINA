@@ -316,7 +316,7 @@ export class NavigationComponent implements OnInit {
           
         case 'settings':
           if (this.isLoggedIn) {
-            this.router.navigate(['/settings']);
+            this.router.navigate(['/settings']); // Menu hambúrguer não usa query parameter
           } else {
             this.router.navigate(['/login']);
           }

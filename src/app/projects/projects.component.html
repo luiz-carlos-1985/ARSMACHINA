@@ -152,7 +152,7 @@
           <div class="detail-item">
             <span class="detail-icon">💰</span>
             <span class="detail-label">Orçamento:</span>
-            <span class="detail-value">R$ {{ project.budget.toLocaleString('pt-BR') }}</span>
+            <span class="detail-value">R$ {{ (project.budget || 0).toLocaleString('pt-BR') }}</span>
           </div>
         </div>
       </div>

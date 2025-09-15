@@ -11,11 +11,26 @@ import { ReportsComponent } from '../reports/reports.component';
 import { EnhancedReportsComponent } from '../reports/enhanced-reports.component';
 import { HelpComponent } from '../help/help.component';
 import { ChatbotComponent } from '../chatbot/chatbot.component';
+import { DashboardHeroComponent } from './components/dashboard-hero/dashboard-hero.component';
+import { QuickActionsComponent } from './components/quick-actions/quick-actions.component';
+import { AnalyticsOverviewComponent } from './components/analytics-overview/analytics-overview.component';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, FormsModule, ProfileComponent, SettingsComponent, ReportsComponent, EnhancedReportsComponent, HelpComponent, ChatbotComponent],
+  imports: [
+    CommonModule, 
+    FormsModule, 
+    ProfileComponent, 
+    SettingsComponent, 
+    ReportsComponent, 
+    EnhancedReportsComponent, 
+    HelpComponent, 
+    ChatbotComponent,
+    DashboardHeroComponent,
+    QuickActionsComponent,
+    AnalyticsOverviewComponent
+  ],
   providers: [AuthService],
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css']
@@ -54,6 +69,15 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   teamPerformance = 92;
   clientSatisfaction = 94;
   revenue = 125000;
+
+  get analytics() {
+    return {
+      productivityScore: this.productivityScore,
+      teamPerformance: this.teamPerformance,
+      clientSatisfaction: this.clientSatisfaction,
+      revenue: this.revenue
+    };
+  }
 
   // Financial data
   monthlyRevenue = 185000;
@@ -335,6 +359,12 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       const section = event.detail.section;
       this.navigateTo(section);
     });
+    
+    // Listen for report switching events
+    window.addEventListener('switch-to-simple-reports', () => {
+      this.closeAllComponents();
+      this.showReportModal = true;
+    });
   }
   
   private addMobileEventListeners() {
@@ -475,6 +505,11 @@ export class DashboardComponent implements OnInit, AfterViewInit {
 
   closeReportModal() {
     this.showReportModal = false;
+  }
+
+  switchToAdvancedReports() {
+    this.closeReportModal();
+    this.navigateTo('reports');
   }
 
   generateSelectedReport(type: string) {
@@ -1210,6 +1245,10 @@ export class DashboardComponent implements OnInit, AfterViewInit {
         console.log(`Navegando para: ${section}`);
         break;
     }
+  }
+
+  navigateToSettings() {
+    this.router.navigate(['/settings'], { queryParams: { from: 'dashboard' } });
   }
   
   closeAllComponents() {

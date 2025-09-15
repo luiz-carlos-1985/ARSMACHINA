@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
 import { TranslationService } from '../translation.service';
 import { AuthService } from '../auth.service';
 import { ThemeService } from '../theme.service';
@@ -13,6 +14,7 @@ import { ThemeService } from '../theme.service';
   styleUrls: ['./settings.component.css']
 })
 export class SettingsComponent implements OnInit {
+  showBackButton = true;
   settings = {
     language: 'pt',
     theme: 'light',
@@ -68,6 +70,7 @@ export class SettingsComponent implements OnInit {
   ];
 
   constructor(
+    private route: ActivatedRoute,
     private translationService: TranslationService,
     private authService: AuthService,
     private themeService: ThemeService
@@ -77,6 +80,17 @@ export class SettingsComponent implements OnInit {
     this.loadSettings();
     // Sync with theme service
     this.settings.theme = this.themeService.getCurrentTheme();
+    // Check if coming from dashboard
+    this.checkNavigationSource();
+  }
+
+  private checkNavigationSource() {
+    // Check if coming from dashboard via query parameter
+    this.route.queryParams.subscribe(params => {
+      if (params['from'] === 'dashboard') {
+        this.showBackButton = false;
+      }
+    });
   }
 
   loadSettings() {
@@ -344,5 +358,9 @@ export class SettingsComponent implements OnInit {
 
   getTranslation(key: string): string {
     return this.translationService.translate(key);
+  }
+
+  goBack() {
+    window.history.back();
   }
 }

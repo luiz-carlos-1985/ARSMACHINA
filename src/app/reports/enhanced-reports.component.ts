@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { TranslationService } from '../translation.service';
+import jsPDF from 'jspdf';
+import html2canvas from 'html2canvas';
 
 interface ReportData {
   projects: any[];
@@ -21,6 +23,13 @@ interface ReportData {
       <div class="reports-header">
         <h2>📊 Sistema Avançado de Relatórios</h2>
         <p>Gere relatórios detalhados com filtros avançados e múltiplos formatos</p>
+        <div class="report-switch-link">
+          <button class="switch-report-btn simple" (click)="switchToSimpleReports()">
+            <span class="switch-icon">📋</span>
+            <span class="switch-text">{{ getTranslation('dashboard.simpleReport') }}</span>
+            <span class="switch-arrow">→</span>
+          </button>
+        </div>
       </div>
 
       <!-- Estatísticas em Tempo Real -->
@@ -1104,6 +1113,76 @@ interface ReportData {
         font-size: 0.8em;
       }
     }
+    
+    /* Report Switch Link Styles */
+    .report-switch-link {
+      margin-top: 15px;
+      text-align: center;
+    }
+    
+    .switch-report-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 20px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border: none;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      font-size: 14px;
+      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+    }
+    
+    .switch-report-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+      background: linear-gradient(135deg, #5a67d8 0%, #6b46c1 100%);
+    }
+    
+    .switch-icon {
+      font-size: 16px;
+    }
+    
+    .switch-text {
+      font-weight: 600;
+    }
+    
+    .switch-arrow {
+      font-size: 14px;
+      transition: transform 0.3s ease;
+    }
+    
+    .switch-report-btn:hover .switch-arrow {
+      transform: translateX(3px);
+    }
+    
+    @media (max-width: 768px) {
+      .switch-report-btn {
+        width: 100%;
+        justify-content: center;
+        padding: 14px 20px;
+        font-size: 15px;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      .switch-report-btn {
+        padding: 12px 18px;
+        font-size: 14px;
+      }
+      
+      .switch-icon {
+        font-size: 15px;
+      }
+      
+      .switch-arrow {
+        font-size: 13px;
+      }
+    }
   `]
 })
 export class EnhancedReportsComponent implements OnInit {
@@ -1308,20 +1387,31 @@ export class EnhancedReportsComponent implements OnInit {
     return finalSize + ' KB';
   }
 
-  downloadReport(report: any) {
-    const content = this.generateReportContent(report);
-    const mimeType = this.getMimeType(report.format);
-    const extension = report.format.toLowerCase();
-    
-    const blob = new Blob([content], { type: mimeType });
-    const url = window.URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `${report.type}-${report.generatedAt.toISOString().split('T')[0]}.${extension}`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    window.URL.revokeObjectURL(url);
+  async downloadReport(report: any) {
+    try {
+      let blob: Blob;
+      let extension = report.format.toLowerCase();
+      
+      if (report.format === 'PDF') {
+        blob = await this.generatePDFContent(report);
+      } else {
+        const content = this.generateReportContent(report);
+        const mimeType = this.getMimeType(report.format);
+        blob = new Blob([content], { type: mimeType });
+      }
+      
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `${report.type}-${report.generatedAt.toISOString().split('T')[0]}.${extension}`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error('Erro ao fazer download do relatório:', error);
+      alert('Erro ao gerar o relatório. Tente novamente.');
+    }
   }
 
   private getMimeType(format: string): string {
@@ -1331,6 +1421,165 @@ export class EnhancedReportsComponent implements OnInit {
       case 'HTML': return 'text/html';
       default: return 'text/plain';
     }
+  }
+
+  private async generatePDFContent(report: any): Promise<Blob> {
+    try {
+      const pdf = new jsPDF('p', 'mm', 'a4');
+      const pageWidth = pdf.internal.pageSize.getWidth();
+      const pageHeight = pdf.internal.pageSize.getHeight();
+      const margin = 20;
+      let yPosition = margin;
+
+      // Cabeçalho
+      pdf.setFontSize(20);
+      pdf.setFont('helvetica', 'bold');
+      pdf.text(report.name || 'Relatório', margin, yPosition);
+      yPosition += 15;
+
+      pdf.setFontSize(12);
+      pdf.setFont('helvetica', 'normal');
+      pdf.text(`Gerado em: ${new Date().toLocaleDateString('pt-BR')}`, margin, yPosition);
+      yPosition += 20;
+
+      // Linha separadora
+      pdf.setLineWidth(0.5);
+      pdf.line(margin, yPosition, pageWidth - margin, yPosition);
+      yPosition += 15;
+
+      // Conteúdo baseado no tipo de relatório
+      switch (report.type) {
+        case 'projects':
+          yPosition = this.addProjectsContentToPDF(pdf, yPosition, margin, pageWidth, pageHeight);
+          break;
+        case 'tasks':
+          yPosition = this.addTasksContentToPDF(pdf, yPosition, margin, pageWidth, pageHeight);
+          break;
+        case 'analytics':
+          yPosition = this.addAnalyticsContentToPDF(pdf, yPosition, margin, pageWidth, pageHeight);
+          break;
+        case 'financial':
+          yPosition = this.addFinancialContentToPDF(pdf, yPosition, margin, pageWidth, pageHeight);
+          break;
+        default:
+          pdf.setFontSize(14);
+          pdf.text('Relatório gerado com sucesso!', margin, yPosition);
+          yPosition += 10;
+          pdf.setFontSize(12);
+          pdf.text('Este é um relatório padrão do sistema.', margin, yPosition);
+      }
+
+      // Rodapé
+      const footerY = pageHeight - 20;
+      pdf.setFontSize(10);
+      pdf.setFont('helvetica', 'italic');
+      pdf.text('Ars Machina Consultancy - Relatório Automatizado', margin, footerY);
+      pdf.text(`Página 1`, pageWidth - margin - 20, footerY);
+
+      return new Blob([pdf.output('blob')], { type: 'application/pdf' });
+    } catch (error) {
+      console.error('Erro ao gerar PDF:', error);
+      throw new Error('Falha na geração do PDF: ' + error);
+    }
+  }
+
+  private addProjectsContentToPDF(pdf: jsPDF, yPosition: number, margin: number, pageWidth: number, pageHeight: number): number {
+    pdf.setFontSize(16);
+    pdf.setFont('helvetica', 'bold');
+    pdf.text('Resumo de Projetos', margin, yPosition);
+    yPosition += 15;
+
+    // Estatísticas
+    pdf.setFontSize(12);
+    pdf.setFont('helvetica', 'normal');
+    pdf.text(`Total de Projetos: ${this.stats.totalProjects}`, margin, yPosition);
+    yPosition += 8;
+    pdf.text(`Projetos Concluídos: ${this.stats.completedProjects}`, margin, yPosition);
+    yPosition += 8;
+    pdf.text(`Taxa de Conclusão: ${Math.round((this.stats.completedProjects / this.stats.totalProjects) * 100)}%`, margin, yPosition);
+    yPosition += 15;
+
+    // Lista de projetos
+    if (this.reportData.projects.length > 0) {
+      pdf.setFontSize(14);
+      pdf.setFont('helvetica', 'bold');
+      pdf.text('Lista de Projetos:', margin, yPosition);
+      yPosition += 10;
+
+      this.reportData.projects.forEach((project, index) => {
+        if (yPosition > pageHeight - 40) {
+          pdf.addPage();
+          yPosition = margin;
+        }
+
+        pdf.setFontSize(12);
+        pdf.setFont('helvetica', 'bold');
+        pdf.text(`${index + 1}. ${project.name}`, margin, yPosition);
+        yPosition += 8;
+
+        pdf.setFont('helvetica', 'normal');
+        pdf.text(`   Status: ${project.statusText}`, margin, yPosition);
+        yPosition += 6;
+        pdf.text(`   Progresso: ${project.progress}%`, margin, yPosition);
+        yPosition += 6;
+        pdf.text(`   Prazo: ${project.deadline}`, margin, yPosition);
+        yPosition += 10;
+      });
+    }
+
+    return yPosition;
+  }
+
+  private addTasksContentToPDF(pdf: jsPDF, yPosition: number, margin: number, pageWidth: number, pageHeight: number): number {
+    pdf.setFontSize(16);
+    pdf.setFont('helvetica', 'bold');
+    pdf.text('Relatório de Tarefas', margin, yPosition);
+    yPosition += 15;
+
+    pdf.setFontSize(12);
+    pdf.setFont('helvetica', 'normal');
+    pdf.text(`Total de Tarefas: ${this.stats.totalTasks}`, margin, yPosition);
+    yPosition += 8;
+    pdf.text(`Tarefas Concluídas: ${this.stats.completedTasks}`, margin, yPosition);
+    yPosition += 15;
+
+    return yPosition;
+  }
+
+  private addAnalyticsContentToPDF(pdf: jsPDF, yPosition: number, margin: number, pageWidth: number, pageHeight: number): number {
+    pdf.setFontSize(16);
+    pdf.setFont('helvetica', 'bold');
+    pdf.text('Relatório de Analytics', margin, yPosition);
+    yPosition += 15;
+
+    pdf.setFontSize(12);
+    pdf.setFont('helvetica', 'normal');
+    pdf.text(`Produtividade: ${this.stats.productivity}%`, margin, yPosition);
+    yPosition += 8;
+    pdf.text(`Performance da Equipe: ${this.reportData.analytics.teamPerformance || 85}%`, margin, yPosition);
+    yPosition += 8;
+    pdf.text(`Satisfação do Cliente: ${this.reportData.analytics.clientSatisfaction || 90}%`, margin, yPosition);
+    yPosition += 15;
+
+    return yPosition;
+  }
+
+  private addFinancialContentToPDF(pdf: jsPDF, yPosition: number, margin: number, pageWidth: number, pageHeight: number): number {
+    pdf.setFontSize(16);
+    pdf.setFont('helvetica', 'bold');
+    pdf.text('Relatório Financeiro', margin, yPosition);
+    yPosition += 15;
+
+    pdf.setFontSize(12);
+    pdf.setFont('helvetica', 'normal');
+    pdf.text(`Receita Total: R$ ${this.stats.revenue.toLocaleString('pt-BR')}`, margin, yPosition);
+    yPosition += 8;
+    pdf.text(`Número de Projetos: ${this.stats.totalProjects}`, margin, yPosition);
+    yPosition += 8;
+    pdf.text(`Receita Média por Projeto: R$ ${Math.round(this.stats.revenue / this.stats.totalProjects).toLocaleString('pt-BR')}`, margin, yPosition);
+    yPosition += 15;
+
+    return yPosition;
   }
 
   private generateReportContent(report: any): string {
@@ -1577,5 +1826,10 @@ export class EnhancedReportsComponent implements OnInit {
 
   getTranslation(key: string): string {
     return this.translationService.translate(key);
+  }
+
+  switchToSimpleReports() {
+    // Emitir evento para o componente pai fechar este modal e abrir o modal simples
+    window.dispatchEvent(new CustomEvent('switch-to-simple-reports'));
   }
 }

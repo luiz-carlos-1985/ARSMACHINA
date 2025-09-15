@@ -1,8 +1,18 @@
+/* Import shared styles */
+@import './styles/shared.css';
+@import './styles/mobile.css';
+
 /* Global Styles */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+}
+
+html {
+  height: 100%;
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 
 body {
@@ -13,6 +23,8 @@ body {
   transition: all 0.3s ease;
   /* Add padding-top to compensate for fixed navbar */
   padding-top: 70px;
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 
 :root {

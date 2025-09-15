@@ -198,7 +198,7 @@ export class ProjectsComponent implements OnInit {
   }
 
   viewProject(project: any) {
-    alert(`Visualizando projeto: ${project.name}\n\nDescrição: ${project.description}\nStatus: ${project.statusText}\nProgresso: ${project.progress}%\nPrazo: ${project.deadline}\nCliente: ${project.client}\nOrçamento: R$ ${project.budget.toLocaleString('pt-BR')}`);
+    alert(`Visualizando projeto: ${project.name}\n\nDescrição: ${project.description}\nStatus: ${project.statusText}\nProgresso: ${project.progress}%\nPrazo: ${project.deadline}\nCliente: ${project.client}\nOrçamento: R$ ${(project.budget || 0).toLocaleString('pt-BR')}`);
   }
 
   editProject(project: any) {
@@ -241,7 +241,7 @@ export class ProjectsComponent implements OnInit {
     const planning = this.filteredProjects.filter(p => p.status === 'planning').length;
     const review = this.filteredProjects.filter(p => p.status === 'review').length;
     
-    const totalBudget = this.filteredProjects.reduce((sum, p) => sum + p.budget, 0);
+    const totalBudget = this.filteredProjects.reduce((sum, p) => sum + (p.budget || 0), 0);
     const avgProgress = total > 0 ? Math.round(this.filteredProjects.reduce((sum, p) => sum + p.progress, 0) / total) : 0;
     
     return {
@@ -265,7 +265,7 @@ export class ProjectsComponent implements OnInit {
   }
 
   get totalBudgetFormatted(): string {
-    const total = this.filteredProjects.reduce((sum, p) => sum + p.budget, 0);
+    const total = this.filteredProjects.reduce((sum, p) => sum + (p.budget || 0), 0);
     return (total / 1000).toFixed(0);
   }
 
@@ -300,7 +300,7 @@ export class ProjectsComponent implements OnInit {
   generateProjectsCSV(): string {
     const headers = ['Nome', 'Descrição', 'Status', 'Progresso (%)', 'Prazo', 'Cliente', 'Orçamento', 'Equipe', 'Prioridade'];
     const rows = this.filteredProjects.map(p => 
-      `"${p.name}","${p.description}","${p.statusText}",${p.progress},"${p.deadline}","${p.client}",${p.budget},${p.teamSize},"${p.priority}"`
+      `"${p.name}","${p.description}","${p.statusText}",${p.progress},"${p.deadline}","${p.client}",${p.budget || 0},${p.teamSize},"${p.priority}"`
     );
     
     return [headers.join(','), ...rows].join('\n');
