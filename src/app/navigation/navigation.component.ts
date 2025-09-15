@@ -29,6 +29,11 @@ export class NavigationComponent implements OnInit {
     { code: 'dark', name: 'Escuro', icon: '🌙' }
   ];
   currentTheme = 'light';
+  
+  // Menu drag properties
+  isDraggingMenu = false;
+  dragStartX = 0;
+  menuTranslateX = 0;
 
   constructor(
     private authService: AuthService,
@@ -417,5 +422,59 @@ export class NavigationComponent implements OnInit {
   getCurrentThemeIcon(): string {
     const currentThemeObj = this.availableThemes.find(theme => theme.code === this.currentTheme);
     return currentThemeObj ? currentThemeObj.icon : '☀️';
+  }
+  
+  // Menu drag functionality
+  onMenuDragStart(event: MouseEvent | TouchEvent) {
+    this.isDraggingMenu = true;
+    this.dragStartX = 'touches' in event ? event.touches[0].clientX : event.clientX;
+    this.menuTranslateX = 0;
+    
+    document.addEventListener('mousemove', this.onMenuDragMove.bind(this));
+    document.addEventListener('mouseup', this.onMenuDragEnd.bind(this));
+    document.addEventListener('touchmove', this.onMenuDragMove.bind(this));
+    document.addEventListener('touchend', this.onMenuDragEnd.bind(this));
+    
+    event.preventDefault();
+  }
+  
+  onMenuDragMove(event: MouseEvent | TouchEvent) {
+    if (!this.isDraggingMenu) return;
+    
+    const currentX = 'touches' in event ? event.touches[0].clientX : event.clientX;
+    const deltaX = currentX - this.dragStartX;
+    
+    // Only allow dragging to the right (positive deltaX)
+    if (deltaX > 0) {
+      this.menuTranslateX = deltaX;
+    }
+    
+    event.preventDefault();
+  }
+  
+  onMenuDragEnd(event: MouseEvent | TouchEvent) {
+    if (!this.isDraggingMenu) return;
+    
+    this.isDraggingMenu = false;
+    
+    document.removeEventListener('mousemove', this.onMenuDragMove.bind(this));
+    document.removeEventListener('mouseup', this.onMenuDragEnd.bind(this));
+    document.removeEventListener('touchmove', this.onMenuDragMove.bind(this));
+    document.removeEventListener('touchend', this.onMenuDragEnd.bind(this));
+    
+    // Close menu if dragged more than 100px to the right
+    if (this.menuTranslateX > 100) {
+      this.closeMenu();
+    }
+    
+    // Reset transform
+    this.menuTranslateX = 0;
+  }
+  
+  getMenuStyle() {
+    return {
+      'transform': this.isDraggingMenu ? `translateX(${this.menuTranslateX}px)` : 'translateX(0)',
+      'transition': this.isDraggingMenu ? 'none' : 'all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94)'
+    };
   }
 }

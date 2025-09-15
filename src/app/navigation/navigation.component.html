@@ -139,7 +139,11 @@
     </div>
 
     <!-- Mobile Menu -->
-    <div class="mobile-nav-menu" [class.active]="isMenuOpen">
+    <div class="mobile-nav-menu" 
+         [class.active]="isMenuOpen"
+         [ngStyle]="getMenuStyle()"
+         (mousedown)="onMenuDragStart($event)"
+         (touchstart)="onMenuDragStart($event)">
       <!-- Mobile Menu Header -->
       <div class="mobile-menu-header">
         <div class="mobile-brand">
