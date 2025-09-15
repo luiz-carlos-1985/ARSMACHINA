@@ -24,16 +24,21 @@ export class NavigationComponent implements OnInit {
   isThemeDropdownOpen = false;
   private isMobile = false;
   private touchStartTime = 0;
+  isDraggingMenu = false;
+  dragStartX = 0;
+  menuTranslateX = 0;
   availableThemes = [
     { code: 'light', name: 'Claro', icon: '☀️' },
     { code: 'dark', name: 'Escuro', icon: '🌙' }
   ];
   currentTheme = 'light';
   
-  // Menu drag properties
-  isDraggingMenu = false;
-  dragStartX = 0;
-  menuTranslateX = 0;
+  // Menu drag
+  isDragging = false;
+  startX = 0;
+  translateX = 0;
+  
+
 
   constructor(
     private authService: AuthService,
@@ -422,6 +427,43 @@ export class NavigationComponent implements OnInit {
   getCurrentThemeIcon(): string {
     const currentThemeObj = this.availableThemes.find(theme => theme.code === this.currentTheme);
     return currentThemeObj ? currentThemeObj.icon : '☀️';
+  }
+  
+  onDragStart(e: any) {
+    this.isDragging = true;
+    this.startX = e.touches ? e.touches[0].clientX : e.clientX;
+    this.translateX = 0;
+    
+    document.addEventListener('mousemove', this.onDragMove.bind(this));
+    document.addEventListener('mouseup', this.onDragEnd.bind(this));
+    document.addEventListener('touchmove', this.onDragMove.bind(this));
+    document.addEventListener('touchend', this.onDragEnd.bind(this));
+    
+    e.preventDefault();
+  }
+  
+  onDragMove(e: any) {
+    if (!this.isDragging) return;
+    const currentX = e.touches ? e.touches[0].clientX : e.clientX;
+    const deltaX = currentX - this.startX;
+    if (deltaX > 0) this.translateX = deltaX;
+    e.preventDefault();
+  }
+  
+  onDragEnd() {
+    this.isDragging = false;
+    
+    document.removeEventListener('mousemove', this.onDragMove.bind(this));
+    document.removeEventListener('mouseup', this.onDragEnd.bind(this));
+    document.removeEventListener('touchmove', this.onDragMove.bind(this));
+    document.removeEventListener('touchend', this.onDragEnd.bind(this));
+    
+    if (this.translateX > 100) this.closeMenu();
+    this.translateX = 0;
+  }
+  
+  getMenuTransform() {
+    return `translateX(${this.translateX}px)`;
   }
   
   // Menu drag functionality

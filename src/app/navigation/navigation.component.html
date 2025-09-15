@@ -31,107 +31,60 @@
         <span class="nav-text">{{ getTranslation('nav.dashboard') }}</span>
       </a>
       
-      <!-- Logout Button -->
-<button *ngIf="isLoggedIn" (tap)="logout()" (click)="logout()" class="logout-btn" 
-              type="button" 
-              aria-label="Logout"
-              tabindex="0">
-        <span class="nav-text">{{ getTranslation('nav.logout') }}</span>
-      </button>
       
       <!-- User Menu Dropdown -->
       <div *ngIf="isLoggedIn" class="user-menu-dropdown">
-        <button class="user-menu-btn" 
-                (click)="toggleUserMenu($event)" 
-                [class.active]="isUserMenuOpen"
-                type="button"
-                aria-label="User menu"
-                [attr.aria-expanded]="isUserMenuOpen"
-                tabindex="0">
+        <button class="user-menu-btn" (click)="toggleUserMenu($event)" [class.active]="isUserMenuOpen" type="button" aria-label="User menu" [attr.aria-expanded]="isUserMenuOpen" tabindex="0">
           <span class="user-avatar">👤</span>
           <svg class="dropdown-arrow" [class.rotated]="isUserMenuOpen" width="12" height="12" viewBox="0 0 12 12">
             <path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" stroke-width="1.5" fill="none"/>
           </svg>
         </button>
         <div class="user-dropdown" [class.show]="isUserMenuOpen">
-          <button class="user-option" 
-                  (click)="navigateToSection('profile', $event)"
-                  type="button"
-                  tabindex="0">
+          <button class="user-option" (click)="navigateToSection('profile', $event)" type="button" tabindex="0">
             <span class="option-icon">👤</span>
             <span>{{ getTranslation('dashboard.profile') }}</span>
           </button>
-          <button class="user-option" 
-                  (click)="navigateToSection('settings', $event)"
-                  type="button"
-                  tabindex="0">
+          <button class="user-option" (click)="navigateToSection('settings', $event)" type="button" tabindex="0">
             <span class="option-icon">⚙️</span>
             <span>{{ getTranslation('dashboard.settings') }}</span>
           </button>
-          <button class="user-option" 
-                  (click)="navigateToSection('reports', $event)"
-                  type="button"
-                  tabindex="0">
+          <button class="user-option" (click)="navigateToSection('reports', $event)" type="button" tabindex="0">
             <span class="option-icon">📊</span>
             <span>{{ getTranslation('dashboard.reports') }}</span>
           </button>
-          <button class="user-option" 
-                  (click)="navigateToSection('help', $event)"
-                  type="button"
-                  tabindex="0">
+          <button class="user-option" (click)="navigateToSection('help', $event)" type="button" tabindex="0">
             <span class="option-icon">❓</span>
             <span>{{ getTranslation('nav.help') }}</span>
           </button>
           <div class="dropdown-divider"></div>
-          <button class="user-option delete-account" 
-                  (click)="navigateToSection('delete-account', $event)"
-                  type="button"
-                  tabindex="0">
+          <button class="user-option delete-account" (click)="navigateToSection('delete-account', $event)" type="button" tabindex="0">
             <span class="option-icon">🗑️</span>
             <span>{{ getTranslation('deleteAccount.title') }}</span>
           </button>
-          <button class="user-option logout" 
-                  (click)="logout()"
-                  type="button"
-                  tabindex="0">
+          <button class="user-option logout" (click)="logout()" type="button" tabindex="0">
             <span class="option-icon">🚪</span>
             <span>{{ getTranslation('nav.logout') }}</span>
           </button>
         </div>
       </div>
       
-      <button *ngIf="!isLoggedIn" 
-              (click)="navigateToSection('help', $event)" 
-              class="help-btn"
-              type="button"
-              aria-label="Help"
-              tabindex="0">
+      <button *ngIf="!isLoggedIn" (click)="navigateToSection('help', $event)" class="help-btn" type="button" aria-label="Help" tabindex="0">
         <span class="help-icon">❓</span>
         <span class="nav-text">{{ getTranslation('nav.help') }}</span>
       </button>
-<app-theme-toggle></app-theme-toggle>
+      
+      <app-theme-toggle></app-theme-toggle>
       
       <div class="language-selector desktop-lang">
-        <button class="language-btn" 
-                (click)="toggleLanguageDropdown($event)" 
-                [class.active]="isLanguageDropdownOpen"
-                type="button"
-                aria-label="Language selector"
-                [attr.aria-expanded]="isLanguageDropdownOpen"
-                tabindex="0">
+        <button class="language-btn" (click)="toggleLanguageDropdown($event)" [class.active]="isLanguageDropdownOpen" type="button" aria-label="Language selector" [attr.aria-expanded]="isLanguageDropdownOpen" tabindex="0">
           <span class="current-lang">{{ getCurrentLanguageName() }}</span>
           <svg class="dropdown-arrow" [class.rotated]="isLanguageDropdownOpen" width="12" height="12" viewBox="0 0 12 12">
             <path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" stroke-width="1.5" fill="none"/>
           </svg>
         </button>
         <div class="language-dropdown" [class.show]="isLanguageDropdownOpen">
-          <button
-            *ngFor="let lang of availableLanguages"
-            class="language-option"
-            [class.active]="lang.code === currentLanguage"
-            (click)="selectLanguage(lang.code, $event)"
-            type="button"
-            tabindex="0">
+          <button *ngFor="let lang of availableLanguages" class="language-option" [class.active]="lang.code === currentLanguage" (click)="selectLanguage(lang.code, $event)" type="button" tabindex="0">
             {{ lang.name }}
           </button>
         </div>
@@ -141,11 +94,11 @@
     <!-- Mobile Menu -->
     <div class="mobile-nav-menu" 
          [class.active]="isMenuOpen"
-         [ngStyle]="getMenuStyle()">
+         [style.transform]="getMenuTransform()"
+         (touchstart)="onDragStart($event)"
+         (mousedown)="onDragStart($event)">
       <!-- Mobile Menu Header -->
-      <div class="mobile-menu-header"
-           (mousedown)="onMenuDragStart($event)"
-           (touchstart)="onMenuDragStart($event)">
+      <div class="mobile-menu-header">
         <div class="mobile-brand">
           <img src="assets/ars-machina-logo.svg" alt="Ars Machina Logo" class="mobile-logo">
           <div class="mobile-brand-info">
@@ -153,18 +106,11 @@
             <p>Consultancy</p>
           </div>
         </div>
-        <div class="mobile-header-actions">
-          <button class="mobile-close-btn" 
-                  (click)="closeMenu()" 
-                  title="Fechar menu"
-                  type="button"
-                  aria-label="Close menu"
-                  tabindex="0">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-              <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-            </svg>
-          </button>
-        </div>
+        <button class="mobile-close-btn" (click)="closeMenu()" title="Fechar menu" type="button" aria-label="Close menu" tabindex="0">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+            <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </button>
       </div>
 
       <!-- Mobile Menu Items -->
@@ -172,271 +118,134 @@
         <div class="mobile-menu-section">
           <h4 class="mobile-section-title">{{ getTranslation('nav.navigation') }}</h4>
           <a routerLink="/home" (click)="closeMenu()" routerLinkActive="active" class="mobile-nav-item">
-            <div class="mobile-nav-icon">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                <path d="M3 9L12 2L21 9V20C21 20.5304 20.7893 21.0391 20.4142 21.4142C20.0391 21.7893 19.5304 22 19 22H5C4.46957 22 3.96086 21.7893 3.58579 21.4142C3.21071 21.0391 3 20.5304 3 20V9Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                <path d="M9 22V12H15V22" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-            </div>
+            <div class="mobile-nav-icon">🏠</div>
             <div class="mobile-nav-content">
               <span class="mobile-nav-title">{{ getTranslation('nav.home') }}</span>
               <span class="mobile-nav-desc">{{ getTranslation('nav.homeDesc') }}</span>
             </div>
-            <div class="mobile-nav-arrow">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                <path d="M9 18L15 12L9 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-            </div>
+            <div class="mobile-nav-arrow">→</div>
           </a>
-
           <a routerLink="/about" (click)="closeMenu()" routerLinkActive="active" class="mobile-nav-item">
-            <div class="mobile-nav-icon">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
-                <path d="M12 16V12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                <path d="M12 8H12.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-              </svg>
-            </div>
+            <div class="mobile-nav-icon">ℹ️</div>
             <div class="mobile-nav-content">
               <span class="mobile-nav-title">{{ getTranslation('nav.about') }}</span>
               <span class="mobile-nav-desc">{{ getTranslation('nav.aboutDesc') }}</span>
             </div>
-            <div class="mobile-nav-arrow">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                <path d="M9 18L15 12L9 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-            </div>
+            <div class="mobile-nav-arrow">→</div>
           </a>
-
           <a routerLink="/services" (click)="closeMenu()" routerLinkActive="active" class="mobile-nav-item">
-            <div class="mobile-nav-icon">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                <path d="M12.22 2H11.78C11.2496 2 10.7409 2.21071 10.3658 2.58579C9.99071 2.96086 9.78 3.46957 9.78 4V11.2C9.77998 11.4122 9.73564 11.6219 9.64918 11.8149C9.56272 12.0078 9.43581 12.1798 9.27649 12.3199C9.11718 12.46 8.92904 12.5651 8.72414 12.6284C8.51924 12.6917 8.30249 12.7119 8.089 12.6875L2.5 12.1875C2.36739 12.1741 2.23185 12.1875 2.10515 12.2269C1.97844 12.2663 1.86334 12.3308 1.76732 12.4161C1.6713 12.5014 1.59668 12.6056 1.54836 12.7214C1.50005 12.8372 1.47917 12.9619 1.48719 13.0865L2.22 20.48C2.35223 21.8393 3.48 22.8 4.85 22.8H19.15C20.52 22.8 21.6478 21.8393 21.78 20.48L22.5128 13.0865C22.5208 12.9619 22.4999 12.8372 22.4516 12.7214C22.4033 12.6056 22.3287 12.5014 22.2327 12.4161C22.1367 12.3308 22.0216 12.2663 21.8948 12.2269C21.7681 12.1875 21.6326 12.1741 21.5 12.1875L15.911 12.6875C15.6975 12.7119 15.4808 12.6917 15.2759 12.6284C15.071 12.5651 14.8828 12.46 14.7235 12.3199C14.5642 12.1798 14.4373 12.0078 14.3508 11.8149C14.2644 11.6219 14.22 11.4122 14.22 11.2V4C14.22 3.46957 14.0093 2.96086 13.6342 2.58579C13.2591 2.21071 12.7504 2 12.22 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-            </div>
+            <div class="mobile-nav-icon">🛠️</div>
             <div class="mobile-nav-content">
               <span class="mobile-nav-title">{{ getTranslation('nav.services') }}</span>
               <span class="mobile-nav-desc">{{ getTranslation('nav.servicesDesc') }}</span>
             </div>
-            <div class="mobile-nav-arrow">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                <path d="M9 18L15 12L9 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-            </div>
+            <div class="mobile-nav-arrow">→</div>
           </a>
-
           <a routerLink="/blog" (click)="closeMenu()" routerLinkActive="active" class="mobile-nav-item">
-            <div class="mobile-nav-icon">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                <path d="M14 2H6C5.46957 2 4.96086 2.21071 4.58579 2.58579C4.21071 2.96086 4 3.46957 4 4V20C4 20.5304 4.21071 21.0391 4.58579 21.4142C4.96086 21.7893 5.46957 22 6 22H18C18.5304 22 19.0391 21.7893 19.4142 21.4142C19.7893 21.0391 20 20.5304 20 20V8L14 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                <path d="M14 2V8H20" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                <path d="M16 13H8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                <path d="M16 17H8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                <path d="M10 9H9H8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-            </div>
+            <div class="mobile-nav-icon">📝</div>
             <div class="mobile-nav-content">
               <span class="mobile-nav-title">{{ getTranslation('nav.blog') }}</span>
               <span class="mobile-nav-desc">{{ getTranslation('nav.blogDesc') }}</span>
             </div>
-            <div class="mobile-nav-arrow">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                <path d="M9 18L15 12L9 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-            </div>
+            <div class="mobile-nav-arrow">→</div>
           </a>
-
           <a routerLink="/contact" (click)="closeMenu()" routerLinkActive="active" class="mobile-nav-item">
-            <div class="mobile-nav-icon">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                <path d="M21 15C21 15.5304 20.7893 16.0391 20.4142 16.4142C20.0391 16.7893 19.5304 17 19 17H7L3 21V5C3 4.46957 3.21071 3.96086 3.58579 3.58579C3.96086 3.21071 4.46957 3 5 3H19C19.5304 3 20.0391 3.21071 20.4142 3.58579C20.7893 3.96086 21 4.46957 21 5V15Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-            </div>
+            <div class="mobile-nav-icon">📞</div>
             <div class="mobile-nav-content">
               <span class="mobile-nav-title">{{ getTranslation('nav.contact') }}</span>
               <span class="mobile-nav-desc">{{ getTranslation('nav.contactDesc') }}</span>
             </div>
-            <div class="mobile-nav-arrow">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                <path d="M9 18L15 12L9 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-            </div>
+            <div class="mobile-nav-arrow">→</div>
           </a>
         </div>
 
-        <!-- Dashboard Section -->
         <div class="mobile-menu-section" *ngIf="isLoggedIn">
           <h4 class="mobile-section-title">Dashboard</h4>
           <a routerLink="/dashboard" (click)="closeMenu()" routerLinkActive="active" class="mobile-nav-item">
-            <div class="mobile-nav-icon">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                <rect x="3" y="3" width="7" height="7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                <rect x="14" y="3" width="7" height="7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                <rect x="14" y="14" width="7" height="7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                <rect x="3" y="14" width="7" height="7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-            </div>
+            <div class="mobile-nav-icon">📊</div>
             <div class="mobile-nav-content">
               <span class="mobile-nav-title">{{ getTranslation('nav.dashboard') }}</span>
               <span class="mobile-nav-desc">{{ getTranslation('nav.dashboardDesc') }}</span>
             </div>
-            <div class="mobile-nav-arrow">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                <path d="M9 18L15 12L9 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-            </div>
+            <div class="mobile-nav-arrow">→</div>
           </a>
         </div>
 
-        <!-- Account Section -->
         <div class="mobile-menu-section" *ngIf="!isLoggedIn || isLoggedIn">
           <h4 class="mobile-section-title">{{ getTranslation('nav.account') }}</h4>
           <a *ngIf="!isLoggedIn" routerLink="/login" (click)="closeMenu()" routerLinkActive="active" class="mobile-nav-item">
-            <div class="mobile-nav-icon">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                <path d="M15 3H19C19.5304 3 20.0391 3.21071 20.4142 3.58579C20.7893 3.96086 21 4.46957 21 5V19C21 19.5304 20.7893 20.0391 20.4142 20.4142C20.0391 20.7893 19.5304 21 19 21H15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                <path d="M10 17L15 12L10 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                <path d="M15 12H3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-            </div>
+            <div class="mobile-nav-icon">🔐</div>
             <div class="mobile-nav-content">
               <span class="mobile-nav-title">{{ getTranslation('nav.login') }}</span>
               <span class="mobile-nav-desc">{{ getTranslation('nav.loginDesc') }}</span>
             </div>
-            <div class="mobile-nav-arrow">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                <path d="M9 18L15 12L9 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-            </div>
+            <div class="mobile-nav-arrow">→</div>
           </a>
           
-          <!-- User Menu Items for Logged In Users -->
           <div *ngIf="isLoggedIn" class="mobile-user-section">
-            <button (click)="navigateToSection('profile', $event)" 
-                    class="mobile-nav-item"
-                    type="button"
-                    tabindex="0">
-              <div class="mobile-nav-icon">
-                <span style="font-size: 20px;">👤</span>
-              </div>
+            <button (click)="navigateToSection('profile', $event)" class="mobile-nav-item" type="button" tabindex="0">
+              <div class="mobile-nav-icon">👤</div>
               <div class="mobile-nav-content">
                 <span class="mobile-nav-title">{{ getTranslation('dashboard.profile') }}</span>
                 <span class="mobile-nav-desc">{{ getTranslation('nav.profileDesc') }}</span>
               </div>
-              <div class="mobile-nav-arrow">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                  <path d="M9 18L15 12L9 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-              </div>
+              <div class="mobile-nav-arrow">→</div>
             </button>
             
-            <button (click)="navigateToSection('settings', $event)" 
-                    class="mobile-nav-item"
-                    type="button"
-                    tabindex="0">
-              <div class="mobile-nav-icon">
-                <span style="font-size: 20px;">⚙️</span>
-              </div>
+            <button (click)="navigateToSection('settings', $event)" class="mobile-nav-item" type="button" tabindex="0">
+              <div class="mobile-nav-icon">⚙️</div>
               <div class="mobile-nav-content">
                 <span class="mobile-nav-title">{{ getTranslation('dashboard.settings') }}</span>
                 <span class="mobile-nav-desc">{{ getTranslation('nav.settingsDesc') }}</span>
               </div>
-              <div class="mobile-nav-arrow">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                  <path d="M9 18L15 12L9 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-              </div>
+              <div class="mobile-nav-arrow">→</div>
             </button>
             
-            <button (click)="navigateToSection('reports', $event)" 
-                    class="mobile-nav-item"
-                    type="button"
-                    tabindex="0">
-              <div class="mobile-nav-icon">
-                <span style="font-size: 20px;">📊</span>
-              </div>
+            <button (click)="navigateToSection('reports', $event)" class="mobile-nav-item" type="button" tabindex="0">
+              <div class="mobile-nav-icon">📊</div>
               <div class="mobile-nav-content">
                 <span class="mobile-nav-title">{{ getTranslation('dashboard.reports') }}</span>
                 <span class="mobile-nav-desc">{{ getTranslation('nav.reportsDesc') }}</span>
               </div>
-              <div class="mobile-nav-arrow">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                  <path d="M9 18L15 12L9 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-              </div>
+              <div class="mobile-nav-arrow">→</div>
             </button>
             
-            <button (click)="navigateToSection('delete-account', $event)" 
-                    class="mobile-nav-item delete-account-mobile"
-                    type="button"
-                    tabindex="0">
-              <div class="mobile-nav-icon">
-                <span style="font-size: 20px;">🗑️</span>
-              </div>
+            <button (click)="navigateToSection('delete-account', $event)" class="mobile-nav-item delete-account-mobile" type="button" tabindex="0">
+              <div class="mobile-nav-icon">🗑️</div>
               <div class="mobile-nav-content">
                 <span class="mobile-nav-title">{{ getTranslation('deleteAccount.title') }}</span>
                 <span class="mobile-nav-desc">{{ getTranslation('nav.deleteAccountDesc') }}</span>
               </div>
-              <div class="mobile-nav-arrow">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                  <path d="M9 18L15 12L9 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-              </div>
+              <div class="mobile-nav-arrow">→</div>
             </button>
           </div>
           
-          <!-- Help for all users -->
-          <button (click)="navigateToSection('help', $event)" 
-                  class="mobile-nav-item mobile-help-item"
-                  type="button"
-                  tabindex="0">
-            <div class="mobile-nav-icon">
-              <span style="font-size: 20px;">❓</span>
-            </div>
+          <button (click)="navigateToSection('help', $event)" class="mobile-nav-item mobile-help-item" type="button" tabindex="0">
+            <div class="mobile-nav-icon">❓</div>
             <div class="mobile-nav-content">
               <span class="mobile-nav-title">{{ getTranslation('nav.help') }}</span>
               <span class="mobile-nav-desc">{{ getTranslation('nav.helpDesc') }}</span>
             </div>
-            <div class="mobile-nav-arrow">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                <path d="M9 18L15 12L9 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-            </div>
+            <div class="mobile-nav-arrow">→</div>
           </button>
         </div>
 
-        <!-- Settings Section -->
         <div class="mobile-menu-section">
           <h4 class="mobile-section-title">{{ getTranslation('nav.settings') }}</h4>
           
-          <!-- Theme Toggle -->
           <div class="mobile-theme-selector">
-            <div class="mobile-nav-icon">
-              <span style="font-size: 20px;">{{ getCurrentThemeIcon() }}</span>
-            </div>
+            <div class="mobile-nav-icon">{{ getCurrentThemeIcon() }}</div>
             <div class="mobile-nav-content">
               <span class="mobile-nav-title">{{ getTranslation('nav.theme') }}</span>
               <span class="mobile-nav-desc">{{ getCurrentThemeName() }}</span>
             </div>
-            <button class="mobile-theme-dropdown-btn" 
-                    (click)="toggleThemeDropdown($event)" 
-                    [class.active]="isThemeDropdownOpen"
-                    type="button"
-                    aria-label="Theme selector"
-                    [attr.aria-expanded]="isThemeDropdownOpen"
-                    tabindex="0">
+            <button class="mobile-theme-dropdown-btn" (click)="toggleThemeDropdown($event)" [class.active]="isThemeDropdownOpen" type="button" aria-label="Theme selector" [attr.aria-expanded]="isThemeDropdownOpen" tabindex="0">
               <svg class="dropdown-arrow" [class.rotated]="isThemeDropdownOpen" width="12" height="12" viewBox="0 0 12 12">
                 <path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" stroke-width="1.5" fill="none"/>
               </svg>
             </button>
             <div class="mobile-theme-dropdown" [class.show]="isThemeDropdownOpen">
-              <button
-                *ngFor="let theme of availableThemes"
-                class="mobile-theme-option"
-                [class.active]="theme.code === currentTheme"
-                (click)="selectTheme(theme.code, $event)"
-                type="button"
-                tabindex="0">
+              <button *ngFor="let theme of availableThemes" class="mobile-theme-option" [class.active]="theme.code === currentTheme" (click)="selectTheme(theme.code, $event)" type="button" tabindex="0">
                 <span class="theme-icon">{{ theme.icon }}</span>
                 <span class="theme-name">{{ theme.name }}</span>
               </button>
@@ -444,69 +253,34 @@
           </div>
           
           <div class="mobile-language-selector">
-            <div class="mobile-nav-icon">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
-                <path d="M2 12H22" stroke="currentColor" stroke-width="2"/>
-                <path d="M12 2C14.5013 4.73835 15.9228 8.29203 16 12C15.9228 15.708 14.5013 19.2616 12 22C9.49872 19.2616 8.07725 15.708 8 12C8.07725 8.29203 9.49872 4.73835 12 2Z" stroke="currentColor" stroke-width="2"/>
-              </svg>
-            </div>
+            <div class="mobile-nav-icon">🌐</div>
             <div class="mobile-nav-content">
               <span class="mobile-nav-title">{{ getTranslation('nav.language') }}</span>
               <span class="mobile-nav-desc">{{ getCurrentLanguageName() }}</span>
             </div>
-            <button class="mobile-language-dropdown-btn" 
-                    (click)="toggleLanguageDropdown($event)" 
-                    [class.active]="isLanguageDropdownOpen"
-                    type="button"
-                    aria-label="Language selector"
-                    [attr.aria-expanded]="isLanguageDropdownOpen"
-                    tabindex="0">
+            <button class="mobile-language-dropdown-btn" (click)="toggleLanguageDropdown($event)" [class.active]="isLanguageDropdownOpen" type="button" aria-label="Language selector" [attr.aria-expanded]="isLanguageDropdownOpen" tabindex="0">
               <svg class="dropdown-arrow" [class.rotated]="isLanguageDropdownOpen" width="12" height="12" viewBox="0 0 12 12">
                 <path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" stroke-width="1.5" fill="none"/>
               </svg>
             </button>
             <div class="mobile-language-dropdown" [class.show]="isLanguageDropdownOpen">
-              <button
-                *ngFor="let lang of availableLanguages"
-                class="mobile-language-option"
-                [class.active]="lang.code === currentLanguage"
-                (click)="selectLanguage(lang.code, $event)"
-                type="button"
-                tabindex="0">
+              <button *ngFor="let lang of availableLanguages" class="mobile-language-option" [class.active]="lang.code === currentLanguage" (click)="selectLanguage(lang.code, $event)" type="button" tabindex="0">
                 {{ lang.name }}
               </button>
             </div>
           </div>
         </div>
 
-        <!-- Logout Button -->
         <div class="mobile-menu-footer" *ngIf="isLoggedIn">
-          <button (click)="logout()" 
-                  class="mobile-logout-btn"
-                  type="button"
-                  aria-label="Logout"
-                  tabindex="0">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-              <path d="M9 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V5C3 4.46957 3.21071 3.96086 3.58579 3.58579C3.96086 3.21071 4.46957 3 5 3H9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-              <path d="M16 17L21 12L16 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-              <path d="M21 12H9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-            {{ getTranslation('nav.logout') }}
+          <button (click)="logout()" class="mobile-logout-btn" type="button" aria-label="Logout" tabindex="0">
+            🚪 {{ getTranslation('nav.logout') }}
           </button>
         </div>
       </div>
     </div>
 
-    <!-- Enhanced Hamburger Menu -->
-    <button class="hamburger" 
-            [class.active]="isMenuOpen"
-            *ngIf="!isMenuOpen"
-            (click)="toggleMenu()"
-            type="button" 
-            aria-label="Toggle navigation menu"
-            [attr.aria-expanded]="isMenuOpen"
-            tabindex="0">
+    <!-- Hamburger Menu -->
+    <button class="hamburger" [class.active]="isMenuOpen" *ngIf="!isMenuOpen" (click)="toggleMenu()" type="button" aria-label="Toggle navigation menu" [attr.aria-expanded]="isMenuOpen" tabindex="0">
       <span></span>
       <span></span>
       <span></span>
@@ -514,8 +288,5 @@
   </div>
 
   <!-- Mobile Menu Overlay -->
-  <div class="mobile-menu-overlay" 
-       [class.active]="isMenuOpen" 
-       (click)="closeMenu()"
-       [attr.aria-hidden]="!isMenuOpen"></div>
+  <div class="mobile-menu-overlay" [class.active]="isMenuOpen" (click)="closeMenu()" [attr.aria-hidden]="!isMenuOpen"></div>
 </nav>
