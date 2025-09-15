@@ -7,7 +7,7 @@ import { TranslationService } from '../translation.service';
   standalone: true,
   imports: [CommonModule],
   templateUrl: './about.component.html',
-  styleUrls: ['./about.component.css'],
+  styleUrls: ['./about.component.css', './social-styles.css'],
 })
 export class AboutComponent {
   constructor(public translationService: TranslationService) {}

@@ -250,6 +250,11 @@ export class TranslationService {
       'services.interactive.description': 'Oferecemos soluções personalizadas que atendem às necessidades específicas do seu negócio, com foco em inovação e resultados mensuráveis.',
       'services.interactive.cta': 'Fale conosco',
 
+      // Social Media
+      'social.followUs': 'Siga-nos',
+      'social.connectWithUs': 'Conecte-se Conosco',
+      'footer.tagline': 'Transformando ideias em realidade digital',
+      
       // Footer
       'footer.rights': 'Todos os direitos reservados.'
     },
@@ -501,6 +506,11 @@ export class TranslationService {
       'services.interactive.description': 'We offer personalized solutions that meet your business\'s specific needs, with a focus on innovation and measurable results.',
       'services.interactive.cta': 'Contact us',
 
+      // Social Media
+      'social.followUs': 'Follow Us',
+      'social.connectWithUs': 'Connect With Us',
+      'footer.tagline': 'Transforming ideas into digital reality',
+      
       // Footer
       'footer.rights': 'All rights reserved.'
     }

@@ -12,7 +12,7 @@ const client = generateClient<Schema>();
   standalone: true,
   imports: [CommonModule],
   templateUrl: './todos.component.html',
-  styleUrls: ['./todos.component.css'],
+  styleUrls: ['./todos.component.css', './social-styles.css'],
 })
 export class TodosComponent implements OnInit, OnDestroy {
   todos: any[] = [];
