@@ -6,6 +6,21 @@
   <base href="/">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <!-- Event snippet for Solicitar cotação conversion page -->
+  <script>
+  function gtag_report_conversion(url) {
+    var callback = function () {
+      if (typeof(url) != 'undefined') {
+        window.location = url;
+      }
+    };
+    gtag('event', 'conversion', {
+        'send_to': 'AW-17534393821/rulFCJPwhZwbEN27hqlB',
+        'event_callback': callback
+    });
+    return false;
+  }
+  </script>
   
   <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=AW-17534393821"></script>
