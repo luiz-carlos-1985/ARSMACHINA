@@ -95,10 +95,6 @@
     <div class="mobile-nav-menu" 
          [class.active]="isMenuOpen"
          [ngStyle]="getMenuStyle()">
-      <!-- Drag Handle -->
-      <div class="mobile-menu-drag-handle" 
-           (touchstart)="onDragStart($event)"
-           (mousedown)="onDragStart($event)"></div>
       <!-- Mobile Menu Header -->
       <div class="mobile-menu-header">
         <div class="mobile-brand">

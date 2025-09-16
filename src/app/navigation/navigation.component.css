@@ -822,35 +822,6 @@
   right: 0;
 }
 
-/* ===== MOBILE MENU DRAG HANDLE ===== */
-.mobile-menu-drag-handle {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 20px;
-  background: transparent;
-  cursor: grab;
-  z-index: 1001;
-  touch-action: none;
-}
-
-.mobile-menu-drag-handle:active {
-  cursor: grabbing;
-}
-
-.mobile-menu-drag-handle::before {
-  content: '';
-  position: absolute;
-  top: 8px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 40px;
-  height: 4px;
-  background: rgba(255, 255, 255, 0.3);
-  border-radius: 2px;
-}
-
 /* ===== MOBILE MENU HEADER ===== */
 .mobile-menu-header {
   padding: 1.5rem 1.25rem 1.25rem;
@@ -862,7 +833,6 @@
   position: relative;
   overflow: hidden;
   min-height: 80px;
-  margin-top: 20px;
 }
 
 .mobile-menu-header::before {
