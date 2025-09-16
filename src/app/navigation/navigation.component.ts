@@ -423,6 +423,20 @@ export class NavigationComponent implements OnInit {
     return `translateX(${this.translateX}px)`;
   }
   
+  onMenuTouchStart(event: TouchEvent) {
+    const target = event.target as HTMLElement;
+    if (!target.closest('.mobile-nav-item, button, a')) {
+      this.onDragStart(event);
+    }
+  }
+
+  onMenuMouseDown(event: MouseEvent) {
+    const target = event.target as HTMLElement;
+    if (!target.closest('.mobile-nav-item, button, a')) {
+      this.onDragStart(event);
+    }
+  }
+
   // Menu drag functionality
   onMenuDragStart(event: MouseEvent | TouchEvent) {
     this.isDraggingMenu = true;
