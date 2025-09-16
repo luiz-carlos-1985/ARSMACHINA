@@ -304,77 +304,34 @@ export class NavigationComponent implements OnInit {
   }
   
   navigateToSection(section: string, event?: Event) {
-    try {
-      if (event) {
-        event.preventDefault();
-        event.stopPropagation();
-      }
+    console.log('Navigate clicked:', section);
+    
+    if (event) {
+      event.preventDefault();
+      event.stopPropagation();
+    }
 
-      // Close all menus
-      this.isUserMenuOpen = false;
-      this.closeMenu();
-      
-      // Navigate directly to the correct route
+    this.closeMenu();
+    
+    setTimeout(() => {
       switch (section) {
         case 'profile':
-          if (this.isLoggedIn) {
-            this.router.navigate(['/profile']);
-          } else {
-            this.router.navigate(['/login']);
-          }
+          this.router.navigate(['/profile']);
           break;
-          
         case 'settings':
-          if (this.isLoggedIn) {
-            this.router.navigate(['/settings']); // Menu hambúrguer não usa query parameter
-          } else {
-            this.router.navigate(['/login']);
-          }
+          this.router.navigate(['/settings']);
           break;
-          
         case 'reports':
-          if (this.isLoggedIn) {
-            this.router.navigate(['/reports']);
-          } else {
-            this.router.navigate(['/login']);
-          }
+          this.router.navigate(['/reports']);
           break;
-          
         case 'help':
-          if (this.isLoggedIn) {
-            this.router.navigate(['/help-dashboard']);
-          } else {
-            this.router.navigate(['/help']);
-          }
+          this.router.navigate(['/help']);
           break;
-          
         case 'delete-account':
-          if (this.isLoggedIn) {
-            this.router.navigate(['/delete-account']);
-          } else {
-            this.router.navigate(['/login']);
-          }
+          this.router.navigate(['/delete-account']);
           break;
-          
-        default:
-          console.warn('Unknown section:', section);
-          if (this.isLoggedIn) {
-            this.router.navigate(['/dashboard']);
-          } else {
-            this.router.navigate(['/login']);
-          }
       }
-      
-      // Force change detection for mobile
-      if (this.isMobile) {
-        this.cdr.detectChanges();
-      }
-    } catch (error) {
-      console.error('Error navigating to section:', error);
-      // Ensure menus are closed even if navigation fails
-      this.isUserMenuOpen = false;
-      this.closeMenu();
-    }
+    }, 100);
   }
 
   getTranslation(key: string): string {

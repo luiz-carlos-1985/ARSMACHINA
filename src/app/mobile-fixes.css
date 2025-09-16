@@ -1,18 +1,38 @@
 /* Mobile-specific fixes for touch events and responsiveness */
 button {
-    pointer-events: auto; /* Ensure buttons are clickable */
+    pointer-events: auto;
+    touch-action: manipulation;
 }
 
-.mobile-nav-item {
-    position: relative; /* Ensure proper stacking context */
-    z-index: 10; /* Bring buttons above other elements */
-}
+
+
+
 
 .hamburger {
-    z-index: 1000; /* Ensure hamburger menu is always on top */
+    z-index: 10001;
+    pointer-events: auto;
+    touch-action: manipulation;
+}
+
+.chatbot-container {
+    pointer-events: auto !important;
+    touch-action: manipulation;
+    z-index: 999 !important;
+}
+
+.chatbot-minimized {
+    pointer-events: auto !important;
+    touch-action: manipulation;
+    z-index: 1000 !important;
+}
+
+/* Scroll fixes for mobile menu */
+.mobile-nav-menu {
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
 }
 
 /* Additional styles to enhance touch responsiveness */
 .theme-toggle {
-    touch-action: manipulation; /* Prevent default touch actions */
+    touch-action: manipulation;
 }

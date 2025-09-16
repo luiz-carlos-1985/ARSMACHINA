@@ -712,6 +712,9 @@ export class ChatbotComponent implements OnInit, OnDestroy {
 
   onChatClick(event: Event) {
     if (!this.isDragging && !this.hasDragged) {
+      event.preventDefault();
+      event.stopPropagation();
+      console.log('Chat clicked!');
       this.toggleChat();
     }
   }

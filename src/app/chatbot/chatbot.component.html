@@ -5,7 +5,8 @@
        [class.dragging]="isDragging"
        (click)="onChatClick($event)"
        (mousedown)="onMouseDown($event)"
-       (touchstart)="onDragStart($event)">
+       (touchstart)="onDragStart($event)"
+       (touchend)="onChatClick($event)">
     <div class="chat-icon-wrapper">
       <div class="chat-icon">🤖</div>
       <div class="pulse-ring"></div>

@@ -94,9 +94,11 @@
     <!-- Mobile Menu -->
     <div class="mobile-nav-menu" 
          [class.active]="isMenuOpen"
-         [style.transform]="getMenuTransform()"
-         (touchstart)="onDragStart($event)"
-         (mousedown)="onDragStart($event)">
+         [ngStyle]="getMenuStyle()">
+      <!-- Drag Handle -->
+      <div class="mobile-menu-drag-handle" 
+           (touchstart)="onDragStart($event)"
+           (mousedown)="onDragStart($event)"></div>
       <!-- Mobile Menu Header -->
       <div class="mobile-menu-header">
         <div class="mobile-brand">
@@ -183,51 +185,51 @@
           </a>
           
           <div *ngIf="isLoggedIn" class="mobile-user-section">
-            <button (click)="navigateToSection('profile', $event)" class="mobile-nav-item" type="button" tabindex="0">
+            <a routerLink="/profile" (click)="closeMenu()" class="mobile-nav-item">
               <div class="mobile-nav-icon">👤</div>
               <div class="mobile-nav-content">
                 <span class="mobile-nav-title">{{ getTranslation('dashboard.profile') }}</span>
                 <span class="mobile-nav-desc">{{ getTranslation('nav.profileDesc') }}</span>
               </div>
               <div class="mobile-nav-arrow">→</div>
-            </button>
+            </a>
             
-            <button (click)="navigateToSection('settings', $event)" class="mobile-nav-item" type="button" tabindex="0">
+            <a routerLink="/settings" (click)="closeMenu()" class="mobile-nav-item">
               <div class="mobile-nav-icon">⚙️</div>
               <div class="mobile-nav-content">
                 <span class="mobile-nav-title">{{ getTranslation('dashboard.settings') }}</span>
                 <span class="mobile-nav-desc">{{ getTranslation('nav.settingsDesc') }}</span>
               </div>
               <div class="mobile-nav-arrow">→</div>
-            </button>
+            </a>
             
-            <button (click)="navigateToSection('reports', $event)" class="mobile-nav-item" type="button" tabindex="0">
+            <a routerLink="/reports" (click)="closeMenu()" class="mobile-nav-item">
               <div class="mobile-nav-icon">📊</div>
               <div class="mobile-nav-content">
                 <span class="mobile-nav-title">{{ getTranslation('dashboard.reports') }}</span>
                 <span class="mobile-nav-desc">{{ getTranslation('nav.reportsDesc') }}</span>
               </div>
               <div class="mobile-nav-arrow">→</div>
-            </button>
+            </a>
             
-            <button (click)="navigateToSection('delete-account', $event)" class="mobile-nav-item delete-account-mobile" type="button" tabindex="0">
+            <a routerLink="/delete-account" (click)="closeMenu()" class="mobile-nav-item delete-account-mobile">
               <div class="mobile-nav-icon">🗑️</div>
               <div class="mobile-nav-content">
                 <span class="mobile-nav-title">{{ getTranslation('deleteAccount.title') }}</span>
                 <span class="mobile-nav-desc">{{ getTranslation('nav.deleteAccountDesc') }}</span>
               </div>
               <div class="mobile-nav-arrow">→</div>
-            </button>
+            </a>
           </div>
           
-          <button (click)="navigateToSection('help', $event)" class="mobile-nav-item mobile-help-item" type="button" tabindex="0">
+          <a routerLink="/help" (click)="closeMenu()" class="mobile-nav-item mobile-help-item">
             <div class="mobile-nav-icon">❓</div>
             <div class="mobile-nav-content">
               <span class="mobile-nav-title">{{ getTranslation('nav.help') }}</span>
               <span class="mobile-nav-desc">{{ getTranslation('nav.helpDesc') }}</span>
             </div>
             <div class="mobile-nav-arrow">→</div>
-          </button>
+          </a>
         </div>
 
         <div class="mobile-menu-section">

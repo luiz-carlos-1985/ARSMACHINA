@@ -813,11 +813,42 @@
   border-left: 1px solid rgba(0, 0, 0, 0.1);
   user-select: none;
   -webkit-user-select: none;
-  touch-action: pan-x;
+  touch-action: pan-y;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
 }
 
 .mobile-nav-menu.active {
   right: 0;
+}
+
+/* ===== MOBILE MENU DRAG HANDLE ===== */
+.mobile-menu-drag-handle {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 20px;
+  background: transparent;
+  cursor: grab;
+  z-index: 1001;
+  touch-action: none;
+}
+
+.mobile-menu-drag-handle:active {
+  cursor: grabbing;
+}
+
+.mobile-menu-drag-handle::before {
+  content: '';
+  position: absolute;
+  top: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 40px;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 2px;
 }
 
 /* ===== MOBILE MENU HEADER ===== */
@@ -831,6 +862,7 @@
   position: relative;
   overflow: hidden;
   min-height: 80px;
+  margin-top: 20px;
 }
 
 .mobile-menu-header::before {
@@ -972,6 +1004,7 @@
   -moz-appearance: none;
   appearance: none;
   width: calc(100% - 1rem);
+  pointer-events: auto;
 }
 
 .mobile-nav-item::before {
@@ -1890,6 +1923,11 @@ body.menu-open {
     touch-action: manipulation !important;
     -webkit-tap-highlight-color: rgba(102, 126, 234, 0.2) !important;
     cursor: pointer !important;
+    pointer-events: auto !important;
+  }
+  
+  .mobile-nav-item * {
+    pointer-events: none !important;
   }
   
   .mobile-close-btn {
@@ -1915,12 +1953,7 @@ body.menu-open {
     user-select: none !important;
   }
 
-  /* Prevent child elements from blocking touch */
-  .hamburger *,
-  .mobile-close-btn *,
-  .mobile-nav-item * {
-    pointer-events: none !important;
-  }
+
 
   /* Enhanced active states for mobile */
   .hamburger:active {
@@ -1994,14 +2027,9 @@ body.menu-open {
     padding: 0 1rem;
   }
 
-  .mobile-nav-item {
-    padding: 0.875rem 1rem !important;
-    margin: 0.125rem 0 !important;
-    min-height: 56px !important;
-    pointer-events: auto !important;
-    cursor: pointer !important;
-    -webkit-tap-highlight-color: rgba(102, 126, 234, 0.2) !important;
-  }
+
+  
+
 
   .mobile-nav-icon {
     width: 44px;
