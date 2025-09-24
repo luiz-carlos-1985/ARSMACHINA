@@ -802,6 +802,7 @@
   width: 320px;
   max-width: 85vw;
   height: 100vh;
+  height: 100dvh;
   background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
@@ -818,6 +819,8 @@
   overscroll-behavior: contain;
   display: flex;
   flex-direction: column;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(102, 126, 234, 0.3) transparent;
 }
 
 .mobile-nav-menu.active {
@@ -928,7 +931,11 @@
   gap: 1.5rem;
   flex: 1;
   overflow-y: auto;
+  overflow-x: hidden;
   -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+  min-height: 0;
+  padding-bottom: 120px;
 }
 
 .mobile-menu-section {
@@ -1298,11 +1305,15 @@
 
 /* ===== MOBILE MENU FOOTER ===== */
 .mobile-menu-footer {
-  padding: 0.5rem;
-  border-top: 0px solid rgba(0, 0, 0, 0.08);
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.5) 0%, rgba(248, 249, 250, 0.5) 100%);
-  margin-top: 0px;
-  margin-bottom: 30px;
+  padding: 1rem;
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(248, 249, 250, 0.9) 100%);
+  margin-top: auto;
+  flex-shrink: 0;
+  position: sticky;
+  bottom: 0;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
 }
 
 .mobile-logout-btn {
@@ -1473,11 +1484,14 @@
   .mobile-nav-menu {
     width: 100vw;
     max-width: 100vw;
+    height: 100vh;
+    height: 100dvh;
   }
 
   .mobile-menu-header {
     padding: 1.25rem 1rem 1rem;
     min-height: 70px;
+    flex-shrink: 0;
   }
 
   .mobile-logo {
@@ -1499,8 +1513,11 @@
   }
 
   .mobile-menu-content {
-    padding: 1rem 0 1.5rem;
+    padding: 1rem 0;
     gap: 1.25rem;
+    padding-bottom: 140px;
+    min-height: 0;
+    flex: 1;
   }
 
   .mobile-menu-section {
@@ -1543,6 +1560,12 @@
 
   .mobile-menu-footer {
     padding: 1rem;
+    position: sticky;
+    bottom: 0;
+    background: rgba(248, 249, 250, 0.95);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
   }
 
   .mobile-logout-btn {
@@ -1612,27 +1635,53 @@
 
 /* ===== SCROLLBAR STYLING ===== */
 .mobile-nav-menu::-webkit-scrollbar {
-  width: 6px;
+  width: 4px;
 }
 
 .mobile-nav-menu::-webkit-scrollbar-track {
-  background: rgba(0, 0, 0, 0.05);
+  background: transparent;
 }
 
 .mobile-nav-menu::-webkit-scrollbar-thumb {
   background: rgba(102, 126, 234, 0.3);
-  border-radius: 3px;
+  border-radius: 2px;
 }
 
 .mobile-nav-menu::-webkit-scrollbar-thumb:hover {
   background: rgba(102, 126, 234, 0.5);
 }
 
-/* ===== PREVENT BODY SCROLL WHEN MENU IS OPEN ===== */
+.mobile-menu-content::-webkit-scrollbar {
+  width: 4px;
+}
+
+.mobile-menu-content::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.mobile-menu-content::-webkit-scrollbar-thumb {
+  background: rgba(102, 126, 234, 0.2);
+  border-radius: 2px;
+}
+
+.mobile-menu-content::-webkit-scrollbar-thumb:hover {
+  background: rgba(102, 126, 234, 0.4);
+}
+
+/* ===== PREVENT BODY SCROLL WHEN MENU IS OPEN (DESKTOP ONLY) ===== */
 body.menu-open {
   overflow: hidden;
   position: fixed;
   width: 100%;
+}
+
+/* Allow body scroll on mobile when menu is open */
+@media (max-width: 768px) {
+  body.menu-open {
+    overflow: auto !important;
+    position: static !important;
+    width: auto !important;
+  }
 }
 
 /* ===== USER MENU DROPDOWN ===== */
@@ -1929,8 +1978,6 @@ body.menu-open {
     user-select: none !important;
   }
 
-
-
   /* Enhanced active states for mobile */
   .hamburger:active {
     background: rgba(255, 255, 255, 0.3) !important;
@@ -1957,6 +2004,21 @@ body.menu-open {
 
   .mobile-nav-menu {
     display: block !important;
+    height: 100vh !important;
+    height: 100dvh !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    -webkit-overflow-scrolling: touch !important;
+    overscroll-behavior: contain !important;
+    scroll-behavior: smooth !important;
+  }
+  
+  .mobile-menu-content {
+    min-height: calc(100vh - 160px) !important;
+    min-height: calc(100dvh - 160px) !important;
+    padding-bottom: 120px !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch !important;
   }
 }
 
@@ -1989,23 +2051,30 @@ body.menu-open {
   .mobile-nav-menu {
     width: 100vw !important;
     max-width: 100vw !important;
+    height: 100vh !important;
+    height: 100dvh !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch !important;
   }
 
   .mobile-menu-header {
     padding: 1.5rem 1rem 1rem;
+    flex-shrink: 0 !important;
   }
 
   .mobile-menu-content {
     padding: 1rem 0;
+    min-height: calc(100vh - 180px) !important;
+    min-height: calc(100dvh - 180px) !important;
+    padding-bottom: 140px !important;
+    flex: 1 !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch !important;
   }
 
   .mobile-menu-section {
     padding: 0 1rem;
   }
-
-
-  
-
 
   .mobile-nav-icon {
     width: 44px;
@@ -2018,6 +2087,15 @@ body.menu-open {
     pointer-events: auto !important;
     cursor: pointer !important;
     -webkit-tap-highlight-color: rgba(102, 126, 234, 0.2) !important;
+  }
+  
+  .mobile-menu-footer {
+    position: sticky !important;
+    bottom: 0 !important;
+    background: rgba(248, 249, 250, 0.98) !important;
+    backdrop-filter: blur(20px) !important;
+    -webkit-backdrop-filter: blur(20px) !important;
+    z-index: 10 !important;
   }
 }
 /* ===== MOBILE HEADER ACTIONS ===== */

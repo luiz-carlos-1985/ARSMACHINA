@@ -155,6 +155,11 @@ export class NavigationComponent implements OnInit {
   }
 
   private updateBodyScroll() {
+    // Não bloquear o scroll do body no mobile para permitir scroll do menu
+    if (this.isMobile) {
+      return; // Não aplicar menu-open no mobile
+    }
+    
     if (this.isMenuOpen) {
       document.body.classList.add('menu-open');
     } else {
