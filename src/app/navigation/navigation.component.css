@@ -2112,6 +2112,7 @@ body.menu-open {
   flex-shrink: 0;
   background: rgba(248, 249, 250, 0.8);
   backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
 }
 
 @media (max-width: 480px) {
