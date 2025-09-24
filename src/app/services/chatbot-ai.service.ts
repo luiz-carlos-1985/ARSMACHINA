@@ -200,7 +200,7 @@ export class ChatbotAiService {
   };
 
   constructor() {
-    this.initializeSession();
+    // Não inicializa automaticamente - deixa o componente controlar
   }
 
   private generateSessionId(): string {
@@ -208,15 +208,27 @@ export class ChatbotAiService {
   }
 
   private initializeSession(): void {
+    const userLanguage = this.getUserLanguage();
     const welcomeMessage: ChatMessage = {
       id: this.generateMessageId(),
       sender: 'bot',
-      message: '👋 Olá! Eu sou o assistente inteligente da Ars Machina Consultancy. Como posso ajudar você hoje?',
+      message: userLanguage === 'en' 
+        ? '👋 Hello! I\'m the intelligent assistant from Ars Machina Consultancy. How can I help you today?'
+        : '👋 Olá! Eu sou o assistente inteligente da Ars Machina Consultancy. Como posso ajudar você hoje?',
       timestamp: new Date(),
       type: 'text'
     };
     
     this.conversationHistory.next([welcomeMessage]);
+  }
+
+  private getUserLanguage(): 'pt' | 'en' {
+    const saved = localStorage.getItem('ars-machina-user-prefs');
+    if (saved) {
+      const prefs = JSON.parse(saved);
+      return prefs.language || 'pt';
+    }
+    return navigator.language.startsWith('en') ? 'en' : 'pt';
   }
 
   private generateMessageId(): string {
