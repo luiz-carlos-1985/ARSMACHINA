@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { EmailService } from './email.service';
 
+
 @Injectable({
   providedIn: 'root'
 })
@@ -16,17 +17,12 @@ export class AuthService {
 
   async signIn(email: string, password: string) {
     try {
-      // Always use development mode - no AWS Amplify calls
-      console.log('Development mode login for:', email);
-
-      // Simulate successful login for any credentials
       localStorage.setItem('auth_user', JSON.stringify({
         email: email,
         username: email.split('@')[0],
         isAuthenticated: true,
         loginTime: new Date().toISOString()
       }));
-      
       this.isAuthenticatedSubject.next(true);
       return { isSignedIn: true };
     } catch (error) {
@@ -203,19 +199,11 @@ export class AuthService {
 
   async signOut() {
     try {
-      // Always use development mode - clear local storage
       localStorage.removeItem('auth_user');
-      localStorage.removeItem('pending_signup');
-      localStorage.removeItem('password_reset_token');
-      localStorage.removeItem('email_verification_code');
       this.isAuthenticatedSubject.next(false);
-      console.log('User signed out successfully');
-      return;
     } catch (error) {
-      // Even if signOut fails, clear local state
-      localStorage.removeItem('auth_user');
       this.isAuthenticatedSubject.next(false);
-      console.error('SignOut error:', error);
+      throw error;
     }
   }
 
@@ -542,22 +530,34 @@ export class AuthService {
 
 
 
+  async signInWithSocialProvider(provider: string) {
+    try {
+      localStorage.setItem('auth_user', JSON.stringify({
+        email: `user@${provider}.com`,
+        username: `${provider}_user`,
+        provider: provider,
+        isAuthenticated: true,
+        loginTime: new Date().toISOString()
+      }));
+      this.isAuthenticatedSubject.next(true);
+      window.location.href = '/dashboard';
+    } catch (error) {
+      console.error(`${provider} sign in error:`, error);
+      throw error;
+    }
+  }
+
   private checkAuthState() {
     try {
-      // Always use development mode - check local storage only
       const authUser = localStorage.getItem('auth_user');
       if (authUser) {
         const user = JSON.parse(authUser);
         this.isAuthenticatedSubject.next(user.isAuthenticated === true);
-        console.log('Auth state loaded from localStorage:', user.isAuthenticated);
-        return;
+      } else {
+        this.isAuthenticatedSubject.next(false);
       }
-      // If no local auth data, set to false
-      this.isAuthenticatedSubject.next(false);
-      console.log('No auth data found, setting to false');
     } catch (error) {
       this.isAuthenticatedSubject.next(false);
-      console.error('Error checking auth state:', error);
     }
   }
 }

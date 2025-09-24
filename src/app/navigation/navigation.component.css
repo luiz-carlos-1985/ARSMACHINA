@@ -16,7 +16,7 @@
 }
 
 .nav-container {
-  max-width: 1200px;
+  max-width: 3200px;
   margin: 0 auto;
   display: flex;
   justify-content: space-between;
@@ -518,9 +518,9 @@
 }
 
 .language-btn {
-  background: linear-gradient(135deg, rgba(76, 175, 80, 0.25) 0%, rgba(56, 142, 60, 0.25) 50%, rgba(139, 195, 74, 0.2) 100%);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.08) 50%, rgba(255, 255, 255, 0.12) 100%);
   color: white;
-  border: 2px solid rgba(76, 175, 80, 0.5);
+  border: 2px solid rgba(255, 255, 255, 0.25);
   padding: 0.8rem 1.4rem;
   border-radius: 20px;
   cursor: pointer;
@@ -532,7 +532,7 @@
   justify-content: space-between;
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  box-shadow: 0 6px 20px rgba(76, 175, 80, 0.2), inset 0 2px 0 rgba(255, 255, 255, 0.3), 0 0 0 1px rgba(76, 175, 80, 0.3);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15), inset 0 2px 0 rgba(255, 255, 255, 0.3), 0 0 0 1px rgba(255, 255, 255, 0.1);
   font-weight: 700;
   letter-spacing: 0.8px;
   font-size: 0.9rem;

@@ -18,7 +18,8 @@ Esta aplicação é uma landing page profissional e interativa que demonstra as 
 ### 🔐 Sistema de Autenticação
 - **Registro e Login**: Sistema seguro usando Amazon Cognito
 - **Gerenciamento de Usuários**: Perfis personalizados e controle de acesso
-- **Autenticação Social**: Integração com provedores externos
+- **Autenticação Social**: Login com Google, Facebook e LinkedIn
+- **Callback Seguro**: Processamento seguro de retorno da autenticação social
 
 ### 📊 API e Banco de Dados
 - **GraphQL API**: Endpoint em tempo real com AWS AppSync
@@ -55,6 +56,7 @@ Esta aplicação é uma landing page profissional e interativa que demonstra as 
    - Configure suas credenciais AWS
    - Execute `amplify init` para inicializar o projeto
    - Configure os serviços necessários (Cognito, AppSync, DynamoDB)
+   - Configure a autenticação social (consulte `SOCIAL_AUTH_SETUP.md`)
 
 4. **Execute o servidor de desenvolvimento**:
    ```bash

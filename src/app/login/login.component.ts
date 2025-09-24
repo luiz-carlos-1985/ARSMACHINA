@@ -4,11 +4,12 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../auth.service';
 import { TranslationService } from '../translation.service';
+import { SocialAuthComponent } from '../social-auth/social-auth.component';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [FormsModule, CommonModule, RouterLink],
+  imports: [FormsModule, CommonModule, RouterLink, SocialAuthComponent],
   providers: [AuthService],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'

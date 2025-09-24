@@ -5,11 +5,12 @@ import { CommonModule } from '@angular/common';
 import { TranslationService } from '../translation.service';
 import { AuthService } from '../auth.service';
 import { Subject, takeUntil, debounceTime, distinctUntilChanged } from 'rxjs';
+import { SocialAuthComponent } from '../social-auth/social-auth.component';
 
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [FormsModule, ReactiveFormsModule, CommonModule, RouterLink],
+  imports: [FormsModule, ReactiveFormsModule, CommonModule, RouterLink, SocialAuthComponent],
   templateUrl: './register.component.html',
   styleUrl: './register.component.css'
 })

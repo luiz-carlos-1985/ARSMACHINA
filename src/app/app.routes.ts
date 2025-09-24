@@ -1,4 +1,6 @@
 import { Routes } from '@angular/router';
+import { inject } from '@angular/core';
+import { AuthGuard } from './auth-guard.service';
 
 export const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
@@ -15,7 +17,8 @@ export const routes: Routes = [
   { path: 'login', loadComponent: () => import('./login/login.component').then(m => m.LoginComponent) },
   { path: 'register', loadComponent: () => import('./register/register.component').then(m => m.RegisterComponent) },
   { path: 'verify-code', loadComponent: () => import('./verify-code/verify-code.component').then(m => m.VerifyCodeComponent) },
-  { path: 'dashboard', loadComponent: () => import('./dashboard/dashboard.component').then(m => m.DashboardComponent) },
+  { path: 'auth/callback', loadComponent: () => import('./auth-callback/auth-callback.component').then(m => m.AuthCallbackComponent) },
+  { path: 'dashboard', loadComponent: () => import('./dashboard/dashboard.component').then(m => m.DashboardComponent), canActivate: [() => inject(AuthGuard).canActivate()] },
   { path: 'projects', loadComponent: () => import('./projects/projects.component').then(m => m.ProjectsComponent) },
   { path: 'activities', loadComponent: () => import('./activities/activities.component').then(m => m.ActivitiesComponent) },
   { path: 'notifications', loadComponent: () => import('./notifications/notifications.component').then(m => m.NotificationsComponent) },

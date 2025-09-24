@@ -56,6 +56,8 @@
       <a routerLink="/reset-password">{{ getTranslation('login.forgotPassword') }}</a>
     </div>
 
+    <app-social-auth mode="login"></app-social-auth>
+
     <div class="register-link">
       <p>{{ getTranslation('login.noAccount') }} <a routerLink="/register" routerLinkActive="active">{{ getTranslation('login.register') }}</a></p>
     </div>
