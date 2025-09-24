@@ -1310,7 +1310,7 @@
   background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(248, 249, 250, 0.9) 100%);
   margin-top: auto;
   flex-shrink: 0;
-  position: sticky;
+  position: relative;
   bottom: 0;
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
