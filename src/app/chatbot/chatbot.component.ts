@@ -128,6 +128,13 @@ export class ChatbotComponent implements OnInit, OnDestroy {
   contextualHelp: boolean = true;
   proactiveAssistance: boolean = true;
   currentMessage: string = '';
+  quickReplies: string[] = [];
+  showQuickReplies: boolean = false;
+  userName: string = '';
+  userPreferences: any = {};
+  conversationHistory: string[] = [];
+  lastUserActivity: Date = new Date();
+  userLanguage: 'pt' | 'en' = 'pt';
   
   // Real-time features
   currentGreeting: string = '';
@@ -164,11 +171,11 @@ export class ChatbotComponent implements OnInit, OnDestroy {
     this.setInitialPosition();
     this.initializeSubscriptions();
     this.addOrientationListener();
-
     this.startPerformanceMonitoring();
     this.initializeParticleSystem();
     this.setupAdvancedAnimations();
     this.startSessionTimer();
+    this.getUserLanguagePreference();
     setTimeout(() => this.showInfoBalloon = false, 8000);
   }
 
@@ -232,6 +239,10 @@ export class ChatbotComponent implements OnInit, OnDestroy {
     this.updateConversationFlow(message);
     this.checkForServiceMention(message);
     this.generateSmartSuggestions(message);
+    this.detectUserName(message);
+    this.detectAndSetLanguage(message);
+    this.updateUserActivity();
+    this.generateQuickReplies(message);
 
     // Add user message with enhanced metadata
     const userMsg: ChatMessage = {
@@ -283,9 +294,7 @@ export class ChatbotComponent implements OnInit, OnDestroy {
         this.currentTypingText = '';
         this.scrollToBottom();
         this.playNotificationSound();
-        
-
-        
+        this.showQuickReplies = true;
         this.cdr.detectChanges();
       }, typingDelay);
       
@@ -302,7 +311,7 @@ export class ChatbotComponent implements OnInit, OnDestroy {
     const personality = this.getPersonalityResponse(intent);
     
     return {
-      message: this.getBusinessResponse(message),
+      message: this.getContextualResponse(message),
       type: 'text',
       confidence: this.calculateResponseConfidence(message, intent),
       metadata: {
@@ -395,14 +404,52 @@ export class ChatbotComponent implements OnInit, OnDestroy {
   }
 
   private generateSmartSuggestions(message: string): void {
-    const suggestions = [
-      'Gostaria de saber mais sobre nossos serviços?',
-      'Posso ajudar com um orçamento personalizado?',
-      'Tem algum projeto específico em mente?',
-      'Quer agendar uma consulta gratuita?'
-    ];
+    const lowerMessage = message.toLowerCase();
+    let suggestions = [];
     
-    this.suggestedResponses = suggestions.slice(0, 3);
+    if (this.userLanguage === 'en') {
+      if (lowerMessage.includes('price') || lowerMessage.includes('cost')) {
+        suggestions = [
+          'View available packages',
+          'Request custom quote',
+          'Schedule free consultation'
+        ];
+      } else if (lowerMessage.includes('service') || lowerMessage.includes('development')) {
+        suggestions = [
+          'Web development',
+          'Mobile apps',
+          'Cloud infrastructure'
+        ];
+      } else {
+        suggestions = [
+          'Would you like to know more about our services?',
+          'Can I help with a personalized quote?',
+          'Do you have a specific project in mind?'
+        ];
+      }
+    } else {
+      if (lowerMessage.includes('preço') || lowerMessage.includes('custo')) {
+        suggestions = [
+          'Ver pacotes disponíveis',
+          'Solicitar orçamento personalizado',
+          'Agendar consulta gratuita'
+        ];
+      } else if (lowerMessage.includes('serviço') || lowerMessage.includes('desenvolvimento')) {
+        suggestions = [
+          'Sites e sistemas web',
+          'Aplicativos mobile',
+          'Cloud e infraestrutura'
+        ];
+      } else {
+        suggestions = [
+          'Gostaria de saber mais sobre nossos serviços?',
+          'Posso ajudar com um orçamento personalizado?',
+          'Tem algum projeto específico em mente?'
+        ];
+      }
+    }
+    
+    this.suggestedResponses = suggestions;
   }
 
   private detectLanguage(message: string): string {
@@ -530,14 +577,15 @@ export class ChatbotComponent implements OnInit, OnDestroy {
 
   getBusinessResponse(message: string): string {
     const lowerMessage = message.toLowerCase();
-    const isEnglish = this.detectEnglish(message);
+    const isEnglish = this.userLanguage === 'en';
+    const greeting = this.userName ? `${this.userName}, ` : '';
     
     // Mensagem inicial atrativa mostrando serviços - apenas para saudações
     if (lowerMessage.includes('oi') || lowerMessage.includes('olá') || lowerMessage.includes('hello') || lowerMessage.includes('bom dia') || lowerMessage.includes('boa tarde') || lowerMessage.includes('boa noite')) {
-      return `🎯 **Excelente! Você está falando com o especialista certo.**\n\n` +
+      return `🎯 **${greeting}Excelente! Você está falando com o especialista certo.**\n\n` +
              `Sou consultor sênior da **Ars Machina Consultancy** - referência em transformação digital corporativa.\n\n` +
              `📊 **NOSSOS RESULTADOS COMPROVADOS:**\n` +
-             `✅ **+200 empresas** transformadas digitalmente\n` +
+             `✅ **+20 empresas** transformadas digitalmente\n` +
              `✅ **ROI médio de 300%** em 12 meses\n` +
              `✅ **98% de satisfação** dos clientes\n` +
              `✅ Equipe **certificada** pelas principais clouds\n\n` +
@@ -562,7 +610,7 @@ export class ChatbotComponent implements OnInit, OnDestroy {
              `**Qual desafio tecnológico da sua empresa posso ajudar a resolver?**`;
     }
     
-    if (lowerMessage.includes('serviços') || lowerMessage.includes('servicos') || lowerMessage.includes('desenvolvimento')) {
+    if (lowerMessage.includes('serviços') || lowerMessage.includes('servicos') || lowerMessage.includes('desenvolvimento') || lowerMessage.includes('services') || lowerMessage.includes('development')) {
       this.showWhatsAppButton = true;
       this.selectedService = 'Desenvolvimento';
       return `🏗️ **PORTFÓLIO COMPLETO ARS MACHINA:**\n\n` +
@@ -696,7 +744,32 @@ export class ChatbotComponent implements OnInit, OnDestroy {
              `**Prefere WhatsApp ou email?**`;
     }
     
-    if (lowerMessage.includes('ideia') || lowerMessage.includes('projeto') || lowerMessage.includes('startup')) {
+    if (lowerMessage.includes('ideia') || lowerMessage.includes('projeto') || lowerMessage.includes('startup') || lowerMessage.includes('idea') || lowerMessage.includes('project')) {
+      if (isEnglish) {
+        return `💡 **WE TRANSFORM YOUR IDEA INTO DIGITAL REALITY!**\n\n` +
+               `🎯 **ARS MACHINA PROCESS:**\n\n` +
+               `1️⃣ **DISCOVERY (FREE)**\n` +
+               `• Understand your vision\n` +
+               `• Feasibility analysis\n` +
+               `• Scope definition\n\n` +
+               `2️⃣ **PLANNING**\n` +
+               `• Solution architecture\n` +
+               `• Detailed timeline\n` +
+               `• Transparent budget\n\n` +
+               `3️⃣ **DEVELOPMENT**\n` +
+               `• Agile methodology\n` +
+               `• Weekly deliveries\n` +
+               `• Rigorous testing\n\n` +
+               `4️⃣ **LAUNCH & SUPPORT**\n` +
+               `• Professional deployment\n` +
+               `• Team training\n` +
+               `• Continuous support\n\n` +
+               `🚀 **SUCCESS CASES:**\n` +
+               `• E-commerce that earned $2M in the 1st year\n` +
+               `• App with +50k downloads\n` +
+               `• System that reduced costs by 60%\n\n` +
+               `**Tell me your idea! What problem do you want to solve?**`;
+      }
       return `💡 **TRANSFORMAMOS SUA IDEIA EM REALIDADE DIGITAL!**\n\n` +
              `🎯 **PROCESSO ARS MACHINA:**\n\n` +
              `1️⃣ **DESCOBERTA (GRATUITA)**\n` +
@@ -724,28 +797,28 @@ export class ChatbotComponent implements OnInit, OnDestroy {
     
     // Resposta padrão atrativa
     if (isEnglish) {
-      return `🤖 **Hello! I'm your digital consultant from Ars Machina!**\n\n` +
+      return `🤖 **Hello${this.userName ? ' ' + this.userName : ''}! I'm your digital consultant from Ars Machina!**\n\n` +
              `We're here to **revolutionize your business** with cutting-edge technology!\n\n` +
              `💻 Type **'services'** - See our complete portfolio\n` +
              `💰 Type **'pricing'** - Learn about our packages\n` +
              `💡 Type **'idea'** - Transform your idea into a project\n` +
              `📞 Type **'contact'** - Speak with a specialist\n\n` +
              `🏆 **WHY CHOOSE ARS MACHINA?**\n` +
-             `✅ +200 successfully delivered projects\n` +
+             `✅ +20 successfully delivered projects\n` +
              `✅ Specialized and certified team\n` +
              `✅ Proven agile methodology\n` +
              `✅ 24/7 technical support\n` +
              `✅ Quality guarantee\n\n` +
              `**Ready to start your digital transformation now?**`;
     }
-    return `🤖 **Olá! Sou seu consultor digital da Ars Machina!**\n\n` +
+    return `🤖 **${greeting}Olá! Sou seu consultor digital da Ars Machina!**\n\n` +
            `Estamos aqui para **revolucionar seu negócio** com tecnologia de ponta!\n\n` +
            `💻 Digite **'serviços'** - Ver nosso portfólio completo\n` +
            `💰 Digite **'preços'** - Conhecer nossos pacotes\n` +
            `💡 Digite **'ideia'** - Transformar sua ideia em projeto\n` +
            `📞 Digite **'contato'** - Falar com especialista\n\n` +
            `🏆 **POR QUE ESCOLHER A ARS MACHINA?**\n` +
-           `✅ +200 projetos entregues com sucesso\n` +
+           `✅ +20 projetos entregues com sucesso\n` +
            `✅ Equipe especializada e certificada\n` +
            `✅ Metodologia ágil comprovada\n` +
            `✅ Suporte técnico 24/7\n` +
@@ -763,7 +836,13 @@ export class ChatbotComponent implements OnInit, OnDestroy {
   // New methods
   getRandomGreeting(): string {
     if (!this.currentGreeting) {
-      const greetings = [
+      const greetings = this.userLanguage === 'en' ? [
+        '🚀 Hello! I\'m your advanced AI consultant!',
+        '🤖 Hi! Ready to revolutionize your business?',
+        '💡 Welcome to the future of digital consulting!',
+        '🎯 Hello! Let\'s create something extraordinary together?',
+        '⚡ Hi! Your digital transformation starts here!'
+      ] : [
         '🚀 Olá! Sou sua IA consultora avançada!',
         '🤖 Oi! Pronto para revolucionar seu negócio?',
         '💡 Bem-vindo ao futuro da consultoria digital!',
@@ -776,12 +855,20 @@ export class ChatbotComponent implements OnInit, OnDestroy {
   }
 
   getResponseTime(): string {
-    return 'Resposta em ~2s';
+    return this.userLanguage === 'en' ? 'Response in ~2s' : 'Resposta em ~2s';
   }
 
   getTypingText(): string {
     if (!this.currentTypingText) {
-      const typingTexts = [
+      const typingTexts = this.userLanguage === 'en' ? [
+        '🧠 AI processing with 95% accuracy...',
+        '🔮 Analyzing advanced neural context...',
+        '⚡ Generating hyper-personalized response...',
+        '🎯 Optimizing solution with advanced ML...',
+        '🚀 Quantum processing in progress...',
+        '💎 Refining response with deep learning...',
+        '🌟 Synchronizing knowledge matrix...'
+      ] : [
         '🧠 IA processando com 95% de precisão...',
         '🔮 Analisando contexto neural avançado...',
         '⚡ Gerando resposta hiper-personalizada...',
@@ -859,10 +946,25 @@ export class ChatbotComponent implements OnInit, OnDestroy {
   }
 
   detectEnglish(message: string): boolean {
-    const englishWords = ['hello', 'hi', 'good', 'morning', 'afternoon', 'evening', 'services', 'development', 'portfolio', 'price', 'cost', 'pricing', 'budget', 'quote', 'contact', 'talk', 'speak', 'consultant', 'help', 'can', 'you', 'what', 'how', 'when', 'where', 'why', 'the', 'and', 'or', 'but', 'with', 'for', 'from', 'about', 'into', 'through', 'during', 'before', 'after', 'above', 'below', 'up', 'down', 'out', 'off', 'over', 'under', 'again', 'further', 'then', 'once'];
-    const words = message.toLowerCase().split(/\s+/);
+    const lowerMessage = message.toLowerCase();
+    
+    // Palavras claramente em inglês
+    const strongEnglishIndicators = ['hello', 'hi', 'good morning', 'good afternoon', 'good evening', 'services', 'development', 'website', 'price', 'cost', 'pricing', 'budget', 'quote', 'contact', 'help', 'can you', 'what', 'how', 'when', 'where', 'why', 'i need', 'i want', 'i would like', 'thank you', 'thanks'];
+    
+    // Palavras comuns em inglês
+    const englishWords = ['the', 'and', 'or', 'but', 'with', 'for', 'from', 'about', 'into', 'through', 'during', 'before', 'after', 'above', 'below', 'up', 'down', 'out', 'off', 'over', 'under', 'again', 'further', 'then', 'once', 'my', 'your', 'his', 'her', 'our', 'their', 'this', 'that', 'these', 'those', 'am', 'is', 'are', 'was', 'were', 'be', 'been', 'being', 'have', 'has', 'had', 'do', 'does', 'did', 'will', 'would', 'could', 'should'];
+    
+    // Verifica indicadores fortes
+    if (strongEnglishIndicators.some(indicator => lowerMessage.includes(indicator))) {
+      return true;
+    }
+    
+    // Conta palavras em inglês
+    const words = lowerMessage.split(/\s+/);
     const englishWordCount = words.filter(word => englishWords.includes(word)).length;
-    return englishWordCount >= 2 || message.toLowerCase().includes('hello') || message.toLowerCase().includes('services') || message.toLowerCase().includes('development');
+    
+    // Se mais de 30% das palavras são em inglês, considera inglês
+    return englishWordCount > 0 && (englishWordCount / words.length) >= 0.3;
   }
 
   openWhatsApp() {
@@ -1038,7 +1140,7 @@ export class ChatbotComponent implements OnInit, OnDestroy {
   private initializeAdvancedFeatures(): void {
     this.setupNeuralNetwork();
     this.initializePersonalityMatrix();
-    this.loadUserPreferences();
+    this.loadChatPreferences();
     this.setupPredictiveAnalytics();
   }
 
@@ -1194,12 +1296,13 @@ export class ChatbotComponent implements OnInit, OnDestroy {
     localStorage.setItem('ars-machina-chat-preferences', JSON.stringify(preferences));
   }
 
-  private loadUserPreferences(): void {
+  private loadChatPreferences(): void {
     const saved = localStorage.getItem('ars-machina-chat-preferences');
     if (saved) {
       const preferences = JSON.parse(saved);
       Object.assign(this, preferences);
     }
+    this.loadUserPreferences();
   }
 
   // Advanced search methods
@@ -1274,5 +1377,226 @@ export class ChatbotComponent implements OnInit, OnDestroy {
     this.searchResults = [];
     this.showSearch = false;
     this.highlightedMessageId = '';
+  }
+
+  // Métodos para melhorar interação
+  private detectUserName(message: string): void {
+    const namePatterns = [
+      /meu nome é ([a-záàâãéèêíïóôõöúçñ]+)/i,
+      /me chamo ([a-záàâãéèêíïóôõöúçñ]+)/i,
+      /sou o? ([a-záàâãéèêíïóôõöúçñ]+)/i,
+      /i'm ([a-z]+)/i,
+      /my name is ([a-z]+)/i
+    ];
+    
+    for (const pattern of namePatterns) {
+      const match = message.match(pattern);
+      if (match && match[1]) {
+        this.userName = match[1].charAt(0).toUpperCase() + match[1].slice(1).toLowerCase();
+        this.saveUserPreference('name', this.userName);
+        break;
+      }
+    }
+  }
+
+  private updateUserActivity(): void {
+    this.lastUserActivity = new Date();
+    this.conversationHistory.push(new Date().toISOString());
+    if (this.conversationHistory.length > 50) {
+      this.conversationHistory = this.conversationHistory.slice(-50);
+    }
+  }
+
+  private generateQuickReplies(message: string): void {
+    const lowerMessage = message.toLowerCase();
+    
+    if (this.userLanguage === 'en') {
+      if (lowerMessage.includes('price') || lowerMessage.includes('budget')) {
+        this.quickReplies = [
+          'Professional website',
+          'Complete e-commerce',
+          'Mobile app',
+          'Free consultation'
+        ];
+      } else if (lowerMessage.includes('service') || lowerMessage.includes('development')) {
+        this.quickReplies = [
+          'Web development',
+          'Mobile apps',
+          'Cloud computing',
+          'Cybersecurity'
+        ];
+      } else if (lowerMessage.includes('contact') || lowerMessage.includes('talk')) {
+        this.quickReplies = [
+          'WhatsApp',
+          'Email',
+          'Schedule meeting',
+          'Phone'
+        ];
+      } else {
+        this.quickReplies = [
+          'View services',
+          'Request quote',
+          'Talk to specialist',
+          'About company'
+        ];
+      }
+    } else {
+      if (lowerMessage.includes('preço') || lowerMessage.includes('orçamento')) {
+        this.quickReplies = [
+          'Site profissional',
+          'E-commerce completo',
+          'App mobile',
+          'Consultoria gratuita'
+        ];
+      } else if (lowerMessage.includes('serviço') || lowerMessage.includes('desenvolvimento')) {
+        this.quickReplies = [
+          'Desenvolvimento web',
+          'Apps mobile',
+          'Cloud computing',
+          'Cibersegurança'
+        ];
+      } else if (lowerMessage.includes('contato') || lowerMessage.includes('falar')) {
+        this.quickReplies = [
+          'WhatsApp',
+          'Email',
+          'Agendar reunião',
+          'Telefone'
+        ];
+      } else {
+        this.quickReplies = [
+          'Ver serviços',
+          'Solicitar orçamento',
+          'Falar com especialista',
+          'Sobre a empresa'
+        ];
+      }
+    }
+  }
+
+  onQuickReplySelect(reply: string): void {
+    this.userInput = reply;
+    this.showQuickReplies = false;
+    this.sendMessage();
+  }
+
+  private detectAndSetLanguage(message: string): void {
+    // Verifica periodicamente se o idioma mudou
+    try {
+      const currentServiceLang = this.translationService.getCurrentLanguage();
+      if (currentServiceLang && currentServiceLang !== this.userLanguage) {
+        this.userLanguage = currentServiceLang === 'en' ? 'en' : 'pt';
+        this.saveUserPreference('language', this.userLanguage);
+        console.log('Language updated from service:', this.userLanguage);
+      }
+    } catch (error) {
+      // Fallback se o método não existir
+      console.log('Translation service method not available');
+    }
+  }
+
+  private saveUserPreference(key: string, value: any): void {
+    this.userPreferences[key] = value;
+    localStorage.setItem('ars-machina-user-prefs', JSON.stringify(this.userPreferences));
+  }
+
+  private loadUserPreferences(): void {
+    const saved = localStorage.getItem('ars-machina-user-prefs');
+    if (saved) {
+      this.userPreferences = JSON.parse(saved);
+      this.userName = this.userPreferences.name || '';
+      this.userLanguage = this.userPreferences.language || 'pt';
+    }
+  }
+
+  getPersonalizedGreeting(): string {
+    const hour = new Date().getHours();
+    let timeGreeting = '';
+    
+    if (this.userLanguage === 'en') {
+      if (hour < 12) timeGreeting = 'Good morning';
+      else if (hour < 18) timeGreeting = 'Good afternoon';
+      else timeGreeting = 'Good evening';
+    } else {
+      if (hour < 12) timeGreeting = 'Bom dia';
+      else if (hour < 18) timeGreeting = 'Boa tarde';
+      else timeGreeting = 'Boa noite';
+    }
+    
+    return this.userName ? `${timeGreeting}, ${this.userName}!` : `${timeGreeting}!`;
+  }
+
+  showTypingIndicator(): void {
+    this.isTyping = true;
+    setTimeout(() => this.isTyping = false, 2000);
+  }
+
+  getContextualResponse(message: string): string {
+    const context = this.conversationFlow.slice(-3).join(' ').toLowerCase();
+    
+    if (this.userLanguage === 'en') {
+      if (context.includes('price') && message.toLowerCase().includes('expensive')) {
+        return 'I understand your concern about the investment. We offer various payment options and our average ROI is 300% in 12 months. How about a free consultation to evaluate your specific case?';
+      }
+      
+      if (context.includes('service') && message.toLowerCase().includes('time')) {
+        return 'Our projects follow agile methodology with weekly deliveries. A professional website is ready in 2-4 weeks, while more complex systems can take 2-6 months. Can I detail the timeline for your specific project?';
+      }
+    } else {
+      if (context.includes('preço') && message.toLowerCase().includes('caro')) {
+        return 'Entendo sua preocupação com o investimento. Oferecemos várias opções de pagamento e nosso ROI médio é de 300% em 12 meses. Que tal uma consultoria gratuita para avaliarmos seu caso específico?';
+      }
+      
+      if (context.includes('serviço') && message.toLowerCase().includes('tempo')) {
+        return 'Nossos projetos seguem metodologia ágil com entregas semanais. Um site profissional fica pronto em 2-4 semanas, enquanto sistemas mais complexos podem levar 2-6 meses. Posso detalhar o cronograma do seu projeto específico?';
+      }
+    }
+    
+    return this.getBusinessResponse(message);
+  }
+
+  private getUserLanguagePreference(): void {
+    // Verifica se há idioma salvo nas preferências
+    const savedLang = this.userPreferences.language;
+    if (savedLang) {
+      this.userLanguage = savedLang;
+      console.log('Loaded saved language:', this.userLanguage);
+      return;
+    }
+
+    // Tenta verificar idioma do serviço de tradução
+    try {
+      const currentLang = this.translationService.getCurrentLanguage();
+      if (currentLang) {
+        this.userLanguage = currentLang === 'en' ? 'en' : 'pt';
+        this.saveUserPreference('language', this.userLanguage);
+        console.log('Language from translation service:', this.userLanguage);
+        return;
+      }
+    } catch (error) {
+      console.log('Translation service not available, using browser language');
+    }
+
+    // Fallback para idioma do navegador
+    const browserLang = navigator.language || (navigator as any).userLanguage;
+    this.userLanguage = browserLang.startsWith('en') ? 'en' : 'pt';
+    this.saveUserPreference('language', this.userLanguage);
+    console.log('Browser language detected:', this.userLanguage);
+  }
+
+  setLanguage(lang: 'pt' | 'en'): void {
+    this.userLanguage = lang;
+    this.saveUserPreference('language', this.userLanguage);
+    // Tenta atualizar o serviço de tradução também
+    try {
+      this.translationService.setLanguage(lang);
+    } catch (error) {
+      console.log('Translation service setLanguage not available');
+    }
+    console.log('Language manually set to:', this.userLanguage);
+  }
+
+  // Método público para forçar atualização do idioma
+  updateLanguageFromProfile(): void {
+    this.getUserLanguagePreference();
   }
 }
