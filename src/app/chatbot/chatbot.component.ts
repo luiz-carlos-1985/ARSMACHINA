@@ -726,7 +726,7 @@ export class ChatbotComponent implements OnInit, OnDestroy {
       const newY = window.innerHeight - event.clientY - 36;
       
       this.position.x = Math.max(24, Math.min(newX, window.innerWidth - 96));
-      this.position.y = Math.max(24, Math.min(newY, window.innerHeight - 96));
+      this.position.y = Math.max(100, Math.min(newY, window.innerHeight - 96));
       
       const dragDistance = Math.abs(event.clientX - this.dragStartPos.x) + Math.abs(event.clientY - this.dragStartPos.y);
       if (dragDistance > 5) {
@@ -747,7 +747,7 @@ export class ChatbotComponent implements OnInit, OnDestroy {
       const newY = window.innerHeight - touch.clientY - 36;
       
       this.position.x = Math.max(24, Math.min(newX, window.innerWidth - 96));
-      this.position.y = Math.max(24, Math.min(newY, window.innerHeight - 96));
+      this.position.y = Math.max(100, Math.min(newY, window.innerHeight - 96));
       
       const dragDistance = Math.abs(touch.clientX - this.dragStartPos.x) + Math.abs(touch.clientY - this.dragStartPos.y);
       if (dragDistance > 5) {
