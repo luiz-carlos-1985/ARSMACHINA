@@ -2901,12 +2901,6 @@
   flex-shrink: 0;
 }
 
-.client-info h4 {
-  margin: 0 0 4px 0;
-  font-size: 16px;
-  color: #333;
-}
-
 .client-info p {
   margin: 0 0 8px 0;
   font-size: 14px;
@@ -3376,12 +3370,6 @@
   justify-content: center;
   font-weight: 700;
   font-size: 1.2rem;
-}
-
-.client-info h4 {
-  margin: 0 0 8px 0;
-  color: var(--text-primary);
-  font-size: 1.1rem;
 }
 
 .client-contact {
@@ -4617,6 +4605,7 @@
 
 .modal-body {
   padding: 20px 30px 30px;
+  background-color: #f8f9fa;
 }
 
 .form-group {
@@ -4627,7 +4616,7 @@
   display: block;
   margin-bottom: 8px;
   font-weight: 600;
-  color: var(--text-primary);
+  color: #1e293b;
   font-size: 0.9rem;
 }
 
@@ -6873,7 +6862,7 @@
   }
   
   .client-info h4 {
-    color: #f9fafb;
+    color: #6b7280;
   }
   
   .client-info p {
@@ -6884,7 +6873,7 @@
 /* Light theme text colors */
 @media (prefers-color-scheme: light) {
   .client-info h4 {
-    color: #1f2937;
+    color: #6b7280;
   }
   
   .client-info p {
