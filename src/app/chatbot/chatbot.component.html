@@ -41,7 +41,7 @@
           <div class="status-indicator"></div>
         </div>
         <div class="info">
-          <h3>🤖 Ars Machina AI</h3>
+          <h3>🤖 AI</h3>
           <span class="status">
             {{ userLanguage === 'en' ? 'Online' : 'Online' }}
           </span>
@@ -176,8 +176,7 @@
 
 
     <!-- Action Buttons -->
-    <div *ngIf="!isMinimized" class="action-buttons" style="padding: 16px 24px; background: #f8f9fa; border-top: 1px solid #e5e7eb;">
-      <div class="action-title" style="font-size: 14px; font-weight: 600; color: #374151; margin-bottom: 12px; text-align: center;">{{ userLanguage === 'en' ? 'Quick Actions' : 'Ações Rápidas' }}</div>
+    <div *ngIf="!isMinimized" class="action-buttons" style="padding: 5px 5px; background: #f8f9fa; border-top: 1px solid #e5e7eb;">
       <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin-bottom: 12px;">
         <button (click)="quickAction('services')" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; padding: 12px; border-radius: 12px; font-size: 12px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; transition: all 0.2s;">
           🛠️ {{ userLanguage === 'en' ? 'Services' : 'Serviços' }}

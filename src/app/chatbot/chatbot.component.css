@@ -286,6 +286,7 @@
   border-radius: 50%;
   border: 2px solid white;
   animation: statusPulse 2s infinite;
+  z-index: 3;
 }
 
 .status-dot {
@@ -805,8 +806,8 @@
   }
   
   .chat-header {
-    padding: 20px 24px;
-    padding-top: max(90px, env(safe-area-inset-top));
+    padding: 5px 5px;
+    padding-top: max(75px, env(safe-area-inset-top));
     position: relative;
   }
   
