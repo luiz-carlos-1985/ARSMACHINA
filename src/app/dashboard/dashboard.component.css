@@ -2201,7 +2201,6 @@
   /* Modal buttons mobile fixes */
   .btn-primary,
   .btn-secondary,
-  .modal-close,
   .icon-btn,
   .manage-projects-btn,
   .view-all-btn,
@@ -2464,7 +2463,6 @@
   /* Modal buttons for small screens */
   .btn-primary,
   .btn-secondary,
-  .modal-close,
   .icon-btn,
   .manage-projects-btn,
   .view-all-btn,
@@ -4588,8 +4586,8 @@
   font-size: 24px;
   color: #999;
   cursor: pointer;
-  padding: 5px;
-  border-radius: 50%;
+  padding: 1px;
+  border-radius: 5%;
   width: 35px;
   height: 35px;
   display: flex;
@@ -4600,7 +4598,7 @@
 
 .modal-close:hover {
   background: #f8f9fa;
-  color: #666;
+  color: #667;
 }
 
 .modal-body {
@@ -5144,8 +5142,8 @@
   
   .modal-close {
     position: absolute;
-    top: 15px;
-    right: 15px;
+    top: 5px;
+    right: 5px;
   }
 }
 
