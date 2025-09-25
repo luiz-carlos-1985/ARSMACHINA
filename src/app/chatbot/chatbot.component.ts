@@ -472,6 +472,8 @@ export class ChatbotComponent implements OnInit, OnDestroy {
   }
 
   onChatClick(event: Event): void {
+    event.stopPropagation();
+    event.preventDefault();
     if (!this.hasDragged) {
       this.toggleChat();
     }
@@ -479,6 +481,7 @@ export class ChatbotComponent implements OnInit, OnDestroy {
   }
 
   onMouseDown(event: MouseEvent): void {
+    event.stopPropagation();
     this.isDragging = true;
     this.dragStartPos = { x: event.clientX, y: event.clientY };
     this.dragOffset = {
@@ -488,6 +491,7 @@ export class ChatbotComponent implements OnInit, OnDestroy {
   }
 
   onDragStart(event: TouchEvent): void {
+    event.stopPropagation();
     const touch = event.touches[0];
     this.isDragging = true;
     this.dragStartPos = { x: touch.clientX, y: touch.clientY };
