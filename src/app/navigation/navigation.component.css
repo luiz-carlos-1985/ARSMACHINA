@@ -184,7 +184,7 @@
   -webkit-text-fill-color: transparent;
   background-clip: text;
   font-weight: 800;
-  font-size: 0.6rem;
+  font-size: 1.1rem;
   letter-spacing: 0.3px;
   text-shadow: 1 2px 8px rgba(0,0,0,0.2);
   position: relative;
@@ -435,7 +435,7 @@
   }
   
   .brand-text {
-    font-size: 0.55rem;
+    font-size: 1.1rem;
   }
 }
 
@@ -493,7 +493,7 @@
   }
   
   .brand-text {
-    font-size: 0.5rem;
+    font-size: 1.1rem;
   }
 }
 
